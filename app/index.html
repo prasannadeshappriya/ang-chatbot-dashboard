@@ -2,9 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Dashboard</title>
+    <!--Import css files-->
+    <link rel="stylesheet" href="../vendors/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <!--Import js files-->
+    <script src="../vendors/js/jquery-3.2.1.min.js"></script>
+    <script src="../vendors/js/bootstrap.min.js"></script>
+    <script src="../vendors/js/angular.min.js"></script>
+    <script src="../vendors/js/angular-route.js"></script>
+    <script src="../vendors/js/ngStorage.min.js"></script>
+    <script src="../vendors/js/angular-ui-router.min.js"></script>
+    <!--Angular main config-->
+    <script src="app.modules.js"></script>
+    <script src="app.config.js"></script>
+    <!--Angular Services-->
+    <script src="service/page.refresh.service.js"></script>
+    <script src="app.run.js"></script>
+    <!--Angular controllers-->
+    <script src="controller/main.controller.js"></script>
+    <!--Base URL-->
+    <base href="/ang-chatbot-dashboard/app/">
 </head>
-<body>
-
-</body>
+    <body ng-app="chat-bot-app" ng-controller="mainController">
+        <div class="col-lg-12">
+            <div ng-view></div>
+        </div>
+    </body>
 </html>
