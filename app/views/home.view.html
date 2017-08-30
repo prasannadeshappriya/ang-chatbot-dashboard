@@ -1,0 +1,14 @@
+<div class="container" ng-controller="mainController">
+    <div class="col-xs-12">
+        <div class="col-xs-3">
+            <div class="list-group" style="margin-top: 10%">
+                <a ng-click="showView('entity')" class="list-group-item">Settings</a>
+                <a ng-click="showView('settings')" class="list-group-item">Entity</a>
+            </div>
+        </div>
+        <div class="col-xs-9">
+            <div ng-include="'views/components/entity.view.html'" ng-show="viewController.entity"></div>
+            <div ng-include="'views/components/settings.view.html'" ng-show="viewController.settings"></div>
+        </div>
+    </div>
+</div>

@@ -6,17 +6,7 @@ app.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
         .when("/",{
             //Dashboard home page
-            templateUrl: "views/entities.view.html",
-            controller: 'mainController',
-            resolve:{
-                init: function () {
-                    console.log('Dashboard route triggered');
-                }
-            }
-        })
-        .when("/test",{
-            //Dashboard home page
-            templateUrl: "views/settings.view.html",
+            templateUrl: "views/home.view.html",
             controller: 'mainController',
             resolve:{
                 init: function () {
