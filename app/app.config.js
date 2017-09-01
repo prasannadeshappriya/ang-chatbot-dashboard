@@ -2,7 +2,6 @@
  * Created by prasanna_d on 8/30/2017.
  */
 app.config(['$routeProvider', function ($routeProvider) {
-    console.log('asdasd');
     $routeProvider
         .when("/",{
             //Dashboard home page

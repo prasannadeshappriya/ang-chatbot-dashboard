@@ -4,7 +4,7 @@
 app.controller('mainController',[
     '$scope', '$http', 'host_url',
     function ($scope,$http,host_url) {
-        //-----------------------Alert Show Section-----------------------
+        //-----------------------Alert Show Section---------------------------------------------------------------------
         $scope.dangerAlert = false;
         $scope.successAlert = false;
         $scope.message = '';
@@ -13,7 +13,7 @@ app.controller('mainController',[
             $scope.successAlert = false;
             $scope.message = '';
         };
-        //-----------------------On Loading-------------------------------
+        //-----------------------On Loading-----------------------------------------------------------------------------
         $scope.onInit = async function () {
             console.log('Initializing variables');
             try {
@@ -31,7 +31,7 @@ app.controller('mainController',[
                 console.log(err);
             }
         };
-        //-----------------------Views Section----------------------------
+        //-----------------------Views Section--------------------------------------------------------------------------
         $scope.showEntitySection = true;
         $scope.showSettingsSection = false;
         $scope.viewController = {
@@ -40,19 +40,21 @@ app.controller('mainController',[
         $scope.showView = function (view_name) {
             Object.keys($scope.viewController)
                 .forEach(function (key) {
-                    if(key===view_name){$scope.viewController[key]=true;}
+                    console.log(key);
+                    console.log(view_name);
+                    if(key===view_name){$scope.viewController[key]=true; console.log($scope.viewController);}
                     else{$scope.viewController[key]=false;}
                     resetAlert();
                 });
         };
-        //----------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------------------
         $scope.appEntities = [
             {name: 'leave', description: ''}, {name: 'funny', description: ''}
         ];
         $scope.appIntents = [];
         if($scope.appIntents.length>0){$scope.selectedIntentName = $scope.appIntents[0].name;}
         if($scope.appEntities.length>0){$scope.selectedEntityName = $scope.appEntities[0].name;}
-        //-----------------------Data Validation Section----------------------------
+        //-----------------------Data Validation Section----------------------------------------------------------------
         $scope.isSubmit = false;
         $scope.intent_name_empty = false;
         $scope.intent_name_dublicate = false;
@@ -70,7 +72,8 @@ app.controller('mainController',[
                     break;
             }
         };
-        //----------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------------------
+        //Create New Intent
         $scope.createNewIntent = async function () {
             resetAlert();
             $scope.isSubmit = true;
@@ -81,7 +84,7 @@ app.controller('mainController',[
                 try {
                     let result = await $http({
                         method: "POST",
-                        url: "http://localhost:3000/intent/create",
+                        url: host_url + "intent/create",
                         data: 'intent_name='+ $scope.intentName+ '&intent_description=' + $scope.indentDes,
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                     });
@@ -100,6 +103,43 @@ app.controller('mainController',[
                     // console.log(err);
                 }
             }
+        };
+        //Delete an Existing Intent
+        $scope.deleteIntent = async function () {
+            if($scope.selectedIntentName==='' || typeof $scope.selectedIntentName==='undefined'){
+                $scope.message = "You don't have any intents!";
+                $scope.dangerAlert = true;
+                return;
+            }
+            try {
+                let result = await $http({
+                    method: "POST",
+                    url: host_url + "intent/delete",
+                    data: 'intent_name='+ $scope.selectedIntentName,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                });
+                console.log(result);
+                if(result){
+                    if (result.status===200){
+                        for(let i=0; i<$scope.appIntents.length; i++){
+                            if($scope.appIntents[i].name===$scope.selectedIntentName){
+                                $scope.appIntents.splice(i,1);
+                                if($scope.appIntents.length>0){$scope.selectedIntentName = $scope.appIntents[0].name;};
+                                $scope.$apply();break;
+                            }
+                        }
+                    }
+                }
+            }catch (err){
+                console.log(err);
+            }
+            console.log('You are going to delete: ' + $scope.selectedIntentName);
+        };
+
+        $scope.test = function () {
+            // $scope.viewController = {
+            //     intent: true, settings: false, entity: false
+            // };
         };
     }
 ]);

@@ -1,59 +1,61 @@
-<div class="alert alert-success" ng-show="successAlert">
-    {{message}}
-</div>
-<div class="alert alert-danger" ng-show="dangerAlert">
-    {{message}}
-</div>
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h4 class="text-info">Create new entity for '{{selectedIntentName}}'</h4>
+<div ng-controller="mainController">
+    <div class="alert alert-success" ng-show="successAlert">
+        {{message}}
     </div>
-    <div class="panel-body">
-        <div class="col-xs-8 col-xs-offset-2">
-            <div class="form-group">
-                <label for="entityName" class="control-label">Entity Name</label>
-                <input type="text" id="entityName" class="form-control">
-            </div>
-            <div class="form-group">
-                <label for="entityDescription" class="control-label">Entity Description</label>
-                <textarea style="width: 100%; height: 200px; resize: none" id="entityDescription"></textarea>
-            </div>
-            <div>
-                <h5 style="color: red; margin-left: 5%">Note:</h5>
-                <div style="margin-left: 10%">
-                    <h5 style="color: red">-Continuous questions features are still developing.</h5>
-                    <h5 style="color: red">-Cannot create two entities with the same name.</h5>
-                    <h5 style="color: red">-Please put a meaningful name when creating an entity.</h5>
-                </div>
-            </div>
-            <input type="button" class="btn btn-success" value="Create" style="float: right; width: 150px; margin-top: 10px">
+    <div class="alert alert-danger" ng-show="dangerAlert">
+        {{message}}
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="text-info">Create new entity for '{{selectedIntentName}}'</h4>
         </div>
-    </div>
-</div>
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h4 class="text-info">Your current entities</h4>
-    </div>
-    <div class="panel-body">
-        <div class="col-xs-8 col-xs-offset-2">
-            <label for="lblEntitiesSelect">App entities</label>
-            <select ng-model="selectedEntityName" class="form-control" name="size" id="lblEntitiesSelect">
-                <option ng-repeat="item in appEntities">{{item.name}}</option>
-            </select>
-            <div ng-if="appEntities.length>0">
-                <div class="form-group" style="margin-top: 10px">
-                    <label for="entityUpName" class="control-label">Entity Name</label>
-                    <input type="text" id="entityUpName" class="form-control">
+        <div class="panel-body">
+            <div class="col-xs-8 col-xs-offset-2">
+                <div class="form-group">
+                    <label for="entityName" class="control-label">Entity Name</label>
+                    <input type="text" id="entityName" class="form-control">
                 </div>
                 <div class="form-group">
-                    <label for="entityUpDescription" class="control-label">Entity Description</label>
-                    <textarea style="width: 100%; height: 200px; resize: none" id="entityUpDescription"></textarea>
+                    <label for="entityDescription" class="control-label">Entity Description</label>
+                    <textarea style="width: 100%; height: 200px; resize: none" id="entityDescription"></textarea>
                 </div>
-                <input type="button" class="btn btn-success" value="Update" style="width: 150px; float: right" ng-click="showView('entity')">
-                <input type="button" class="btn btn-default" value="Delete" style="width: 150px; float: right; margin-right: 1%">
+                <div>
+                    <h5 style="color: red; margin-left: 5%">Note:</h5>
+                    <div style="margin-left: 10%">
+                        <h5 style="color: red">-Continuous questions features are still developing.</h5>
+                        <h5 style="color: red">-Cannot create two entities with the same name.</h5>
+                        <h5 style="color: red">-Please put a meaningful name when creating an entity.</h5>
+                    </div>
+                </div>
+                <input type="button" class="btn btn-success" value="Create" style="float: right; width: 150px; margin-top: 10px">
             </div>
-            <div ng-if="appEntities.length<=0" style="margin-top: 4%">
-                <h5 class="text-info">You don't have any entities at the moment!</h5>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="text-info">Your current entities</h4>
+        </div>
+        <div class="panel-body">
+            <div class="col-xs-8 col-xs-offset-2">
+                <label for="lblEntitiesSelect">App entities</label>
+                <select ng-model="selectedEntityName" class="form-control" name="size" id="lblEntitiesSelect">
+                    <option ng-repeat="item in appEntities">{{item.name}}</option>
+                </select>
+                <div ng-if="appEntities.length>0">
+                    <div class="form-group" style="margin-top: 10px">
+                        <label for="entityUpName" class="control-label">Entity Name</label>
+                        <input type="text" id="entityUpName" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="entityUpDescription" class="control-label">Entity Description</label>
+                        <textarea style="width: 100%; height: 200px; resize: none" id="entityUpDescription"></textarea>
+                    </div>
+                    <input type="button" class="btn btn-success" value="Update" style="width: 150px; float: right" ng-click="showView('entity')">
+                    <input type="button" class="btn btn-default" value="Delete" style="width: 150px; float: right; margin-right: 1%">
+                </div>
+                <div ng-if="appEntities.length<=0" style="margin-top: 4%">
+                    <h5 class="text-info">You don't have any entities at the moment!</h5>
+                </div>
             </div>
         </div>
     </div>

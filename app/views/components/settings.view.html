@@ -1,35 +1,37 @@
-<div class="alert alert-success" ng-show="successAlert">
-    {{message}}
-</div>
-<div class="alert alert-danger" ng-show="dangerAlert">
-    {{message}}
-</div>
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h4 class="text-info">API Details</h4>
+<div ng-controller="mainController">
+    <div class="alert alert-success" ng-show="successAlert">
+        {{message}}
     </div>
-    <div class="panel-body">
-        <div class="col-xs-8 col-xs-offset-2">
-            <div>
-                <p>
-                    Set your wit.ai app token in the below field to make API requests from this app.
-                    Learn more on <a href="https://wit.ai/docs/http/20170307">https://wit.ai/docs/http/20170307</a>
-                </p>
-                <div class="form-group">
-                    <label for="appID" class="control-label">App ID</label>
-                    <input type="text" id="appID" class="form-control">
+    <div class="alert alert-danger" ng-show="dangerAlert">
+        {{message}}
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="text-info">API Details</h4>
+        </div>
+        <div class="panel-body">
+            <div class="col-xs-8 col-xs-offset-2">
+                <div>
+                    <p>
+                        Set your wit.ai app token in the below field to make API requests from this app.
+                        Learn more on <a href="https://wit.ai/docs/http/20170307">https://wit.ai/docs/http/20170307</a>
+                    </p>
+                    <div class="form-group">
+                        <label for="appID" class="control-label">App ID</label>
+                        <input type="text" id="appID" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="serverAccessToken" class="control-label">Server access token</label>
+                        <input type="text" id="serverAccessToken" class="form-control">
+                    </div>
+                    <h5 style="color: red; margin-left: 5%">Note:</h5>
+                    <div style="margin-left: 10%">
+                        <h5 style="color: red">-Your app token and other related information can be found under settings section of your app
+                            <br>Refer <a href="https://wit.ai">https://wit.ai</a> </h5>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="serverAccessToken" class="control-label">Server access token</label>
-                    <input type="text" id="serverAccessToken" class="form-control">
-                </div>
-                <h5 style="color: red; margin-left: 5%">Note:</h5>
-                <div style="margin-left: 10%">
-                    <h5 style="color: red">-Your app token and other related information can be found under settings section of your app
-                        <br>Refer <a href="https://wit.ai">https://wit.ai</a> </h5>
-                </div>
+                <input type="button" class="btn btn-success" value="Save" style="float: right; width: 150px; margin-top: 10px">
             </div>
-            <input type="button" class="btn btn-success" value="Save" style="float: right; width: 150px; margin-top: 10px">
         </div>
     </div>
 </div>

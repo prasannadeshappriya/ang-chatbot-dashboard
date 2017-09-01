@@ -50,7 +50,7 @@
                 </select>
                 <div ng-if="appIntents.length>0" style="margin-top: 4%">
                     <input type="button" class="btn btn-success" value="Update" style="width: 150px; float: right" ng-click="showView('entity')">
-                    <input type="button" class="btn btn-danger" value="Delete" style="width: 150px; float: right; margin-right: 1%">
+                    <input type="button" class="btn btn-danger" value="Delete" style="width: 150px; float: right; margin-right: 1%" ng-click="deleteIntent()">
                 </div>
                 <div ng-if="appIntents.length<=0" style="margin-top: 4%">
                     <h5 class="text-info">You don't have any intent at the moment!</h5>
