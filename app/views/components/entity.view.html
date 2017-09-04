@@ -7,6 +7,41 @@
     </div>
     <div class="panel panel-default">
         <div class="panel-heading">
+            <h4 class="text-info">Intent - {{selectedIntentName}}</h4>
+        </div>
+        <div class="panel-body">
+            <div class="col-xs-8 col-xs-offset-2">
+                <div class="form-group">
+                    <label for="intexpName" class="control-label">App Intent Expressions</label>
+                    <input type="text" id="intexpName" class="form-control" ng-model="add_exp_int_value">
+
+                </div>
+                <div ng-if="add_intent_expressions.length===0">
+                    <h5 class="col-xs-12 text-info">You don't have any expressions, Create now</h5>
+                </div>
+
+                <input type="button" style="float: right; width: 150px" value="Add"
+                       class="btn btn-success" ng-click="btn_add_intent_expressions(add_exp_int_value)">
+
+                <div ng-if="add_intent_expressions.length>0">
+                    <ul class="list-group" style="margin-top: 60px">
+                        <li class="list-group-item" ng-repeat="item in add_intent_expressions" ng-click="exp_add_item_int_click(item)">{{item}}</li>
+                    </ul>
+                </div>
+
+                <div class="form-group col-xs-12">
+                    <label for="intentDescription" class="control-label">Intent Description</label>
+                    <textarea style="width: 100%; height: 200px; resize: none" id="intentDescription" ng-model="indentDes" ng-change="changeText('intent_description_empty')"></textarea>
+                </div>
+                <div class="col-xs-12">
+                    <span class="col-xs-12" ng-show="isSubmit && intent_description_empty"><p style="color: red; float: right">*Intent description is required</p></span>
+                </div>
+                <input type="button" class="btn btn-success" value="Update" style="float: right; width: 150px; margin-top: 10px" ng-click="createNewIntent()">
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
             <h4 class="text-info">Create new entity for '{{selectedIntentName}}'</h4>
         </div>
         <div class="panel-body">
@@ -16,10 +51,26 @@
                     <input type="text" id="entityName" class="form-control">
                 </div>
                 <div class="form-group">
+                    <label for="expName" class="control-label">App Expressions</label>
+                    <input type="text" id="expName" class="form-control" ng-model="add_exp_value">
+
+                </div>
+                <div ng-if="add_expressions.length===0">
+                    <h5 class="col-xs-12 text-info">You don't have any expressions, Create now</h5>
+                </div>
+                <input type="button" style="float: right; width: 150px" value="Add" class="btn btn-success" ng-click="btn_add_expressions()">
+
+                <div ng-if="add_expressions.length>0">
+                    <ul class="list-group" style="margin-top: 60px">
+                        <li class="list-group-item" ng-repeat="item in add_expressions" ng-click="exp_add_item_click(item)">{{item}}</li>
+                    </ul>
+                </div>
+
+                <div class="form-group col-xs-12">
                     <label for="entityDescription" class="control-label">Entity Description</label>
                     <textarea style="width: 100%; height: 200px; resize: none" id="entityDescription"></textarea>
                 </div>
-                <div>
+                <div class="col-xs-12">
                     <h5 style="color: red; margin-left: 5%">Note:</h5>
                     <div style="margin-left: 10%">
                         <h5 style="color: red">-Continuous questions features are still developing.</h5>

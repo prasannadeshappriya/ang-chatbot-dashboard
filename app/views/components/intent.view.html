@@ -19,15 +19,31 @@
                         <span class="col-xs-12" ng-show="isSubmit && intent_name_dublicate"><p style="color: red; float: right">*Intent name is already taken</p></span>
                     </div>
                 </div>
-
                 <div class="form-group">
+                    <label for="expName" class="control-label">App Expressions</label>
+                    <input type="text" id="expName" class="form-control" ng-model="add_exp_value">
+
+                </div>
+                <div ng-if="add_expressions.length===0">
+                    <h5 class="col-xs-12 text-info">You don't have any expressions, Create now</h5>
+                </div>
+
+                <input type="button" style="float: right; width: 150px" value="Add" class="btn btn-success" ng-click="btn_add_expressions()">
+
+                <div ng-if="add_expressions.length>0">
+                    <ul class="list-group" style="margin-top: 60px">
+                        <li class="list-group-item" ng-repeat="item in add_expressions" ng-click="exp_add_item_click(item)">{{item}}</li>
+                    </ul>
+                </div>
+
+                <div class="form-group col-xs-12">
                     <label for="intentDescription" class="control-label">Intent Description</label>
                     <textarea style="width: 100%; height: 200px; resize: none" id="intentDescription" ng-model="indentDes" ng-change="changeText('intent_description_empty')"></textarea>
                 </div>
                 <div class="col-xs-12">
                     <span class="col-xs-12" ng-show="isSubmit && intent_description_empty"><p style="color: red; float: right">*Intent description is required</p></span>
                 </div>
-                <div>
+                <div class="col-xs-12">
                     <h5 style="color: red; margin-left: 5%">Note:</h5>
                     <div style="margin-left: 10%">
                         <h5 style="color: red">-Cannot create two intent with the same name.</h5>
@@ -38,24 +54,73 @@
             </div>
         </div>
     </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="text-info">Your current intents</h4>
-        </div>
-        <div class="panel-body">
-            <div class="col-xs-8 col-xs-offset-2">
-                <label for="lblintentSelect">App intents</label>
-                <select ng-model="selectedIntentName" class="form-control" name="size" id="lblintentSelect">
-                    <option ng-repeat="item in appIntents">{{item.name}}</option>
-                </select>
-                <div ng-if="appIntents.length>0" style="margin-top: 4%">
-                    <input type="button" class="btn btn-success" value="Update" style="width: 150px; float: right" ng-click="showView('entity')">
-                    <input type="button" class="btn btn-danger" value="Delete" style="width: 150px; float: right; margin-right: 1%" ng-click="deleteIntent()">
-                </div>
-                <div ng-if="appIntents.length<=0" style="margin-top: 4%">
-                    <h5 class="text-info">You don't have any intent at the moment!</h5>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!--<div class="panel panel-default">-->
+        <!--<div class="panel-heading">-->
+            <!--<h4 class="text-info">Create new intent</h4>-->
+        <!--</div>-->
+        <!--<div class="panel-body">-->
+            <!--<div class="col-xs-8 col-xs-offset-2">-->
+                <!--<div class="form-group">-->
+                    <!--<label for="intentName" class="control-label">Intent Name</label>-->
+                    <!--<input type="text" id="intentName" class="form-control" ng-model="intentName" ng-change="changeText('intent_name_empty'); changeText('intent_name_dublicate')">-->
+                    <!--<div class="col-xs-12">-->
+                        <!--<span class="col-xs-12" ng-show="isSubmit && intent_name_empty"><p style="color: red; float: right">*Intent name is required</p></span>-->
+                        <!--<span class="col-xs-12" ng-show="isSubmit && intent_name_dublicate"><p style="color: red; float: right">*Intent name is already taken</p></span>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                    <!--<label for="expName" class="control-label">App Expressions</label>-->
+                    <!--<input type="text" id="expName" class="form-control" ng-model="add_exp_value">-->
+
+                <!--</div>-->
+                <!--<div ng-if="add_expressions.length===0">-->
+                    <!--<h5 class="col-xs-12 text-info">You don't have any expressions, Create now</h5>-->
+                <!--</div>-->
+
+                <!--<input type="button" style="float: right; width: 150px" value="Add" class="btn btn-success" ng-click="btn_add_expressions()">-->
+
+                <!--<div ng-if="add_expressions.length>0">-->
+                    <!--<ul class="list-group" style="margin-top: 60px">-->
+                        <!--<li class="list-group-item" ng-repeat="item in add_expressions" ng-click="exp_add_item_click(item)">{{item}}</li>-->
+                    <!--</ul>-->
+                <!--</div>-->
+
+                <!--<div class="form-group col-xs-12">-->
+                    <!--<label for="intentDescription" class="control-label">Intent Description</label>-->
+                    <!--<textarea style="width: 100%; height: 200px; resize: none" id="intentDescription" ng-model="indentDes" ng-change="changeText('intent_description_empty')"></textarea>-->
+                <!--</div>-->
+                <!--<div class="col-xs-12">-->
+                    <!--<span class="col-xs-12" ng-show="isSubmit && intent_description_empty"><p style="color: red; float: right">*Intent description is required</p></span>-->
+                <!--</div>-->
+                <!--<div class="col-xs-12">-->
+                    <!--<h5 style="color: red; margin-left: 5%">Note:</h5>-->
+                    <!--<div style="margin-left: 10%">-->
+                        <!--<h5 style="color: red">-Cannot create two intent with the same name.</h5>-->
+                        <!--<h5 style="color: red">-Please put a meaningful name when creating an intent.</h5>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<input type="button" class="btn btn-success" value="Create" style="float: right; width: 150px; margin-top: 10px" ng-click="createNewIntent()">-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="panel panel-default">-->
+        <!--<div class="panel-heading">-->
+            <!--<h4 class="text-info">Your current intents</h4>-->
+        <!--</div>-->
+        <!--<div class="panel-body">-->
+            <!--<div class="col-xs-8 col-xs-offset-2">-->
+                <!--<label for="lblintentSelect">App intents</label>-->
+                <!--<select ng-model="selectedIntentName" class="form-control" name="size" id="lblintentSelect">-->
+                    <!--<option ng-repeat="item in appIntents">{{item.name}}</option>-->
+                <!--</select>-->
+                <!--<div ng-if="appIntents.length>0" style="margin-top: 4%">-->
+                    <!--<input type="button" class="btn btn-success" value="Update" style="width: 150px; float: right" ng-click="showView('entity')">-->
+                    <!--<input type="button" class="btn btn-danger" value="Delete" style="width: 150px; float: right; margin-right: 1%" ng-click="deleteIntent()">-->
+                <!--</div>-->
+                <!--<div ng-if="appIntents.length<=0" style="margin-top: 4%">-->
+                    <!--<h5 class="text-info">You don't have any intent at the moment!</h5>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
 </div>

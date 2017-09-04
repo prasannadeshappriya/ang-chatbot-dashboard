@@ -118,5 +118,22 @@ app.controller('IntentController',[
             PageViewService.setViewData('intent_name',$scope.selectedIntentName);
             PageViewService.setViewController(view_name);
         }
+        //--------------------------------------------------------------------------------------------------------------
+        $scope.add_expressions = [];
+        $scope.btn_add_expressions = function () {
+            if(typeof $scope.add_exp_value!=='undefined' && $scope.add_exp_value!==''){
+                if($scope.add_expressions.indexOf($scope.add_exp_value)===-1){
+                    $scope.add_expressions.push($scope.add_exp_value);
+                    $scope.add_exp_value = '';
+                }
+            }
+        };
+        $scope.exp_add_item_click = function (item) {
+            for(let i=0; i<$scope.add_expressions.length; i++){
+                if($scope.add_expressions[i]===item){
+                    $scope.add_expressions.splice((i),1);
+                }
+            }
+        }
     }
 ]);

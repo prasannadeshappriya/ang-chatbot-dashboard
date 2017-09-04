@@ -41,5 +41,38 @@ app.controller('EntityController',[
                 console.log(err);
             }
         };
+        //--------------------------------------------------------------------------------------------------------------
+        $scope.add_expressions = [];
+        $scope.add_intent_expressions = [];
+        $scope.btn_add_expressions = function () {
+            if(typeof $scope.add_exp_value!=='undefined' && $scope.add_exp_value!==''){
+                if($scope.add_expressions.indexOf($scope.add_exp_value)===-1){
+                    $scope.add_expressions.push($scope.add_exp_value);
+                    $scope.add_exp_value = '';
+                }
+            }
+        };
+        $scope.btn_add_intent_expressions = function () {
+            if(typeof $scope.add_exp_int_value!=='undefined' && $scope.add_exp_int_value!==''){
+                if($scope.add_intent_expressions.indexOf($scope.add_exp_int_value)===-1){
+                    $scope.add_intent_expressions.push($scope.add_exp_int_value);
+                    $scope.add_exp_int_value = '';
+                }
+            }
+        };
+        $scope.exp_add_item_int_click = function (item) {
+            for(let i=0; i<$scope.add_intent_expressions.length; i++){
+                if($scope.add_intent_expressions[i]===item){
+                    $scope.add_intent_expressions.splice((i),1);
+                }
+            }
+        }
+        $scope.exp_add_item_click = function (item) {
+            for(let i=0; i<$scope.add_expressions.length; i++){
+                if($scope.add_expressions[i]===item){
+                    $scope.add_expressions.splice((i),1);
+                }
+            }
+        }
     }
 ]);
