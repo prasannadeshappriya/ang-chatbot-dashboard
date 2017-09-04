@@ -14,7 +14,7 @@ app.controller('IntentController',[
             $scope.message = '';
         };
         //-----------------------On Loading-----------------------------------------------------------------------------
-        //Initialize Variables
+        //Initialize intent Variables
         $scope.appIntents = [];
         if($scope.appIntents.length>0){$scope.selectedIntentName = $scope.appIntents[0].name;}
         $scope.onInit = async function () {
