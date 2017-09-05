@@ -7,106 +7,108 @@
     </div>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h4 class="text-info">Intent - {{selectedIntentName}}</h4>
+            <h4 class="text-info">Create new entity</h4>
         </div>
         <div class="panel-body">
             <div class="col-xs-8 col-xs-offset-2">
                 <div class="form-group">
-                    <label for="intexpName" class="control-label">App Intent Expressions</label>
-                    <input type="text" id="intexpName" class="form-control" ng-model="add_exp_int_value">
-
+                    <label for="entityName" class="control-label">Entity name</label>
+                    <input type="text" id="entityName" class="form-control" ng-model="entityName"
+                        ng-change="changeText('entity_name_empty') || changeText('entity_name_dublicate')">
+                    <div class="col-xs-12">
+                        <span class="col-xs-12" ng-show="isSubmit && entity_name_empty"><p style="color: red; float: right">*Entity name is required</p></span>
+                        <span class="col-xs-12" ng-show="isSubmit && entity_name_dublicate"><p style="color: red; float: right">*Entity name is already taken</p></span>
+                    </div>
                 </div>
-                <div ng-if="add_intent_expressions.length===0">
-                    <h5 class="col-xs-12 text-info">You don't have any expressions, Create now</h5>
-                </div>
-
-                <input type="button" style="float: right; width: 150px" value="Add"
-                       class="btn btn-success" ng-click="btn_add_intent_expressions(add_exp_int_value)">
-
-                <div ng-if="add_intent_expressions.length>0">
-                    <ul class="list-group" style="margin-top: 60px">
-                        <li class="list-group-item" ng-repeat="item in add_intent_expressions" ng-click="exp_add_item_int_click(item)">{{item}}</li>
-                    </ul>
-                </div>
-
-                <div class="form-group col-xs-12">
-                    <label for="intentDescription" class="control-label">Intent Description</label>
-                    <textarea style="width: 100%; height: 200px; resize: none" id="intentDescription" ng-model="indentDes" ng-change="changeText('intent_description_empty')"></textarea>
+                <div class="form-group">
+                    <label for="entityDesc" class="control-label">Entity Description</label>
+                    <input type="text" id="entityDesc" class="form-control" ng-model="entityDesc"
+                           ng-change="changeText('entity_des_empty')">
+                    <div class="col-xs-12">
+                        <span class="col-xs-12" ng-show="isSubmit && entity_des_empty"><p style="color: red; float: right">*Entity Description is required</p></span>
+                    </div>
                 </div>
                 <div class="col-xs-12">
-                    <span class="col-xs-12" ng-show="isSubmit && intent_description_empty"><p style="color: red; float: right">*Intent description is required</p></span>
-                </div>
-                <input type="button" class="btn btn-success" value="Update" style="float: right; width: 150px; margin-top: 10px" ng-click="createNewIntent()">
-            </div>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="text-info">Create new entity for '{{selectedIntentName}}'</h4>
-        </div>
-        <div class="panel-body">
-            <div class="col-xs-8 col-xs-offset-2">
-                <div class="form-group">
-                    <label for="entityName" class="control-label">Entity Name</label>
-                    <input type="text" id="entityName" class="form-control">
+                    <hr class="col-xs-9 col-xs-offset-1">
                 </div>
                 <div class="form-group">
-                    <label for="expName" class="control-label">App Expressions</label>
-                    <input type="text" id="expName" class="form-control" ng-model="add_exp_value">
-
-                </div>
-                <div ng-if="add_expressions.length===0">
-                    <h5 class="col-xs-12 text-info">You don't have any expressions, Create now</h5>
-                </div>
-                <input type="button" style="float: right; width: 150px" value="Add" class="btn btn-success" ng-click="btn_add_expressions()">
-
-                <div ng-if="add_expressions.length>0">
-                    <ul class="list-group" style="margin-top: 60px">
-                        <li class="list-group-item" ng-repeat="item in add_expressions" ng-click="exp_add_item_click(item)">{{item}}</li>
-                    </ul>
-                </div>
-
-                <div class="form-group col-xs-12">
-                    <label for="entityDescription" class="control-label">Entity Description</label>
-                    <textarea style="width: 100%; height: 200px; resize: none" id="entityDescription"></textarea>
+                    <div class="col-xs-12">
+                        <div class="col-xs-6">
+                            <label for="lookup_strategies">Lookup Strategies</label>
+                            <select ng-model="selectedLoockup" class="form-control" name="size" id="lookup_strategies">
+                                <option ng-repeat="item in appLoockups">{{item}}</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6">
+                            <p>Search strategies are the techniques wit will use to extract the entity.
+                                <a href="https://wit.ai/docs/recipes#which-entity-should-i-use">Learn more</a> </p>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-xs-12">
-                    <h5 style="color: red; margin-left: 5%">Note:</h5>
-                    <div style="margin-left: 10%">
-                        <h5 style="color: red">-Continuous questions features are still developing.</h5>
-                        <h5 style="color: red">-Cannot create two entities with the same name.</h5>
-                        <h5 style="color: red">-Please put a meaningful name when creating an entity.</h5>
+                    <hr class="col-xs-9 col-xs-offset-1">
+                </div>
+                <div class="form-group">
+                    <label for="entityAddValue" class="control-label">Value</label>
+                    <input type="text" id="entityAddValue" ng-model="entityAddValue" ng-change="changeText('entity_value_empty')" class="form-control">
+                    <div class="col-xs-12">
+                        <span class="col-xs-12" ng-show="entity_value_empty"><p style="color: red; float: right">*Value is required</p></span>
                     </div>
                 </div>
-                <input type="button" class="btn btn-success" value="Create" style="float: right; width: 150px; margin-top: 10px">
-            </div>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="text-info">Your current entities</h4>
-        </div>
-        <div class="panel-body">
-            <div class="col-xs-8 col-xs-offset-2">
-                <label for="lblEntitiesSelect">App entities</label>
-                <select ng-model="selectedEntityName" class="form-control" name="size" id="lblEntitiesSelect">
-                    <option ng-repeat="item in currentEntities">{{item.name}}</option>
-                </select>
-                <div ng-if="currentEntities.length>0">
-                    <div class="form-group" style="margin-top: 10px">
-                        <label for="entityUpName" class="control-label">Entity Name</label>
-                        <input type="text" id="entityUpName" class="form-control">
+                <div class="col-xs-12">
+                    <div class="col-xs-9">
+                        <div class="form-group">
+                            <label for="entityAddExpressions" class="control-label">Expressions</label>
+                            <input type="text" id="entityAddExpressions" ng-model="entityAddExpressions" class="form-control">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="entityUpDescription" class="control-label">Entity Description</label>
-                        <textarea style="width: 100%; height: 200px; resize: none" id="entityUpDescription"></textarea>
+                    <div class="col-xs-3">
+                        <input type="button" style="float: right; width: 100px; margin-top: 24px" value="Add"
+                               class="btn btn-default" ng-click="btnAddExpression()">
                     </div>
-                    <input type="button" class="btn btn-success" value="Update" style="width: 150px; float: right" ng-click="showView('entity')">
-                    <input type="button" class="btn btn-default" value="Delete" style="width: 150px; float: right; margin-right: 1%">
                 </div>
-                <div ng-if="currentEntities.length<=0" style="margin-top: 4%">
-                    <h5 class="text-info">You don't have any entities at the moment!</h5>
+
+                <div class="col-xs-12">
+                    <div class="col-xs-9">
+                        <h5 class="col-xs-12 text-info" ng-if="entityExpressions.length>0">Click on an item to delete from the list</h5>
+                        <a class="list-group-item col-xs-12" ng-repeat="item in entityExpressions"
+                           ng-click="entityExpressionsItemClick(item)">
+                            <p class="list-group-item-text">{{item}}</p>
+                        </a>
+                        <div ng-if="values.length===0">
+                            <h5 class="col-xs-12 text-info">You don't have any expressions, Add values</h5>
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                        <input type="button" style="float: right; width: 100px;" value="Add Values"
+                               class="btn btn-success" ng-click="btnAddValue()">
+                    </div>
                 </div>
+                <div class="col-xs-12">
+                    <div class="col-xs-9">
+                        <div class="list-group" ng-if="values.length>0" style="margin-top: 10px">
+                            <p><b>Current Values</b></p>
+                            <a class="list-group-item" ng-repeat="item in values"
+                               ng-click="entityExpressionsItemClick(item)">
+                                <h4 class="list-group-item-heading">{{item.value}}</h4>
+                                <p class="list-group-item-text" style="margin-left: 30px" ng-repeat="exp in item.expressions">{{exp}}</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <hr class="col-xs-9 col-xs-offset-1">
+                </div>
+                <div class="form-group col-xs-12" style="margin-top: 5px">
+                    <label for="entityDescription" class="control-label">Entity Data</label>
+                    <textarea style="width: 100%; height: 200px; resize: none" id="entityDescription"
+                              ng-model="entityData" ng-change="changeText('entity_data_empty')"></textarea>
+                    <div class="col-xs-12">
+                        <span class="col-xs-12" ng-show="isSubmit && entity_data_empty"><p style="color: red; float: right">*Entity Data is required</p></span>
+                    </div>
+                </div>
+                <input type="button" style="float: right; width: 150px;" value="Create Entity"
+                       class="btn btn-success" ng-click="createEntity()">
             </div>
         </div>
     </div>

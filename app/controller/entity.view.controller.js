@@ -4,75 +4,114 @@
 app.controller('EntityController',[
     '$scope','PageViewService','$http','host_url',
     function ($scope,PageViewService,$http,host_url) {
-        //Data Section
-        $scope.$watch(PageViewService.getViewData, function (newValue,old) {
-            if(newValue){
-                $scope.selectedIntentName = newValue.intent_name;
-                $scope.currentEntities = [];
-                for(let i=0; i<$scope.appEntities.length; i++ ){
-                    if($scope.appEntities[i].intent_name===newValue.intent_name){
-                        $scope.currentEntities.push($scope.appEntities[i]);
-                    }
-                }
-                if($scope.currentEntities.length>0){$scope.selectedEntityName = $scope.currentEntities[0].name;}
+        //-----------------------Alert Show Section---------------------------------------------------------------------
+        $scope.dangerAlert = false;
+        $scope.successAlert = false;
+        $scope.message = '';
+        let resetAlert = function () {
+            $scope.dangerAlert = false;
+            $scope.successAlert = false;
+            $scope.message = '';
+        };
+        //--------------------------------------------------------------------------------------------------------------
+        $scope.appLoockups = ["trait","free-text & keywords","free-text","keywords"];
+        $scope.selectedLoockup = $scope.appLoockups[0];
+        $scope.values = [];
+        $scope.entityExpressions = [];
+        $scope.entityExpressionsItemClick = function (item) {
+            for(let i=0; i< $scope.entityExpressions.length; i++){
+                if(item===$scope.entityExpressions[i]){
+                    $scope.entityExpressions.splice(i,1); break;}
             }
-        },true);
-        //Variable data init
-        $scope.appEntities = [];
-        $scope.currentEntities = [];
-        if($scope.appEntities.length>0){$scope.selectedEntityName = $scope.appEntities[0].name;}
-        //-----------------------On Loading-----------------------------------------------------------------------------
-        //Initialize Variables
-        $scope.appEntities = [];
-        if($scope.appEntities.length>0){$scope.selectedEntityName = $scope.appEntities[0].name;}
-        $scope.onInit = async function () {
-            console.log('Initializing entity variables');
-            try {
-                let result = await $http({
-                    method: "GET",
-                    url: host_url + "entity/get?entityid=all"
+        };
+        $scope.btnAddExpression = function () {
+            let con = true;
+            for(let i=0; i< $scope.entityExpressions.length; i++){
+                if($scope.entityAddExpressions===$scope.entityExpressions[i]){con =false; break;}
+            }
+            if(con){$scope.entityExpressions.push($scope.entityAddExpressions);
+                $scope.entityAddExpressions='';}
+        };
+        $scope.btnAddValue = function () {
+            //Value field validate
+            let con = true;
+            if(typeof $scope.entityAddValue==='undefined' || $scope.entityAddValue ===''){
+                $scope.entity_value_empty = true;
+                con = false;
+            }
+            if(con) {
+                let tmp_obj = {};
+                tmp_obj.value = $scope.entityAddValue;
+                tmp_obj.expressions = $scope.entityExpressions;
+                $scope.values.push(tmp_obj);
+                $scope.entityAddValue = '';
+                $scope.entityExpressions = [];
+            }
+        };
+        $scope.createEntity = async function () {
+            resetAlert();
+            $scope.isSubmit = true;
+            //Data validation
+            let con = true;
+            if(typeof $scope.entityName==='undefined' || $scope.entityName===''){
+                $scope.entity_name_empty = true; con = false;
+            }
+            if(typeof $scope.entityDesc==='undefined' || $scope.entityDesc===''){
+                $scope.entity_des_empty = true; con = false;
+            }
+            if(typeof $scope.entityData==='undefined' || $scope.entityData===''){
+                $scope.entity_data_empty = true; con = false;
+            }
+            if(con){
+                //Database call
+                // let data = $scope.entityData;
+
+                let values = JSON.stringify( $scope.values, function( key, value ) {
+                    if( key === "$$hashKey" ) {return undefined;}
+                    return value;
                 });
-                let resData = result.data.data;
-                for(let i=0; i<resData.length; i++){
-                    $scope.appEntities.push(resData[i]);
+                let result = await $http({
+                    method: "POST",
+                    url: host_url + "wit/postEntity",
+                    data: 'doc='+ $scope.entityDesc+ '&id=' + $scope.entityName + '&lookups=' + JSON.stringify($scope.selectedLoockup) +
+                            '&values=' + values,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                });
+                if(result.status===200){
+                    $scope.entityDesc = ''; $scope.entityName = ''; $scope.entityData ='';
+                    $scope.values = []; $scope.entityExpressions = [];
+                    $scope.message = 'Intent successfully deleted!';
+                    $scope.successAlert = true;
+                    $scope.$apply();
                 }
-                $scope.$apply();
-            }catch (err){
-                console.log(err);
+            }
+        };
+        //Error messages------------------------------------------------------------------------------------------------
+        $scope.isSubmit = false;
+        $scope.entity_name_empty = false;
+        $scope.entity_name_dublicate = false;
+        $scope.entity_des_empty = false;
+        $scope.entity_data_empty = false;
+        $scope.entity_value_empty = false;
+        $scope.changeText = function (field) {
+            switch (field){
+                case 'entity_name_empty':
+                    $scope.entity_name_empty = false;
+                    break;
+                case 'entity_name_dublicate':
+                    $scope.entity_name_dublicate = false;
+                    break;
+                case 'entity_des_empty':
+                    $scope.entity_des_empty = false;
+                    break;
+                case 'entity_data_empty':
+                    $scope.entity_data_empty = false;
+                    break;
+                case 'entity_value_empty':
+                    $scope.entity_value_empty = false;
+                    break;
             }
         };
         //--------------------------------------------------------------------------------------------------------------
-        $scope.add_expressions = [];
-        $scope.add_intent_expressions = [];
-        $scope.btn_add_expressions = function () {
-            if(typeof $scope.add_exp_value!=='undefined' && $scope.add_exp_value!==''){
-                if($scope.add_expressions.indexOf($scope.add_exp_value)===-1){
-                    $scope.add_expressions.push($scope.add_exp_value);
-                    $scope.add_exp_value = '';
-                }
-            }
-        };
-        $scope.btn_add_intent_expressions = function () {
-            if(typeof $scope.add_exp_int_value!=='undefined' && $scope.add_exp_int_value!==''){
-                if($scope.add_intent_expressions.indexOf($scope.add_exp_int_value)===-1){
-                    $scope.add_intent_expressions.push($scope.add_exp_int_value);
-                    $scope.add_exp_int_value = '';
-                }
-            }
-        };
-        $scope.exp_add_item_int_click = function (item) {
-            for(let i=0; i<$scope.add_intent_expressions.length; i++){
-                if($scope.add_intent_expressions[i]===item){
-                    $scope.add_intent_expressions.splice((i),1);
-                }
-            }
-        }
-        $scope.exp_add_item_click = function (item) {
-            for(let i=0; i<$scope.add_expressions.length; i++){
-                if($scope.add_expressions[i]===item){
-                    $scope.add_expressions.splice((i),1);
-                }
-            }
-        }
     }
 ]);
