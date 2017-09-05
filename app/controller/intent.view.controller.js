@@ -64,6 +64,89 @@ app.controller('IntentController',[
                     break;
             }
         };
+        //------------------------Intent Update Model Section-----------------------------------------------------------
+        $scope.selectedappIntents = {};
+        $scope.appIntentsItemClick = function (item) {
+            $scope.selectedappIntents = angular.copy(item);
+            $scope.intUpdateExpression = '';
+        };
+        $scope.appIntentsItemDelete = async function () {
+            let tmp_arr = [];
+            for(let i=0; i<$scope.appIntents.length; i++ ){
+                if($scope.appIntents[i].value!==$scope.selectedappIntents.value){
+                    tmp_arr.push($scope.appIntents[i]);
+                    break;
+                }
+            }
+            $scope.appIntents = tmp_arr;
+                let result = await $http({
+                    method: "POST",
+                    url: host_url + "intent/delete",
+                    data: 'intent_name='+ $scope.selectedappIntents.value,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                });
+                console.log(result);
+                let data = JSON.stringify( $scope.appIntents, function( key, value ) {
+                    if( key === "$$hashKey" ) {return undefined;}
+                    return value;
+                });
+                if(typeof $scope.indentDes==='undefined'){$scope.indentDes='';}
+                await $http({
+                    method: "POST",
+                    url: host_url + "wit/putEntityById",
+                    data: 'entity_name='+ 'intent'+ '&wit_values=' + data + '&wit_doc=' + $scope.indentDes,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                });
+                $scope.message = 'Intent successfully deleted!';
+                $scope.successAlert = true;
+                $scope.$apply();
+
+            $('#updateData').modal('hide');
+        };
+        $scope.appIntentsItemUpdate = async function () {
+            let tmp_arr = [];
+            for(let i=0; i<$scope.appIntents.length; i++ ){
+                if($scope.appIntents[i].value!==$scope.selectedappIntents.value){
+                    tmp_arr.push($scope.appIntents[i]);
+                    break;
+                }else{
+                    tmp_arr.push($scope.selectedappIntents);
+                }
+            }
+            $scope.appIntents = tmp_arr;
+            let data = JSON.stringify( $scope.appIntents, function( key, value ) {
+                if( key === "$$hashKey" ) {return undefined;}
+                return value;
+            });
+            if(typeof $scope.indentDes==='undefined'){$scope.indentDes='';}
+            let result = await $http({
+                method: "POST",
+                url: host_url + "wit/putEntityById",
+                data: 'entity_name='+ 'intent'+ '&wit_values=' + data + '&wit_doc=' + $scope.indentDes,
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            });
+            $scope.message = 'Intent successfully updated!';
+            $scope.successAlert = true;
+            $scope.$apply();
+            $('#updateData').modal('hide');
+        };
+        $scope.appIntentsUpdateItemClick = function (item) {
+            for(let i=0; i<$scope.selectedappIntents.expressions.length; i++){
+                if($scope.selectedappIntents.expressions[i]===item){
+                    $scope.selectedappIntents.expressions.splice((i),1);
+                }
+            }
+        };
+        $scope.btn_update_add_expressions = function () {
+            if($scope.intUpdateExpression!==''&&typeof $scope.intUpdateExpression!=='undefined'){
+                let con = true;
+                for(let i=0; i<$scope.selectedappIntents.expressions.length; i++){
+                    if($scope.selectedappIntents.expressions[i]===$scope.intUpdateExpression){con = false; break;}
+                }
+                if(con){$scope.selectedappIntents.expressions.push($scope.intUpdateExpression);
+                    $scope.intUpdateExpression = '';}
+            }
+        };
         //Create New Intent
         $scope.createNewIntent = async function () {
             resetAlert();
@@ -89,7 +172,7 @@ app.controller('IntentController',[
                             let data = JSON.stringify( $scope.appIntents, function( key, value ) {
                                 if( key === "$$hashKey" ) {return undefined;}
                                 return value;
-                            })
+                            });
                             let result = await $http({
                                 method: "POST",
                                 url: host_url + "wit/putEntityById",
@@ -97,7 +180,7 @@ app.controller('IntentController',[
                                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                             });
                             console.log(result);
-                            $scope.intentName = ''; $scope.indentDes = '';
+                            $scope.intentName = '';
                             $scope.$apply();
                         }
                     }
