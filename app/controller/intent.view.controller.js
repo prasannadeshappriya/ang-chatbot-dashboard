@@ -32,10 +32,7 @@ app.controller('IntentController',[
                 if($scope.appIntents.length>0){$scope.selectedIntentName = $scope.appIntents[0].name;}
                 result = await $http({
                     method: "GET",
-                    url: host_url + "wit/getEntityById?" +
-                    "entity_name=intent&" +
-                    "wit_token=Bearer 6PN2II4QPW5UYG3VPR6EXWFRU6MTTFBH&" +
-                    "content_type=application/json"
+                    url: host_url + "wit/getEntityById?entity_name=intent"
                 });
                 if(result.status===200) {
                     $scope.indentDes = result.data.data.doc;
@@ -87,11 +84,24 @@ app.controller('IntentController',[
                         if(result.status===201){
                             $scope.message = 'Intent successfully created!';
                             $scope.successAlert = true;
-                            $scope.appIntents.push({name: $scope.intentName, description: $scope.indentDes});
-                            $scope.selectedIntentName = $scope.intentName; $scope.intentName = ''; $scope.indentDes = '';
+                            $scope.appIntents.push({value: $scope.intentName, expressions: $scope.add_expressions});
+                            $scope.selectedIntentName = $scope.intentName;
+                            let data = JSON.stringify( $scope.appIntents, function( key, value ) {
+                                if( key === "$$hashKey" ) {return undefined;}
+                                return value;
+                            })
+                            let result = await $http({
+                                method: "POST",
+                                url: host_url + "wit/putEntityById",
+                                data: 'entity_name='+ 'intent'+ '&wit_values=' + data + '&wit_doc=' + $scope.indentDes,
+                                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                            });
+                            console.log(result);
+                            $scope.intentName = ''; $scope.indentDes = '';
                             $scope.$apply();
                         }
                     }
+                    console.log('Intent successfully created!');
                 }catch (err){
                     if(err.status===409){$scope.intent_name_dublicate = true; $scope.$apply();}
                     // console.log(err);
