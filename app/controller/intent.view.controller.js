@@ -191,41 +191,11 @@ app.controller('IntentController',[
                 }
             }
         };
-        //Delete an Existing Intent
-        $scope.deleteIntent = async function () {
-            if($scope.selectedIntentName==='' || typeof $scope.selectedIntentName==='undefined'){
-                $scope.message = "You don't have any intents!";
-                $scope.dangerAlert = true;
-                return;
-            }
-            try {
-                let result = await $http({
-                    method: "POST",
-                    url: host_url + "intent/delete",
-                    data: 'intent_name='+ $scope.selectedIntentName,
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                });
-                console.log(result);
-                if(result){
-                    if (result.status===200){
-                        for(let i=0; i<$scope.appIntents.length; i++){
-                            if($scope.appIntents[i].name===$scope.selectedIntentName){
-                                $scope.appIntents.splice(i,1);
-                                if($scope.appIntents.length>0){$scope.selectedIntentName = $scope.appIntents[0].name;};
-                                $scope.$apply();break;
-                            }
-                        }
-                    }
-                }
-            }catch (err){
-                console.log(err);
-            }
-            console.log('You are going to delete: ' + $scope.selectedIntentName);
-        };
+        //View Controller-----------------------------------------------------------------------------------------------
         $scope.showView = function (view_name) {
             PageViewService.setViewData('intent_name',$scope.selectedIntentName);
             PageViewService.setViewController(view_name);
-        }
+        };
         //--------------------------------------------------------------------------------------------------------------
         $scope.add_expressions = [];
         $scope.btn_add_expressions = function () {
@@ -236,12 +206,5 @@ app.controller('IntentController',[
                 }
             }
         };
-        $scope.exp_add_item_click = function (item) {
-            for(let i=0; i<$scope.add_expressions.length; i++){
-                if($scope.add_expressions[i]===item){
-                    $scope.add_expressions.splice((i),1);
-                }
-            }
-        }
     }
 ]);
