@@ -16,6 +16,7 @@ app.controller('IntentController',[
         //-----------------------On Loading-----------------------------------------------------------------------------
         //Initialize intent Variables
         $scope.appIntents = [];
+        $scope.appIntentsLookups = [];
         if($scope.appIntents.length>0){$scope.selectedIntentName = $scope.appIntents[0].name;}
         $scope.onInit = async function () {
             console.log('Initializing variables');
@@ -29,6 +30,20 @@ app.controller('IntentController',[
                     $scope.appIntents.push(resData[i])
                 }
                 if($scope.appIntents.length>0){$scope.selectedIntentName = $scope.appIntents[0].name;}
+                result = await $http({
+                    method: "GET",
+                    url: host_url + "wit/getEntityById?" +
+                    "entity_name=intent&" +
+                    "wit_token=Bearer 6PN2II4QPW5UYG3VPR6EXWFRU6MTTFBH&" +
+                    "content_type=application/json"
+                });
+                if(result.status===200) {
+                    $scope.indentDes = result.data.data.doc;
+                    $scope.appIntentsLookups = result.data.data.lookups;
+                    $scope.appIntents = result.data.data.values;
+                    console.log(result);
+                    console.log($scope.appIntents);
+                }
                 $scope.$apply();
             }catch (err){
                 console.log(err);

@@ -5,6 +5,21 @@
     <div class="alert alert-danger" ng-show="dangerAlert">
         {{message}}
     </div>
+    <h4 class="text-info">Current intents and it's values/expressions</h4>
+    <div>
+        <div class="list-group">
+            <a class="list-group-item" ng-repeat="item in appIntentsLookups">
+                <h4 class="list-group-item-heading">Lookup strategy</h4>
+                <p class="list-group-item-text" style="margin-left: 30px">- {{item}}</p>
+            </a>
+        </div>
+        <div class="list-group">
+            <a class="list-group-item" ng-repeat="item in appIntents">
+                <h4 class="list-group-item-heading">{{item.value}}</h4>
+                <p class="list-group-item-text" ng-repeat="exp in item.expressions" style="margin-left: 30px">- {{exp}}</p>
+            </a>
+        </div>
+    </div>
     <div class="panel panel-default">
         <div class="panel-heading">
             <h4 class="text-info">Create new intent</h4>
@@ -31,9 +46,12 @@
                 <input type="button" style="float: right; width: 150px" value="Add" class="btn btn-success" ng-click="btn_add_expressions()">
 
                 <div ng-if="add_expressions.length>0">
-                    <ul class="list-group" style="margin-top: 60px">
-                        <li class="list-group-item" ng-repeat="item in add_expressions" ng-click="exp_add_item_click(item)">{{item}}</li>
-                    </ul>
+                    <div class="list-group"  style="margin-top: 60px">
+                        <a class="list-group-item">
+                            <h4 class="list-group-item-heading">{{intentName}}</h4>
+                            <p class="list-group-item-text" ng-repeat="item in add_expressions" style="margin-left: 30px">- {{item}}</p>
+                        </a>
+                    </div>
                 </div>
 
                 <div class="form-group col-xs-12">
