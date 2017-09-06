@@ -36,18 +36,23 @@
                 </div>
             </div>
         </div>
-        <div class="list-group">
-            <a class="list-group-item" ng-repeat="item in appIntentsLookups">
-                <h4 class="list-group-item-heading">Lookup strategy</h4>
-                <p class="list-group-item-text" style="margin-left: 30px">- {{item}}</p>
-            </a>
+        <div ng-show="isLoading">
+            <img src="assets/img/loading.svg" style="height: 60px;" class="center-block">
         </div>
-        <div class="list-group">
-            <a class="list-group-item" ng-repeat="item in appIntents" ng-click="appIntentsItemClick(item)"
-               data-target="#updateData" data-toggle="modal">
-                <h4 class="list-group-item-heading">{{item.value}}</h4>
-                <p class="list-group-item-text" ng-repeat="exp in item.expressions" style="margin-left: 30px">- {{exp}}</p>
-            </a>
+        <div ng-show="!isLoading">
+            <div class="list-group">
+                <a class="list-group-item" ng-repeat="item in appIntentsLookups">
+                    <h4 class="list-group-item-heading">Lookup strategy</h4>
+                    <p class="list-group-item-text" style="margin-left: 30px">- {{item}}</p>
+                </a>
+            </div>
+            <div class="list-group">
+                <a class="list-group-item" ng-repeat="item in appIntents" ng-click="appIntentsItemClick(item)"
+                   data-target="#updateData" data-toggle="modal">
+                    <h4 class="list-group-item-heading">{{item.value}}</h4>
+                    <p class="list-group-item-text" ng-repeat="exp in item.expressions" style="margin-left: 30px">- {{exp}}</p>
+                </a>
+            </div>
         </div>
     </div>
     <div class="panel panel-default">

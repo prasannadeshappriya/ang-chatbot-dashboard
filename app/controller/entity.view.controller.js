@@ -64,24 +64,39 @@ app.controller('EntityController',[
             }
             if(con){
                 //Database call
-                // let data = $scope.entityData;
-
-                let values = JSON.stringify( $scope.values, function( key, value ) {
-                    if( key === "$$hashKey" ) {return undefined;}
-                    return value;
-                });
+                let data = $scope.entityData;
                 let result = await $http({
                     method: "POST",
-                    url: host_url + "wit/postEntity",
-                    data: 'doc='+ $scope.entityDesc+ '&id=' + $scope.entityName + '&lookups=' + JSON.stringify($scope.selectedLoockup) +
-                            '&values=' + values,
+                    url: host_url + "entity/create",
+                    data: 'entity_name='+ $scope.entityName + '&entity_data=' + $scope.entityData + '&entity_description=' + $scope.entityDesc,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 });
-                if(result.status===200){
-                    $scope.entityDesc = ''; $scope.entityName = ''; $scope.entityData ='';
-                    $scope.values = []; $scope.entityExpressions = [];
-                    $scope.message = 'Intent successfully deleted!';
-                    $scope.successAlert = true;
+                if(result.status===201){
+                    let values = JSON.stringify( $scope.values, function( key, value ) {
+                        if( key === "$$hashKey" ) {return undefined;}
+                        return value;
+                    });
+                    result = await $http({
+                        method: "POST",
+                        url: host_url + "wit/postEntity",
+                        data: 'doc='+ $scope.entityDesc+ '&id=' + $scope.entityName + '&lookups=' + JSON.stringify($scope.selectedLoockup) +
+                        '&values=' + values,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    });
+                    if(result.status===200){
+                        $scope.entityDesc = ''; $scope.entityName = ''; $scope.entityData ='';
+                        $scope.values = []; $scope.entityExpressions = [];
+                        $scope.message = 'Entity successfully created!';
+                        $scope.successAlert = true;
+                        $scope.$apply();
+                    }else{
+                        $scope.message = 'Error occurred!';
+                        $scope.dangerAlert = true;
+                        $scope.$apply();
+                    }
+                }else{
+                    $scope.message = 'Error occurred!';
+                    $scope.dangerAlert = true;
                     $scope.$apply();
                 }
             }

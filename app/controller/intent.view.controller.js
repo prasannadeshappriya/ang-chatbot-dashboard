@@ -20,6 +20,7 @@ app.controller('IntentController',[
         if($scope.appIntents.length>0){$scope.selectedIntentName = $scope.appIntents[0].name;}
         $scope.onInit = async function () {
             console.log('Initializing variables');
+            $scope.isLoading = true;
             try {
                 let result = await $http({
                     method: "GET",
@@ -40,14 +41,24 @@ app.controller('IntentController',[
                     $scope.appIntents = result.data.data.values;
                     console.log(result);
                     console.log($scope.appIntents);
+                }else{
+                    $scope.message = 'Error occurred!';
+                    $scope.dangerAlert = true;
+                    $scope.$apply();
                 }
+                $scope.isLoading = false;
                 $scope.$apply();
             }catch (err){
                 console.log(err);
+                $scope.message = 'Error occurred!';
+                $scope.dangerAlert = true;
+                $scope.isLoading = false;
+                $scope.$apply();
             }
         };
         //-----------------------Data Validation Section----------------------------------------------------------------
         $scope.isSubmit = false;
+        $scope.isLoading = true;
         $scope.intent_name_empty = false;
         $scope.intent_name_dublicate = false;
         $scope.intent_description_empty = false;
@@ -85,22 +96,36 @@ app.controller('IntentController',[
                     data: 'intent_name='+ $scope.selectedappIntents.value,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 });
-                console.log(result);
-                let data = JSON.stringify( $scope.appIntents, function( key, value ) {
-                    if( key === "$$hashKey" ) {return undefined;}
-                    return value;
-                });
-                if(typeof $scope.indentDes==='undefined'){$scope.indentDes='';}
-                await $http({
-                    method: "POST",
-                    url: host_url + "wit/putEntityById",
-                    data: 'entity_name='+ 'intent'+ '&wit_values=' + data + '&wit_doc=' + $scope.indentDes,
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                });
-                $scope.message = 'Intent successfully deleted!';
-                $scope.successAlert = true;
-                $scope.$apply();
-
+                if(result.status===200) {
+                    let data = JSON.stringify($scope.appIntents, function (key, value) {
+                        if (key === "$$hashKey") {
+                            return undefined;
+                        }
+                        return value;
+                    });
+                    if (typeof $scope.indentDes === 'undefined') {
+                        $scope.indentDes = '';
+                    }
+                    result = await $http({
+                        method: "POST",
+                        url: host_url + "wit/putEntityById",
+                        data: 'entity_name=' + 'intent' + '&wit_values=' + data + '&wit_doc=' + $scope.indentDes,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    });
+                    if(result.status===200) {
+                        $scope.message = 'Intent successfully deleted!';
+                        $scope.successAlert = true;
+                        $scope.$apply();
+                    }else{
+                        $scope.message = 'Error occurred!';
+                        $scope.dangerAlert = true;
+                        $scope.$apply();
+                    }
+                }else{
+                    $scope.message = 'Error occurred!';
+                    $scope.dangerAlert = true;
+                    $scope.$apply();
+                }
             $('#updateData').modal('hide');
         };
         $scope.appIntentsItemUpdate = async function () {
@@ -179,8 +204,18 @@ app.controller('IntentController',[
                                 data: 'entity_name='+ 'intent'+ '&wit_values=' + data + '&wit_doc=' + $scope.indentDes,
                                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                             });
-                            console.log(result);
-                            $scope.intentName = '';
+                            if(result.status===200) {
+                                console.log(result);
+                                $scope.intentName = '';
+                                $scope.$apply();
+                            }else{
+                                $scope.message = 'Error occurred!';
+                                $scope.dangerAlert = true;
+                                $scope.$apply();
+                            }
+                        }else{
+                            $scope.message = 'Error occurred!';
+                            $scope.dangerAlert = true;
                             $scope.$apply();
                         }
                     }

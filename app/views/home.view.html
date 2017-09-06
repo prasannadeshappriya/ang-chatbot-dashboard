@@ -4,11 +4,13 @@
             <a ng-click="showView('settings')" class="list-group-item">Settings</a>
             <a ng-click="showView('intent')" class="list-group-item">Intents</a>
             <a ng-click="showView('entity')" class="list-group-item">Entities</a>
+            <a ng-click="showView('training')" class="list-group-item">Train Bot</a>
         </div>
     </div>
     <div class="col-xs-9">
         <div ng-include="'views/components/intent.view.html'" ng-show="viewController.intent"></div>
         <div ng-include="'views/components/entity.view.html'" ng-show="viewController.entity"></div>
         <div ng-include="'views/components/settings.view.html'" ng-show="viewController.settings"></div>
+        <div ng-include="'views/components/train.view.html'" ng-show="viewController.training"></div>
     </div>
 </div>
