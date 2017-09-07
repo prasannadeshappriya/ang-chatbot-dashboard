@@ -1,4 +1,4 @@
-<div ng-controller="TrainController">
+<div ng-controller="TrainController" ng-init="onInit()">
     <div class="alert alert-success" ng-show="successAlert">
         {{message}}
     </div>
@@ -13,7 +13,7 @@
             <div class="col-xs-8 col-xs-offset-2">
                 <div class="form-group">
                     <label for="txtUserINput" class="control-label">Input your expression</label>
-                    <input type="text" id="txtUserINput" class="form-control" ng-model="user_input" ng-change="changeText('expression_empty')">
+                    <input type="text" id="txtUserINput" class="form-control" ng-model="user_input" ng-change="changeText('expression_empty'); expressionOnChange();">
                     <div class="col-xs-12">
                         <span class="col-xs-12" ng-show="expression_empty"><p style="color: red; float: right">*Your expression is required</p></span>
                     </div>
@@ -27,8 +27,47 @@
                                ng-click="btnCheck()">
                     </div>
                 </div>
+                <div class="col-xs-12">
+                    <div class="col-xs-8">
+                        <label for="entityName" class="control-label">Entity:</label>
+                        <select class="form-control" name="size" id="entityName" ng-model="selectedEntity" ng-change="entitySelect()">
+                            <option ng-repeat="item in entities">{{item}}</option>
+                        </select>
+                        <input type="text" class="form-control" style="margin-top: 10px" ng-show="showCustomInputBox"
+                               ng-model="entityName" ng-change="changeText('entity_name_empty')">
+                        <span class="col-xs-12" ng-show="entity_name_empty"><p style="color: red; float: right">*Entity name is required</p></span>
+
+                        <label for="entityValue" class="control-label" style="margin-top: 10px">Value:</label>
+                        <select class="form-control" name="size" id="entityValue" ng-model="selectedEntityValue" ng-change="valueSelect()">
+                            <option ng-repeat="item in values">{{item.value}}</option>
+                        </select>
+                        <input type="text" class="form-control" style="margin-top: 10px" ng-show="showCustomInputValueBox"
+                               ng-model="entityValue" ng-change="changeText('entity_value_empty')">
+                        <span class="col-xs-12" ng-show="entity_value_empty"><p style="color: red; float: right">*Entity value is required</p></span>
+
+                    </div>
+                    <div class="col-xs-4">
+                        <input type="button" value="Add" class="btn btn-default" style="margin-top: 25px; width: 150px" ng-click="btnAddEntity()">
+                        <span class="col-xs-12"><p style="color: red; float: right; margin-top: 10px"
+                                                   ng-show="no_values_error">*You did't add any data yet, Add an entity, value pair to validate</p></span>
+                    </div>
+                </div>
+                <div class="list-group col-xs-9 col-xs-offset-2" style="margin-top: 10px">
+                    <a class="list-group-item" ng-repeat="item in entityArr" ng-click="removeValue(item)">
+                        <h4 class="list-group-item-heading">Entity: {{item.entity}}</h4>
+                        <p class="list-group-item-text">Value: {{item.value}}</p>
+                    </a>
+                </div>
+                <div class="col-xs-12">
+                    <span class="col-xs-12"><p style="color: red; text-align: center; margin-top: 10px"
+                                               ng-show="server_400_error">*Check your intent names,
+                                                One or many names are not exist. Create them first and train your app</p></span>
+                    <span class="col-xs-12"><p style="color: red; text-align: center; margin-top: 10px"
+                                               ng-show="server_error">*Something wrong with the server</p></span>
+                    <input type="button" value="Validate" class="btn btn-success" style="margin-top: 25px; width: 150px; float: right" ng-click="btnValidateEntity()">
+                </div>
                 <div class="col-xs-12" ng-show="!isLoading">
-                    <div ng-if="!result">
+                    <div ng-if="!result && isSubmit">
                         <h4 class="text-info">No entities found!</h4>
                     </div>
                     <div ng-if="result">

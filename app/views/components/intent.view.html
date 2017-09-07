@@ -5,6 +5,57 @@
     <div class="alert alert-danger" ng-show="dangerAlert">
         {{message}}
     </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="text-info">Create new intent</h4>
+        </div>
+        <div class="panel-body">
+            <div class="col-xs-8 col-xs-offset-2">
+                <div class="form-group">
+                    <label for="intentName" class="control-label">Intent Name</label>
+                    <input type="text" id="intentName" class="form-control" ng-model="intentName" ng-change="changeText('intent_name_empty'); changeText('intent_name_dublicate')">
+                    <div class="col-xs-12">
+                        <span class="col-xs-12" ng-show="isSubmit && intent_name_empty"><p style="color: red; float: right">*Intent name is required</p></span>
+                        <span class="col-xs-12" ng-show="isSubmit && intent_name_dublicate"><p style="color: red; float: right">*Intent name is already taken</p></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="expName" class="control-label">App Expressions</label>
+                    <input type="text" id="expName" class="form-control" ng-model="add_exp_value">
+
+                </div>
+                <div ng-if="add_expressions.length===0">
+                    <h5 class="col-xs-12 text-info">You don't have any expressions, Create now</h5>
+                </div>
+
+                <input type="button" style="float: right; width: 150px" value="Add" class="btn btn-default" ng-click="btn_add_expressions()">
+
+                <div ng-if="add_expressions.length>0">
+                    <div class="list-group"  style="margin-top: 60px">
+                        <a class="list-group-item">
+                            <h4 class="list-group-item-heading">{{intentName}}</h4>
+                            <p class="list-group-item-text" ng-repeat="item in add_expressions" style="margin-left: 30px">- {{item}}</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="form-group col-xs-12" style="margin-top: 10px">
+                    <label for="intentDescription" class="control-label">Intent Description</label>
+                    <input type="text" id="intentDescription" class="form-control" ng-model="indentDes" ng-change="changeText('intent_description_empty')">
+                    <div class="col-xs-12">
+                        <span class="col-xs-12" ng-show="isSubmit && intent_description_empty"><p style="color: red; float: right">*Intent description is required</p></span>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <h5 style="color: red; margin-left: 5%">Note:</h5>
+                    <div style="margin-left: 10%">
+                        <h5 style="color: red">-Cannot create two intent with the same name.</h5>
+                        <h5 style="color: red">-Please put a meaningful name when creating an intent.</h5>
+                    </div>
+                </div>
+                <input type="button" class="btn btn-success" value="Create" style="float: right; width: 150px; margin-top: 10px" ng-click="createNewIntent()">
+            </div>
+        </div>
+    </div>
     <h4 class="text-info">Current intents and it's values/expressions</h4>
     <div>
         <div class="modal" id="updateData">
@@ -52,58 +103,6 @@
                     <h4 class="list-group-item-heading">{{item.value}}</h4>
                     <p class="list-group-item-text" ng-repeat="exp in item.expressions" style="margin-left: 30px">- {{exp}}</p>
                 </a>
-            </div>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="text-info">Create new intent</h4>
-        </div>
-        <div class="panel-body">
-            <div class="col-xs-8 col-xs-offset-2">
-                <div class="form-group">
-                    <label for="intentName" class="control-label">Intent Name</label>
-                    <input type="text" id="intentName" class="form-control" ng-model="intentName" ng-change="changeText('intent_name_empty'); changeText('intent_name_dublicate')">
-                    <div class="col-xs-12">
-                        <span class="col-xs-12" ng-show="isSubmit && intent_name_empty"><p style="color: red; float: right">*Intent name is required</p></span>
-                        <span class="col-xs-12" ng-show="isSubmit && intent_name_dublicate"><p style="color: red; float: right">*Intent name is already taken</p></span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="expName" class="control-label">App Expressions</label>
-                    <input type="text" id="expName" class="form-control" ng-model="add_exp_value">
-
-                </div>
-                <div ng-if="add_expressions.length===0">
-                    <h5 class="col-xs-12 text-info">You don't have any expressions, Create now</h5>
-                </div>
-
-                <input type="button" style="float: right; width: 150px" value="Add" class="btn btn-success" ng-click="btn_add_expressions()">
-
-                <div ng-if="add_expressions.length>0">
-                    <div class="list-group"  style="margin-top: 60px">
-                        <a class="list-group-item">
-                            <h4 class="list-group-item-heading">{{intentName}}</h4>
-                            <p class="list-group-item-text" ng-repeat="item in add_expressions" style="margin-left: 30px">- {{item}}</p>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="form-group col-xs-12">
-                    <label for="intentDescription" class="control-label">Intent Description</label>
-                    <textarea style="width: 100%; height: 200px; resize: none" id="intentDescription" ng-model="indentDes" ng-change="changeText('intent_description_empty')"></textarea>
-                </div>
-                <div class="col-xs-12">
-                    <span class="col-xs-12" ng-show="isSubmit && intent_description_empty"><p style="color: red; float: right">*Intent description is required</p></span>
-                </div>
-                <div class="col-xs-12">
-                    <h5 style="color: red; margin-left: 5%">Note:</h5>
-                    <div style="margin-left: 10%">
-                        <h5 style="color: red">-Cannot create two intent with the same name.</h5>
-                        <h5 style="color: red">-Please put a meaningful name when creating an intent.</h5>
-                    </div>
-                </div>
-                <input type="button" class="btn btn-success" value="Create" style="float: right; width: 150px; margin-top: 10px" ng-click="createNewIntent()">
             </div>
         </div>
     </div>

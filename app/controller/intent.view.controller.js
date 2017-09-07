@@ -39,8 +39,6 @@ app.controller('IntentController',[
                     $scope.indentDes = result.data.data.doc;
                     $scope.appIntentsLookups = result.data.data.lookups;
                     $scope.appIntents = result.data.data.values;
-                    console.log(result);
-                    console.log($scope.appIntents);
                 }else{
                     $scope.message = 'Error occurred!';
                     $scope.dangerAlert = true;
@@ -234,10 +232,15 @@ app.controller('IntentController',[
         //--------------------------------------------------------------------------------------------------------------
         $scope.add_expressions = [];
         $scope.btn_add_expressions = function () {
-            if(typeof $scope.add_exp_value!=='undefined' && $scope.add_exp_value!==''){
-                if($scope.add_expressions.indexOf($scope.add_exp_value)===-1){
-                    $scope.add_expressions.push($scope.add_exp_value);
-                    $scope.add_exp_value = '';
+            if(typeof $scope.intentName==='undefined' || $scope.intentName===''){
+                $scope.intent_name_empty = true;
+                $scope.isSubmit = true;
+            }else {
+                if (typeof $scope.add_exp_value !== 'undefined' && $scope.add_exp_value !== '') {
+                    if ($scope.add_expressions.indexOf($scope.add_exp_value) === -1) {
+                        $scope.add_expressions.push($scope.add_exp_value);
+                        $scope.add_exp_value = '';
+                    }
                 }
             }
         };
