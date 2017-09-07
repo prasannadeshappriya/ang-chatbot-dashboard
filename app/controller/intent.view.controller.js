@@ -196,6 +196,7 @@ app.controller('IntentController',[
                                 if( key === "$$hashKey" ) {return undefined;}
                                 return value;
                             });
+
                             let result = await $http({
                                 method: "POST",
                                 url: host_url + "wit/putEntityById",

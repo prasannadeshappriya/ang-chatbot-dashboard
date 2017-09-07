@@ -26,11 +26,12 @@ app.controller('EntityController',[
         };
         $scope.btnAddExpression = function () {
             let con = true;
-            for(let i=0; i< $scope.entityExpressions.length; i++){
-                if($scope.entityAddExpressions===$scope.entityExpressions[i]){con =false; break;}
+            if(typeof $scope.entityAddExpressions!=='undefined' && $scope.entityAddExpressions!=='') {
+                for (let i = 0; i < $scope.entityExpressions.length; i++) {
+                    if ($scope.entityAddExpressions === $scope.entityExpressions[i]) {con = false;break;}
+                }
+                if (con) {$scope.entityExpressions.push($scope.entityAddExpressions);$scope.entityAddExpressions = '';}
             }
-            if(con){$scope.entityExpressions.push($scope.entityAddExpressions);
-                $scope.entityAddExpressions='';}
         };
         $scope.btnAddValue = function () {
             //Value field validate
@@ -72,15 +73,21 @@ app.controller('EntityController',[
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 });
                 if(result.status===201){
-                    let values = JSON.stringify( $scope.values, function( key, value ) {
-                        if( key === "$$hashKey" ) {return undefined;}
-                        return value;
-                    });
+                    let data;
+                    if($scope.values.length===0){
+                        data = 'doc='+ $scope.entityDesc+ '&id=' + $scope.entityName + '&lookups=' + JSON.stringify($scope.selectedLoockup.replace("&","%26"));
+                    }else{
+                        let values = JSON.stringify( $scope.values, function( key, value ) {
+                            if( key === "$$hashKey" ) {return undefined;}
+                            return value;
+                        });
+                        data = 'doc='+ $scope.entityDesc+ '&id=' + $scope.entityName + '&lookups=' + JSON.stringify($scope.selectedLoockup.replace("&","%26")) +
+                            '&values=' + values;
+                    }
                     result = await $http({
                         method: "POST",
                         url: host_url + "wit/postEntity",
-                        data: 'doc='+ $scope.entityDesc+ '&id=' + $scope.entityName + '&lookups=' + JSON.stringify($scope.selectedLoockup) +
-                        '&values=' + values,
+                        data: data,
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                     });
                     if(result.status===200){
