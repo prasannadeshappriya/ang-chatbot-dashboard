@@ -141,6 +141,7 @@ app.controller('TrainController',[
                     try {
                         $scope.isLoading = true;
                         $scope.result = null;
+                        $scope.isSubmit = false;
                         let result = await $http({
                             method: "POST",
                             url: host_url + "wit/postSample",

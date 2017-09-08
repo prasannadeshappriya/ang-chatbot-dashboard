@@ -28,9 +28,56 @@
     <!--Base URL-->
     <base href="/ang-chatbot-dashboard/app/">
 </head>
-    <body ng-app="chat-bot-app" ng-controller="mainController">
-        <div class="col-xs-12">
-            <div ng-view style="margin-top: 2%"></div>
+<nav class="navbar navbar-default" ng-controller="mainController">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">DASHBOARD</a>
         </div>
-    </body>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav" style="margin-left: 50px">
+                <li id="navIntents"><a href="" ng-click="showView('intent')">Intents</a></li>
+                <li id="navEntities"><a href="" ng-click="showView('entity')">Entities</a></li>
+                <li class="dropdown" id="navDrop1">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="" ng-click="showView('training')">Train Bot</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown" id="navDrop2">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Profile</a></li>
+                        <li><a href="" ng-click="showView('settings')">Settings</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Log Out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<body ng-app="chat-bot-app" ng-controller="mainController">
+    <div class="container">
+        <div ng-view style="margin-top: 0%"></div>
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted">Place sticky footer content here.</p>
+        </div>
+    </footer>
+</body>
+
+
 </html>
