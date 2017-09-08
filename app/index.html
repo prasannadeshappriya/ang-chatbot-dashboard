@@ -30,7 +30,6 @@
 </head>
 <nav class="navbar navbar-default" ng-controller="mainController">
     <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
@@ -41,14 +40,12 @@
             <a class="navbar-brand" href="#">
                 <img src="../app/assets/img/chat-bot-logo.png" style="width: 160px; margin-top: -15px"></a>
         </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav" style="margin-left: 50px">
                 <li id="navIntents"><a href="" ng-click="showView('intent')">Intents</a></li>
                 <li id="navEntities"><a href="" ng-click="showView('entity')">Entities</a></li>
                 <li class="dropdown" id="navDrop1">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">App <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="" ng-click="showView('training')">Train Bot</a></li>
                     </ul>
@@ -56,72 +53,65 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown" id="navDrop2">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        <img src="../app/assets/img/default_profile_pic.png" style="width: 30px; margin: -10px 10px -10px 21px; right: 0">
+                        Administrator <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Profile</a></li>
+                        <li><a href="">Profile</a></li>
                         <li><a href="" ng-click="showView('settings')">Settings</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">Log Out</a></li>
+                        <li><a href="">Log Out</a></li>
                     </ul>
                 </li>
             </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
+        </div>
+    </div>
 </nav>
-
 <body ng-app="chat-bot-app" ng-controller="mainController">
+
     <div class="container">
         <div ng-view style="margin-top: 0%"></div>
     </div>
+
     <footer class="footer container-fluid">
             <div class="col-xs-12" style="margin-top: 40px">
                 <div class="col-xs-4">
                     <img src="../app/assets/img/chat-bot-logo.png" style="width: 160px; margin-top: -15px">
                     <p class="footer-links">
-                        <a href="#">Intent</a>·
-                        <a href="#">Entity</a>·
-                        <a href="#">Training</a>·
-                        <a href="#">Settings</a>·
-                        <a href="#">Faq</a>·
-                        <a href="#">Contact</a>
+                        <a href="" ng-click="showView('intent')">Intent</a>·
+                        <a href="" ng-click="showView('entity')">Entity</a>·
+                        <a href="" ng-click="showView('training')">Training</a>·
+                        <a href="" ng-click="showView('settings')">Settings</a>·
+                        <a href="">Faq</a>·
+                        <a href="">Contact</a>
                     </p>
                     <p class="footer-company-name">Company Name &copy; 2015</p>
                 </div>
                 <div class="col-xs-4">
-                    <div>
-                        <i class="fa fa-map-marker"></i>
-                        <p><span>21 Revolution Street</span> Paris, France</p>
+                    <div class="col-xs-12">
+                        <div class="col-lg-4">
+                            <img src="../app/assets/img/location.png" style="width: 30px; float: right"></a>
+                        </div>
+                        <div class="col-lg-8">
+                            <p ><span>21 Revolution Street</span> <br>Paris, France</p>
+                        </div>
                     </div>
-
-                    <div>
-                        <i class="fa fa-phone"></i>
-                        <p>+1 555 123456</p>
+                    <div class="col-xs-12">
+                        <div class="col-lg-4">
+                            <img src="../app/assets/img/phone.png" style="width: 30px; float: right"></a>
+                        </div>
+                        <div class="col-lg-8">
+                            <p>+1 555 123456</p>
+                        </div>
                     </div>
-
-                    <div>
-                        <i class="fa fa-envelope"></i>
-                        <p><a href="/cdn-cgi/l/email-protection#3e4d4b4e4e514c4a7e5d51534e5f5047105d5153"><span class="__cf_email__" data-cfemail="e4979194948b9690a4878b8994858a9dca878b89">[email&#160;protected]</span></a></p>
-                    </div>
-
                 </div>
                 <div class="col-xs-4">
                     <p class="footer-company-about">
                         <span>About the company</span><br>
                         Lorem ipsum dolor sit amet, consectateur adispicing elit. Fusce euismod convallis velit, eu auctor lacus vehicula sit amet.
                     </p>
-
-                    <div class="footer-icons">
-
-                        <a href="#"><i class="fa fa-facebook"></i></a>
-                        <a href="#"><i class="fa fa-twitter"></i></a>
-                        <a href="#"><i class="fa fa-linkedin"></i></a>
-                        <a href="#"><i class="fa fa-github"></i></a>
-
-                    </div>
                 </div>
             </div>
     </footer>
 </body>
-
-
 </html>

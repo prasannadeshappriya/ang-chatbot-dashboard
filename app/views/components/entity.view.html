@@ -93,11 +93,13 @@
                         <div class="list-group" ng-if="values.length>0" style="margin-top: 10px">
                             <p><b>Current Values</b></p>
                             <a class="list-group-item" ng-repeat="item in values"
-                               ng-click="entityExpressionsItemClick(item)">
+                               ng-click="onCurrentValuesClick(item)">
                                 <h4 class="list-group-item-heading">{{item.value}}</h4>
                                 <p class="list-group-item-text" style="margin-left: 30px" ng-repeat="exp in item.expressions">{{exp}}</p>
                             </a>
                         </div>
+                        <h5 class="text-info" style="float: right; margin-top: -10px"
+                            ng-if="values.length>0">Click on an item to delete from the list</h5>
                     </div>
                 </div>
                 <div class="col-xs-12">

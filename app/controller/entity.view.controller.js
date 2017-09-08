@@ -145,6 +145,21 @@ app.controller('EntityController',[
             }else{
                 $scope.tmp_keyword_error = false;
             }
+        };
+        //--------------------------------------------------------------------------------------------------------------
+        $scope.onCurrentValuesClick=function (item) {
+            for(let i=0; i<$scope.values.length; i++){
+                if($scope.values[i].value===item.value){
+                    let con = true;
+                    if($scope.values[i].expressions.length===item.expressions.length) {
+                        let count = item.expressions.length;
+                        for (let j = 0; j < count; j++){
+                            if(item.expressions[j]!==$scope.values[i].expressions[j]){con = false;}
+                        }
+                    }else{con = false;}
+                    if(con){$scope.values.splice(i,1);}
+                }
+            }
         }
     }
 ]);
