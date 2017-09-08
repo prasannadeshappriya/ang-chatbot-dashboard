@@ -63,6 +63,7 @@ app.controller('EntityController',[
             if(typeof $scope.entityData==='undefined' || $scope.entityData===''){
                 $scope.entity_data_empty = true; con = false;
             }
+            if($scope.tmp_keyword_error){con = false;}
             if(con){
                 //Database call
                 let data = $scope.entityData;
@@ -135,5 +136,15 @@ app.controller('EntityController',[
             }
         };
         //--------------------------------------------------------------------------------------------------------------
+        //Some strategies are not working, this is to avid from such inputs, temporary solution
+        $scope.tmp_keyword_error = false;
+        $scope.selectLookupStrategy = function () {
+            if($scope.selectedLoockup==='free-text & keywords' ||
+                $scope.selectedLoockup==='free-text'){
+                $scope.tmp_keyword_error = true;
+            }else{
+                $scope.tmp_keyword_error = false;
+            }
+        }
     }
 ]);
