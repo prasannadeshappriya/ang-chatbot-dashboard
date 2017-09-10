@@ -1,0 +1,32 @@
+<div ng-controller="AppEntitiesViewController" ng-init="onInit()">
+    <div class="col-xs-12">
+        <div class="col-xs-12" ng-if="entities.length===0">
+            <img src="assets/img/loading.svg" style="height: 60px;" class="center-block">
+        </div>
+        <div class="col-xs-3" style="border-right: 1px solid gainsboro">
+            <p ng-repeat="item in entities">
+                <a href="" ng-click="onItemClick(item)">{{item}}</a>
+            </p>
+        </div>
+        <div class="col-xs-9" ng-if="entities.length!==0">
+            <img src="assets/img/loading.svg" ng-show="isLoading" style="height: 60px;" class="center-block">
+            <div ng-hide="isLoading">
+                <h4>Name: {{entityName}}</h4>
+                <h4>Description: {{entityDescription}}</h4>
+                <h4>Data: </h4>
+                <hr>
+                <h4>lookup strategy :</h4>
+                <p ng-repeat="item in lookup">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- {{item}}</p>
+                <hr>
+                <h4>Values and expressions</h4>
+                <p class="text-info" ng-if="values.length===0">Currently there are not values and expressions for this entity</p>
+                <div class="list-group">
+                    <a href="" class="list-group-item" ng-repeat="item in values">
+                        <h4 class="list-group-item-heading">{{item.value}}</h4>
+                        <p class="list-group-item-text" ng-repeat="exp in item.expressions">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- {{exp}}</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

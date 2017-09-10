@@ -22,9 +22,11 @@
     <script src="controller/intent.view.controller.js"></script>
     <script src="controller/entity.view.controller.js"></script>
     <script src="controller/train.view.controller.js"></script>
+    <script src="controller/app.entities.view.controller.js"></script>
     <!--Angular Services-->
     <script src="service/page.refresh.service.js"></script>
     <script src="service/page.view.service.js"></script>
+    <script src="service/app.entities.service.js"></script>
     <!--Base URL-->
     <base href="/ang-chatbot-dashboard/app/">
 </head>
@@ -48,6 +50,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">App <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="" ng-click="showView('training')">Train Bot</a></li>
+                        <li><a href="" ng-click="showView('app_entities')">App Entities</a></li>
                     </ul>
                 </li>
             </ul>

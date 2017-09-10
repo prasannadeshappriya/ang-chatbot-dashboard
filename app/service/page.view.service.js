@@ -7,7 +7,9 @@ angular.module('chat-bot-app')
         function ($http) {
             let viewData = {};
             let viewController = {
-                intent: true, settings: false, entity: false, training: false
+                intent: true, settings: false,
+                entity: false, training: false,
+                app_entities: false
             };
 
             let services = {};

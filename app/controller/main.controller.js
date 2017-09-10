@@ -6,7 +6,9 @@ app.controller('mainController',[
     function ($scope,$http,host_url,PageViewService) {
         //-----------------------Views Section--------------------------------------------------------------------------
         $scope.viewController = {
-            intent: true, settings: false, entity: false, training: false
+            intent: true, settings: false,
+            entity: false, training: false,
+            app_entities: false
         };
         $scope.$watch(PageViewService.getViewController, function (newValue) {
             if(newValue){

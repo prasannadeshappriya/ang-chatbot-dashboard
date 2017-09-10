@@ -2,8 +2,8 @@
  * Created by prasanna_d on 9/6/2017.
  */
 app.controller('TrainController',[
-    '$scope','$http','host_url',
-    function ($scope,$http,host_url ) {
+    '$scope','$http','host_url','AppEntitiesService',
+    function ($scope,$http,host_url,AppEntitiesService ) {
         //Validation----------------------------------------------------------------------------------------------------
         $scope.result = null;
         $scope.isSubmit = false;
@@ -31,6 +31,7 @@ app.controller('TrainController',[
             for(let i=0 ;i<result.data.data.length; i++){
                 result.data.data[i] = result.data.data[i].replace("$","/");
             }
+            AppEntitiesService.setAppEntities(result.data.data);
             $scope.entities = result.data.data;
             $scope.entities.push("Custom");
             $scope.values = [{value: "Custom"}];
