@@ -18,5 +18,8 @@ app.controller('mainController',[
         $scope.showView = function (view_name) {
             PageViewService.setViewController(view_name);
         };
+        //--------------------------------------------------------------------------------------------------------------
+        //User Authentication-------------------------------------------------------------------------------------------
+        $scope.isAuthanticated = false;
     }
 ]);

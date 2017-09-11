@@ -4,6 +4,8 @@
 app.controller('IntentController',[
     '$scope','$http','host_url','PageViewService',
     function ($scope,$http,host_url,PageViewService) {
+        $scope.test = ['test1', 'test2', 'test3'];
+
         //-----------------------Alert Show Section---------------------------------------------------------------------
         $scope.dangerAlert = false;
         $scope.successAlert = false;
