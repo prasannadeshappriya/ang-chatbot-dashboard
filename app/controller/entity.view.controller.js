@@ -2,8 +2,8 @@
  * Created by prasanna_d on 9/4/2017.
  */
 app.controller('EntityController',[
-    '$scope','PageViewService','$http','host_url',
-    function ($scope,PageViewService,$http,host_url) {
+    '$scope','PageViewService','$http','host_url','AppEntitiesService',
+    function ($scope,PageViewService,$http,host_url,AppEntitiesService) {
         //-----------------------Alert Show Section---------------------------------------------------------------------
         $scope.dangerAlert = false;
         $scope.successAlert = false;
@@ -12,6 +12,22 @@ app.controller('EntityController',[
             $scope.dangerAlert = false;
             $scope.successAlert = false;
             $scope.message = '';
+        };
+        //App Entities Section------------------------------------------------------------------------------------------
+        $scope.appEntities = [];
+        $scope.$watch(AppEntitiesService.getAppEntities, async function (newValue) {
+            if(newValue){
+                if(typeof newValue!=='undefined'){
+                    $scope.appEntities = [];
+                    for (let i=0; i<newValue.length; i++){
+                        if(!newValue[i].includes('wit/')
+                            && newValue[i]!=='Custom' && newValue[i]!=='intent'){$scope.appEntities.push(newValue[i])}
+                    }
+                }
+            }
+        },true);
+        $scope.appEntityItemClick = function (item) {
+            console.log(item);
         };
         //--------------------------------------------------------------------------------------------------------------
         $scope.appLoockups = ["trait","free-text & keywords","free-text","keywords"];

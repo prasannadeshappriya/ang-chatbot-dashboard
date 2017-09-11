@@ -8,11 +8,17 @@ app.controller('AppEntitiesViewController',[
         $scope.entities = [];
         $scope.$watch(AppEntitiesService.getAppEntities, async function (newValue) {
             if(newValue){
-                $scope.entities = newValue;
+                if(typeof newValue!=='undefined'){
+                    $scope.entities = [];
+                    for (let i=0; i<newValue.length; i++){
+                        if(newValue[i]!=='Custom' && newValue[i]!=='intent'){$scope.entities.push(newValue[i])}
+                    }
+                }
                 if(typeof newValue[0]!=='undefined' &&
                     newValue[0]!=='') {
                     await $scope.onItemClick(newValue[0]);
                 }
+                console.log($scope.entities);
             }
         },true);
         //Entity details------------------------------------------------------------------------------------------------
