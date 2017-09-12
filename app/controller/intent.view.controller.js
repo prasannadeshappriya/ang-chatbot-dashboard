@@ -2,8 +2,8 @@
  * Created by prasanna_d on 9/4/2017.
  */
 app.controller('IntentController',[
-    '$scope','$http','host_url','PageViewService',
-    function ($scope,$http,host_url,PageViewService) {
+    '$scope','$http','host_url','PageViewService','AuthService',
+    function ($scope,$http,host_url,PageViewService,AuthService) {
         $scope.test = ['test1', 'test2', 'test3'];
 
         //-----------------------Alert Show Section---------------------------------------------------------------------
@@ -15,6 +15,14 @@ app.controller('IntentController',[
             $scope.successAlert = false;
             $scope.message = '';
         };
+        $scope.testtest = async function () {
+            console.log('-----------------');
+            let result = await $http({
+                method: "GET",
+                url: host_url + "intent/get?intentid=all&token=" + AuthService.getToken()
+            });
+            console.log('-----------------');
+        };
         //-----------------------On Loading-----------------------------------------------------------------------------
         //Initialize intent Variables
         $scope.appIntents = [];
@@ -24,10 +32,12 @@ app.controller('IntentController',[
             console.log('Initializing variables');
             $scope.isLoading = true;
             try {
+                console.log('-----------------');
                 let result = await $http({
                     method: "GET",
                     url: host_url + "intent/get?intentid=all"
                 });
+                console.log('-----------------');
                 let resData = result.data.data;
                 for(let i=0; i<resData.length; i++){
                     $scope.appIntents.push(resData[i])
@@ -35,7 +45,7 @@ app.controller('IntentController',[
                 if($scope.appIntents.length>0){$scope.selectedIntentName = $scope.appIntents[0].name;}
                 result = await $http({
                     method: "GET",
-                    url: host_url + "wit/getEntityById?entity_name=intent"
+                    url: host_url + "wit/getEntityById?entity_name=intent&token="+AuthService.getToken()
                 });
                 if(result.status===200) {
                     $scope.indentDes = result.data.data.doc;
@@ -183,7 +193,7 @@ app.controller('IntentController',[
                 try {
                     let result = await $http({
                         method: "POST",
-                        url: host_url + "intent/create",
+                        url: host_url + "intent/create&token=" + AuthService.getToken(),
                         data: 'intent_name='+ $scope.intentName+ '&intent_description=' + $scope.indentDes,
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                     });

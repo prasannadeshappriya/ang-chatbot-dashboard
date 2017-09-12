@@ -3,8 +3,8 @@
  */
 angular.module('chat-bot-app')
     .factory('AuthService',[
-        '$localStorage','$http',
-        function ($localStorage, $http) {
+        '$localStorage','$location','$http',
+        function ($localStorage, $location, $http) {
             let isLogin = false;
 
             let service = {};
@@ -33,6 +33,7 @@ angular.module('chat-bot-app')
                         username: username,
                         token: auth_token
                     };
+                    $http.defaults.headers.common.Authorization = 'JWT ' + auth_token;
                     isLogin = true;
                     callback(true);
                 }catch  (err){
@@ -45,6 +46,7 @@ angular.module('chat-bot-app')
             function getToken(){
                 if($localStorage.currentUser){
                     return $localStorage.currentUser.token;}
+                $location.path('/');
                 return '';
             }
             function logout() {

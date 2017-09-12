@@ -37,6 +37,7 @@ app.controller('mainController',[
         },true);
         $scope.userLogOut = function () {
             AuthService.Logout();
+            $http.defaults.headers.common.authorization = '';
         }
     }
 ]);

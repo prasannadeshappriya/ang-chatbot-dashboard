@@ -23,7 +23,12 @@ app.config(['$routeProvider', function ($routeProvider) {
             templateUrl: "views/user.auth.html",
             controller: 'UserAuthController',
             resolve:{
-                init: function () {console.log('Login route triggered');}
+                init: function (AuthService,$location) {
+                    console.log('Login route triggered');
+                    if (AuthService.getUser()!==null) {
+                        $location.path('/dashboard');
+                    }
+                }
             }
         })
         .when("/",{
@@ -31,7 +36,12 @@ app.config(['$routeProvider', function ($routeProvider) {
             templateUrl: "views/user.auth.html",
             controller: 'UserAuthController',
             resolve:{
-                init: function () {console.log('Login route triggered');}
+                init: function (AuthService,$location) {
+                    console.log('Login route triggered');
+                    if (AuthService.getUser()!==null) {
+                        $location.path('/dashboard');
+                    }
+                }
             }
         })
 }]);

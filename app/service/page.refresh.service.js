@@ -3,7 +3,7 @@
  */
 angular.module('chat-bot-app')
     .factory('PageRefreshService',[
-        '$http','$localStorage','AuthService','$location',
+        '$http','$localStorage','AuthService',
         function ($http, $localStorage, AuthService, $location) {
             let services = {};
             services.run = run;
@@ -13,7 +13,7 @@ angular.module('chat-bot-app')
                 console.log('page refreshed');
                 if ($localStorage.currentUser) {
                     AuthService.setIsLogin(true);
-                    $location.path('/dashboard');
+                    $http.defaults.headers.common.authorization = 'JWT ' + $localStorage.currentUser.token;
                 }
             }
         }
