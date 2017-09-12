@@ -29,10 +29,11 @@
     <script src="service/page.refresh.service.js"></script>
     <script src="service/page.view.service.js"></script>
     <script src="service/app.entities.service.js"></script>
+    <script src="service/auth.service.js"></script>
     <!--Base URL-->
     <base href="/ang-chatbot-dashboard/app/">
 </head>
-<nav class="navbar navbar-default" ng-controller="mainController">
+<nav class="navbar navbar-default" ng-controller="mainController" ng-show="isAuthanticated">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -45,7 +46,7 @@
                 <img src="../app/assets/img/chat-bot-logo.png" style="width: 160px; margin-top: -15px"></a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav" style="margin-left: 50px" ng-show="isAuthanticated">
+            <ul class="nav navbar-nav" style="margin-left: 50px">
                 <li id="navIntents"><a href="" ng-click="showView('intent')">Intents</a></li>
                 <li id="navEntities"><a href="" ng-click="showView('entity')">Entities</a></li>
                 <li class="dropdown" id="navDrop1">
@@ -57,26 +58,15 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown" id="navDrop2" ng-show="isAuthanticated">
+                <li class="dropdown" id="navDrop2">
                     <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         <img src="../app/assets/img/default_profile_pic.png" style="width: 30px; margin: -10px 10px -10px 21px; right: 0">
-                        Administrator <span class="caret"></span></a>
+                        {{admin_user_name}} <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="">Profile</a></li>
                         <li><a href="" ng-click="showView('settings')">Settings</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="">Log Out</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown" id="navDrop3" ng-show="isAuthanticated">
-                    <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        <img src="../app/assets/img/default_profile_pic.png" style="width: 30px; margin: -10px 10px -10px 21px; right: 0">
-                        Administrator <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="">Profile</a></li>
-                        <li><a href="" ng-click="showView('settings')">Settings</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="">Log Out</a></li>
+                        <li><a href="" ng-click="userLogOut()">Log Out</a></li>
                     </ul>
                 </li>
             </ul>

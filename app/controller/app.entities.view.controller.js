@@ -18,7 +18,6 @@ app.controller('AppEntitiesViewController',[
                     newValue[0]!=='') {
                     await $scope.onItemClick(newValue[0]);
                 }
-                console.log($scope.entities);
             }
         },true);
         //Entity details------------------------------------------------------------------------------------------------
@@ -36,7 +35,6 @@ app.controller('AppEntitiesViewController',[
         $scope.onItemClick = async function (item) {
             $scope.isLoading = true;
             item = item.replace('/','$');
-            console.log(item);
             let result = await $http({
                 method: "GET",
                 url: host_url + "wit/getEntityById?entity_name=" + item

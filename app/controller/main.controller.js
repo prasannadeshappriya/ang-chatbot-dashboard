@@ -2,8 +2,8 @@
  * Created by prasanna_d on 8/30/2017.
  */
 app.controller('mainController',[
-    '$scope', '$http', 'host_url','PageViewService',
-    function ($scope,$http,host_url,PageViewService) {
+    '$scope', '$http','AuthService', 'host_url','PageViewService','$location',
+    function ($scope,$http,AuthService,host_url,PageViewService,$location) {
         //-----------------------Views Section--------------------------------------------------------------------------
         $scope.viewController = {
             intent: true, settings: false,
@@ -20,6 +20,23 @@ app.controller('mainController',[
         };
         //--------------------------------------------------------------------------------------------------------------
         //User Authentication-------------------------------------------------------------------------------------------
-        $scope.isAuthanticated = false;
+        $scope.admin_user_name = '';
+        $scope.$watch(AuthService.isLoginStatus, function (newValue) {
+            if(typeof newValue==='undefined'){
+                $scope.isAuthanticated = false;
+            }else if(newValue){
+                $scope.isAuthanticated = newValue;
+                let user = AuthService.getUser();
+                if (user) {
+                    $scope.admin_user_name = user.username;
+                }
+            }else{
+                $location.path('/');
+                $scope.isAuthanticated = false;
+            }
+        },true);
+        $scope.userLogOut = function () {
+            AuthService.Logout();
+        }
     }
 ]);

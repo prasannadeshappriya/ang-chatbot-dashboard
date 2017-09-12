@@ -39,7 +39,7 @@ app.controller('TrainController',[
             $scope.showCustomInputBox = true;
             $scope.showCustomInputValueBox = true;
             $scope.isLoading=false;
-            $scope.$apply();
+            // $scope.$apply();
         };
 
         //Error messages section----------------------------------------------------------------------------------------
