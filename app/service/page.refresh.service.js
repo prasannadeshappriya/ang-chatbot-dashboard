@@ -13,7 +13,7 @@ angular.module('chat-bot-app')
                 console.log('page refreshed');
                 if ($localStorage.currentUser) {
                     AuthService.setIsLogin(true);
-                    $http.defaults.headers.common.authorization = 'JWT ' + $localStorage.currentUser.token;
+                    $http.defaults.headers.common.authorization = 'Bearer ' + $localStorage.currentUser.token;
                 }
             }
         }

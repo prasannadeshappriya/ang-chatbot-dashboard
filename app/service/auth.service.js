@@ -33,7 +33,7 @@ angular.module('chat-bot-app')
                         username: username,
                         token: auth_token
                     };
-                    $http.defaults.headers.common.Authorization = 'JWT ' + auth_token;
+                    $http.defaults.headers.common.Authorization = 'Bearer ' + auth_token;
                     isLogin = true;
                     callback(true);
                 }catch  (err){
