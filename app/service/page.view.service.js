@@ -9,7 +9,7 @@ angular.module('chat-bot-app')
             let viewController = {
                 intent: true, settings: false,
                 entity: false, training: false,
-                app_entities: false
+                app_entities: false, help: false
             };
 
             let services = {};

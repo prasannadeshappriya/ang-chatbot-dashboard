@@ -8,7 +8,7 @@ app.controller('mainController',[
         $scope.viewController = {
             intent: true, settings: false,
             entity: false, training: false,
-            app_entities: false
+            app_entities: false, help: false
         };
         $scope.$watch(PageViewService.getViewController, function (newValue) {
             if(newValue){
