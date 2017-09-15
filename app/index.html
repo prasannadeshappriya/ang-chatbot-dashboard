@@ -25,6 +25,7 @@
     <script src="controller/train.view.controller.js"></script>
     <script src="controller/app.entities.view.controller.js"></script>
     <script src="controller/user.auth.controller.js"></script>
+    <script src="controller/broadcast.message.controller.js"></script>
     <!--Angular Services-->
     <script src="service/page.refresh.service.js"></script>
     <script src="service/page.view.service.js"></script>
@@ -54,6 +55,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="" ng-click="showView('training')">Train Bot</a></li>
                         <li><a href="" ng-click="showView('app_entities')">App Entities</a></li>
+                        <li><a href="" data-target="#broadcastMessage" data-toggle="modal">Send Broadcast Message</a></li>
                     </ul>
                 </li>
             </ul>

@@ -28,18 +28,20 @@ app.controller('TrainController',[
                 method: "GET",
                 url: host_url + "wit/getEntities"
             });
-            for(let i=0 ;i<result.data.data.length; i++){
-                result.data.data[i] = result.data.data[i].replace("$","/");
+            if(result.status===200) {
+                for (let i = 0; i < result.data.data.length; i++) {
+                    result.data.data[i] = result.data.data[i].replace("$", "/");
+                }
+                AppEntitiesService.setAppEntities(result.data.data);
+                $scope.entities = result.data.data;
+                $scope.entities.push("Custom");
+                $scope.values = [{value: "Custom"}];
+                $scope.selectedEntity = "Custom";
+                $scope.showCustomInputBox = true;
+                $scope.showCustomInputValueBox = true;
+                $scope.isLoading = false;
+                // $scope.$apply();
             }
-            AppEntitiesService.setAppEntities(result.data.data);
-            $scope.entities = result.data.data;
-            $scope.entities.push("Custom");
-            $scope.values = [{value: "Custom"}];
-            $scope.selectedEntity = "Custom";
-            $scope.showCustomInputBox = true;
-            $scope.showCustomInputValueBox = true;
-            $scope.isLoading=false;
-            // $scope.$apply();
         };
 
         //Error messages section----------------------------------------------------------------------------------------

@@ -2,8 +2,8 @@
  * Created by prasanna_d on 9/4/2017.
  */
 app.controller('IntentController',[
-    '$scope','$http','host_url','PageViewService','AuthService',
-    function ($scope,$http,host_url,PageViewService,AuthService) {
+    '$scope','$http','host_url','PageViewService','AuthService','$location',
+    function ($scope,$http,host_url,PageViewService,AuthService, $location) {
         $scope.test = ['test1', 'test2', 'test3'];
 
         //-----------------------Alert Show Section---------------------------------------------------------------------
@@ -15,14 +15,6 @@ app.controller('IntentController',[
             $scope.successAlert = false;
             $scope.message = '';
         };
-        $scope.testtest = async function () {
-            console.log('-----------------');
-            let result = await $http({
-                method: "GET",
-                url: host_url + "intent/get?intentid=all&token=" + AuthService.getToken()
-            });
-            console.log('-----------------');
-        };
         //-----------------------On Loading-----------------------------------------------------------------------------
         //Initialize intent Variables
         $scope.appIntents = [];
@@ -32,12 +24,10 @@ app.controller('IntentController',[
             console.log('Initializing variables');
             $scope.isLoading = true;
             try {
-                console.log('-----------------');
                 let result = await $http({
                     method: "GET",
                     url: host_url + "intent/get?intentid=all"
                 });
-                console.log('-----------------');
                 let resData = result.data.data;
                 for(let i=0; i<resData.length; i++){
                     $scope.appIntents.push(resData[i])
@@ -60,6 +50,10 @@ app.controller('IntentController',[
                 $scope.$apply();
             }catch (err){
                 console.log(err);
+                if(err.status===401){
+                    AuthService.Logout();
+                    $location.path('/');
+                }
                 $scope.message = 'Error occurred!';
                 $scope.dangerAlert = true;
                 $scope.isLoading = false;

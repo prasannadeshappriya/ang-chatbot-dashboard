@@ -60,7 +60,6 @@ app.controller('UserAuthController',[
                             result.data.username,
                             result.data.token,
                             function (callback) {
-                                console.log('done');
                                 $location.path('/dashboard');
                                 $scope.$apply();
                             });
@@ -76,7 +75,7 @@ app.controller('UserAuthController',[
                         $scope.login_error_flag = true;
                         $scope.login_error_messages = 'Username or password is invalid';
                         $scope.$apply();
-                    }if(err.status===400){
+                    }else if(err.status===400){
                         $scope.login_error_flag = true;
                         $scope.login_error_messages = 'Username or password is invalid';
                         $scope.$apply();
