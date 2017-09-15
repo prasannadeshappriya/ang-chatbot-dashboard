@@ -1,0 +1,37 @@
+<h4>What is an entity</h4>
+<p>We need to get user's values from their input. Intent will tell you the action then entities will hold the
+values of the user's input. Consider following example,<br>
+    &nbsp;&nbsp;- <b>I want cheese pizza</b><br>
+    &nbsp;&nbsp;- <b>I want veg pizza</b><br>
+    &nbsp;&nbsp;- <b>I want onion pizza</b><br><br>
+    As you can see all three questions will relate to order pizza, there for we can <b>create an intent called 'order_pizza'</b>
+    But each of these questions contains different values. In order to extract those values, we'll use entities. Let's see how
+    we should create an entity for above case.<br><br>
+    &nbsp;&nbsp;1) Type your entity name (for our example, entity name is <b>pizza</b>)<br>
+    &nbsp;&nbsp;2) Type your entity description (for our example, <b>'This entity will hold the pizza type'</b>)<br>
+    &nbsp;&nbsp;3) Set your lookup strategies (for our example, <b>trait</b>)<br>
+    &nbsp;&nbsp;4) Now you can add a value and expressions, lets add value expression pair for our example,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1) Value: '<b>cheese</b>'<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Expressions: '<b>I want cheese pizza, I want to order cheese pizza, make me a cheese pizza</b>'<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2) Value: '<b>veg</b>'<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Expressions: '<b>I want veg pizza</b>'<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3) Value: '<b>onion</b>'<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Expressions: '<b>I want onion pizza</b>'<br>
+    &nbsp;&nbsp;5) Add entity data (These data will help our bot when user ask these questions)<br>
+    &nbsp;&nbsp;6) Create your entity<br>
+&nbsp;&nbsp;&nbsp; <b>Note: You don't need to create entity and value pairs at first, you can always create them later.</b><br>
+</p>
+<p>You can always go to the <b>App -> Train Bot</b> page and verify your questions<br>
+    &nbsp;&nbsp;1)Type your question (for our example, '<b>I want cheese pizza</b>')<br>
+    &nbsp;&nbsp;2)Click on check button<br>
+    &nbsp;&nbsp;3)It will show your entity with the value 'cheese' which you just created<br></p>
+<p><b>Note:</b><br>If the entity did not showed to your question, you can simply
+    select <b>'pizza' as the Entity field</b> and <b>'cheese' as the value field.</b>
+    Then click on validate and recheck again.
+    now your intent should be there :)</p><br>
+<h4>Lookup Strategies:</h4>
+<p><b>Trait:</b><br>
+    When the entity value is not inferred from a keyword or specific phrase in the sentence. There is no obvious association
+    between certain words in the sentence and the value of the entity, but rather you need the sentence as a whole to determine the value.</p>
+<p><b>Keywords:</b><br>
+    When the entity value belongs to a predefined list, and you just need substring matching to look it up in the sentence.</p>

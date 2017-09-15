@@ -108,33 +108,7 @@
                     </div>
                 </div>
             </div>
-            <h4>What is an intent and why we should use</h4>
-            <p>We need to understand what your end-user wants to perform. They will ask various things, to understand the action
-            we use intents. Few example actions are listed below, <br>
-             &nbsp;&nbsp;- <b>Ask about the weather</b><br>&nbsp;
-            - <b>Book a restaurant</b><br>&nbsp;
-            - <b>Open the garage door</b><br><br>
-                The problem is that there a millions of different ways to express a given intent. For instance,
-                all the following expressions should be mapped to the same intent:<br>
-                 &nbsp;&nbsp;- <b>What is the weather in Paris?</b><br>&nbsp;
-                - <b>Give me the current weather in Paris</b><br>&nbsp;
-                - <b>Is it sunny or rainy in Paris now?</b>&nbsp;</p>
-            <hr>
-            <h4>How to create a intent and train our bot</h4>
-            <p>Let's consider above weather questions, All these type of questions will trigger same action.
-                Now, lets create that intent.<br>
-                &nbsp;&nbsp;1)Type your intent name (for our example, intent name is <b>weather</b>)<br>
-                &nbsp;&nbsp;2)Add some expressions about your intent (for our example, <b>above questions</b>)<br>
-                &nbsp;&nbsp;3)Leave intent description a value (<b>not important</b>, give any value which describe your app)<br>
-                &nbsp;&nbsp;4)Create your new intent</p><br>
-            <p>You can always go to the <b>App -> Train Bot</b> page and verify your questions<br>
-                &nbsp;&nbsp;1)Type your question (for our example, '<b>Is it sunny or rainy in Paris now?</b>')<br>
-                &nbsp;&nbsp;2)Click on check button<br>
-                &nbsp;&nbsp;3)It will show your intent which you just created<br></p>
-            <p><b>Note:</b><br>If the intent did not showed to your question, you can simply
-                select <b>intent as the Entity field</b> and <b>'weather' as the value field</b>
-            (Select value as custom if you want to give a custom value). Then click on validate and recheck again.
-            now your intent should be there :)</p>
+            <div ng-include="'views/help/intent.help.html'"></div>
         </div>
     </div>
 </div>
