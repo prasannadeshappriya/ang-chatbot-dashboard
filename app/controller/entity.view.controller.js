@@ -56,13 +56,19 @@ app.controller('EntityController',[
                 $scope.entity_value_empty = true;
                 con = false;
             }
+            if(typeof $scope.entityData==='undefined' || $scope.entityData ===''){
+                $scope.entity_data_empty = true;
+                con = false;
+            }
             if(con) {
                 let tmp_obj = {};
                 tmp_obj.value = $scope.entityAddValue;
                 tmp_obj.expressions = $scope.entityExpressions;
+                tmp_obj.data = $scope.entityData;
                 $scope.values.push(tmp_obj);
                 $scope.entityAddValue = '';
                 $scope.entityExpressions = [];
+                $scope.entityData ='';
             }
         };
         $scope.createEntity = async function () {
@@ -76,26 +82,23 @@ app.controller('EntityController',[
             if(typeof $scope.entityDesc==='undefined' || $scope.entityDesc===''){
                 $scope.entity_des_empty = true; con = false;
             }
-            if(typeof $scope.entityData==='undefined' || $scope.entityData===''){
-                $scope.entity_data_empty = true; con = false;
-            }
             if($scope.tmp_keyword_error){con = false;}
             if(con){
                 //Database call
-                let data = $scope.entityData;
                 let result = await $http({
                     method: "POST",
                     url: host_url + "entity/create",
-                    data: 'entity_name='+ $scope.entityName + '&entity_data=' + $scope.entityData + '&entity_description=' + $scope.entityDesc,
+                    data: 'entity_name='+ $scope.entityName + '&entity_data=' + JSON.stringify($scope.values) + '&entity_description=' + $scope.entityDesc,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 });
+                console.log(result);
                 if(result.status===201){
                     let data;
                     if($scope.values.length===0){
                         data = 'doc='+ $scope.entityDesc+ '&id=' + $scope.entityName + '&lookups=' + JSON.stringify($scope.selectedLoockup.replace("&","%26"));
                     }else{
                         let values = JSON.stringify( $scope.values, function( key, value ) {
-                            if( key === "$$hashKey" ) {return undefined;}
+                            if( key === "$$hashKey" || key === "data" ) {return undefined;}
                             return value;
                         });
                         data = 'doc='+ $scope.entityDesc+ '&id=' + $scope.entityName + '&lookups=' + JSON.stringify($scope.selectedLoockup.replace("&","%26")) +

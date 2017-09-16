@@ -20,6 +20,68 @@ app.controller('AppEntitiesViewController',[
                 }
             }
         },true);
+        //Model---------------------------------------------------------------------------------------------------------
+        let selected_item;
+        $scope.entityItemClick = function(item){
+            $scope.selectedappEntity = angular.copy(item);
+            selected_item = item;
+        };
+        $scope.btn_update_add_expressions = function () {
+            if(typeof $scope.intUpdateExpression!=='undefined' &&
+                $scope.intUpdateExpression!=='') {
+                if ($scope.selectedappEntity.expressions.indexOf($scope.intUpdateExpression)===-1){
+                    $scope.selectedappEntity.expressions.push($scope.intUpdateExpression);
+                }
+            }
+        };
+        $scope.appEntityUpdateItemClick = function (item) {
+            let i = $scope.selectedappEntity.expressions.indexOf(item);
+            if(i!==-1){$scope.selectedappEntity.expressions.splice(i,1);}
+        };
+        $scope.isSubmit = false;
+        $scope.data_error = false;
+        $scope.appEntityItemUpdate = async function () {
+            $scope.isSubmit = true;
+            if($scope.selectedappEntity.data.replace(" ","")==='' ||
+                typeof $scope.selectedappEntity.data==='undefined'){
+                return $scope.data_error = true;
+            }
+            for(let i=0; i<$scope.values.length; i++){
+                if($scope.values[i]===selected_item){
+                    $scope.values.splice(i,1);
+                    $scope.values.splice(i,0,$scope.selectedappEntity);
+                    console.log($scope.values);
+                    break;
+                }
+            }
+            let data = JSON.stringify($scope.values, function( key, value ) {
+                if( key === "$$hashKey" || key==="data" ) {return undefined;}
+                return value;
+            });
+            if(typeof $scope.entityDescription==='undefined'){$scope.entityDescription='';}
+            let result = await $http({
+                method: "POST",
+                url: host_url + "entity/update",
+                data: 'entity_name='+  $scope.entityName + '&entity_value=' + $scope.selectedappEntity.value +
+                        '&entity_data=' + $scope.selectedappEntity.data,
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            });
+            console.log(result);
+            if(result.status===201){
+                result = await $http({
+                    method: "POST",
+                    url: host_url + "wit/putEntityById",
+                    data: 'entity_name='+  $scope.entityName + '&wit_values=' + data + '&wit_doc=' + $scope.entityDescription,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                });
+                console.log(result);
+            }
+
+            $scope.message = 'Intent successfully updated!';
+            $scope.successAlert = true;
+            $scope.$apply();
+            $('#updateData').modal('hide');
+        };
         //Entity details------------------------------------------------------------------------------------------------
         $scope.entityName = '';
         $scope.entityDescription = '';
@@ -49,6 +111,23 @@ app.controller('AppEntitiesViewController',[
                     $scope.entityDescription = result.data.data.doc;
                 }
                 $scope.lookup = result.data.data.lookups;
+                let val = result.data.data.values;
+                let data = result.data.values;
+                for(let i=0; i<val.length; i++){
+                    let item = val[i], con=true;
+                    if(data) {
+                        for (let j = 0; j < data.length; j++) {
+                            if (item.value === data[j].value) {
+                                item.data = data[j].data;
+                                con = false;
+                                break;
+                            }
+                        }
+                    }
+                    if(con){item.data = ''}
+                }
+                console.log(result.data.values);
+                console.log(val);
                 $scope.values = result.data.data.values;
                 $scope.$apply();
             }else{
@@ -56,6 +135,9 @@ app.controller('AppEntitiesViewController',[
                 $scope.dangerAlert = true;
                 $scope.$apply();
             }
+        };
+        $scope.delete = function () {
+            console.log('delete');
         }
     }
 ]);

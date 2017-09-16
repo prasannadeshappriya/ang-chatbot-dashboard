@@ -1,4 +1,40 @@
 <div ng-controller="AppEntitiesViewController" ng-init="onInit()">
+    <!--Models-->
+    <div class="modal fade" id="updateEntityData">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Entity value: {{selectedappEntity.value}}</h4>
+                </div>
+                <div class="modal-body">
+                    <p><b>Data:</b></p>
+                    <textarea class="col-xs-12" style="resize: none; height: 100px; margin-bottom: 10px"
+                              ng-model="selectedappEntity.data"></textarea>
+                    <p style="color: red; float: right" ng-show="isSubmit && data_error">*Entity data is required</p>
+                    <p style="margin-top: 10px"><b>Expressions:</b></p>
+                    <div class="list-group col-xs-12" style="margin-top: 10px">
+                        <p class="text-info" ng-if="selectedappEntity.expressions.length===0">You don't have any expressions yet.</p>
+                        <a class="list-group-item" ng-repeat="item in selectedappEntity.expressions"
+                           ng-click="appEntityUpdateItemClick(item)">
+                            <p class="list-group-item-text">{{item}}</p>
+                        </a>
+                    </div>
+                    <div class="form-group">
+                        <label for="intUpdateExpression" class="control-label">Add Expressions</label>
+                        <input type="text" id="intUpdateExpression" ng-model="intUpdateExpression" class="form-control">
+                    </div>
+                    <input type="button" style="float: right; width: 100px" value="Add" class="btn btn-success" ng-click="btn_update_add_expressions()">
+                </div>
+                <div class="modal-footer" style="margin-top: 5%">
+                    <button type="button" class="btn btn-danger" style="width: 100px" ng-click="appIntentsItemDelete()">Delete</button>
+                    <button type="button" class="btn btn-success" style="width: 100px" ng-click="appEntityItemUpdate()">Update</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" style="width: 100px">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!---->
     <div class="col-xs-12">
         <div class="col-xs-12" ng-if="entities.length===0">
             <img src="assets/img/loading.svg" style="height: 60px;" class="center-block">
@@ -13,7 +49,6 @@
             <div ng-hide="isLoading">
                 <h4>Name: {{entityName}}</h4>
                 <h4>Description: {{entityDescription}}</h4>
-                <h4>Data: </h4>
                 <hr>
                 <h4>lookup strategy :</h4>
                 <p ng-repeat="item in lookup">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- {{item}}</p>
@@ -21,11 +56,16 @@
                 <h4>Values and expressions</h4>
                 <p class="text-info" ng-if="values.length===0">Currently there are not values and expressions for this entity</p>
                 <div class="list-group">
-                    <a href="" class="list-group-item" ng-repeat="item in values">
+                    <a href="" class="list-group-item" ng-repeat="item in values"
+                       data-target="#updateEntityData" data-toggle="modal" ng-click="entityItemClick(item)">
                         <h4 class="list-group-item-heading">{{item.value}}</h4>
+                        <p class="list-group-item-text" ng-if="item.data.length>0"><b>Data:</b></p>
+                        <p class="list-group-item-text">{{item.data}}</p>
+                        <p class="list-group-item-text" ng-if="item.expressions.length>0"><b>Expressions:</b></p>
                         <p class="list-group-item-text" ng-repeat="exp in item.expressions">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- {{exp}}</p>
                     </a>
                 </div>
+                <input type="button" class="btn btn-danger" value="Delete" style="width: 150px; float: right" ng-click="delete()">
             </div>
         </div>
     </div>
