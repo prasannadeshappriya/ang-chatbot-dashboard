@@ -39,8 +39,10 @@
 
                                     <!--Remember me flag-->
                                     <div class="form-group text-center col-xs-12">
-                                        <small class="help-block col-xs-12" ng-show="isSignInClicked || login_error_flag"
+                                        <small class="help-block col-xs-12" ng-show="isSignInClicked && login_error_flag"
                                                style="color: red; float: right">{{login_error_messages}}</small>
+                                        <small class="text-info col-xs-12" ng-show="isSignInClicked && sign_in_flag"
+                                               style="float: right; margin-bottom: 8px">Signing in.. Please wait..</small>
                                         <input type="checkbox" tabindex="3" class="" name="remember" id="remember">
                                         <label for="remember"> Remember Me</label>
                                     </div>
@@ -82,8 +84,10 @@
                                     </div>
 
                                     <div class="col-xs-12 text-center">
-                                        <small class="help-block col-xs-12" ng-show="isSignUpClicked || reg_error_flag"
+                                        <small class="help-block col-xs-12" ng-show="isSignUpClicked && reg_error_flag"
                                                style="color: red; float: right">{{reg_error_messages}}</small>
+                                        <small class="text-info col-xs-12" ng-show="isSignUpClicked && sign_up_flag"
+                                               style="float: right; margin-bottom: 8px">Signing up.. Please wait..</small>
                                     </div>
 
                                     <!--Signup button-->

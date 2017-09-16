@@ -27,7 +27,7 @@ angular.module('chat-bot-app')
                 }else{isLogin = false;return null;}
             }
 
-            function login(username,auth_token,callback) {
+            async function login(username,auth_token,callback) {
                 try {
                     $localStorage.currentUser = {
                         username: username,
@@ -35,7 +35,9 @@ angular.module('chat-bot-app')
                     };
                     $http.defaults.headers.common.Authorization = 'Bearer ' + auth_token;
                     isLogin = true;
-                    callback(true);
+                    setTimeout(function () {
+                        callback(true);
+                    },1000);
                 }catch  (err){
                     console.log(err);
                     isLogin = true;

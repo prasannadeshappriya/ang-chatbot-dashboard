@@ -38,6 +38,7 @@ app.controller('UserAuthController',[
             //Show the errors when only sign in button pressed
             $scope.isSignInClicked = true;
             $scope.login_error_flag = false;
+            $scope.sign_in_flag = false;
             let con = true; //Validation flag
             if($scope.login_username==='' ||
                 typeof $scope.login_username==='undefined') {
@@ -56,32 +57,40 @@ app.controller('UserAuthController',[
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                     });
                     if(result.status===200){
+                        $scope.sign_in_flag = true;
+                        $scope.$apply();
                         AuthService.Login(
                             result.data.username,
                             result.data.token,
                             function (callback) {
+                                if(callback){console.log('Auth service successful')}
                                 $location.path('/dashboard');
+                                $scope.sign_in_flag = false;
                                 $scope.$apply();
                             });
                     }else{
                         console.log('Unknown Error: ');
                         console.log(result);
                         $scope.login_error_flag = true;
+                        $scope.sign_in_flag = false;
                         $scope.login_error_messages = 'Error occurred while communicate with the server, Try again!';
                         $scope.$apply();
                     }
                 }catch(err){
                     if(err.status===401){
+                        $scope.sign_in_flag = false;
                         $scope.login_error_flag = true;
                         $scope.login_error_messages = 'Username or password is invalid';
                         $scope.$apply();
                     }else if(err.status===400){
+                        $scope.sign_in_flag = false;
                         $scope.login_error_flag = true;
                         $scope.login_error_messages = 'Username or password is invalid';
                         $scope.$apply();
                     }else{
                         console.log('Unknown Error: ');
                         console.log(err);
+                        $scope.sign_in_flag = false;
                         $scope.login_error_flag = true;
                         $scope.login_error_messages = 'Server Error';
                         $scope.$apply();
@@ -93,6 +102,7 @@ app.controller('UserAuthController',[
             //Show the errors when only sign up button pressed
             $scope.isSignUpClicked = true;
             $scope.reg_error_flag = false;
+            $scope.sign_up_flag = false;
             let con = true; //Validation flag
             if($scope.reg_username==='' ||
                 typeof $scope.reg_username==='undefined') {
@@ -146,20 +156,23 @@ app.controller('UserAuthController',[
                         data: 'username=' + $scope.reg_username + '&password=' + $scope.reg_password,
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                     });
-                    console.log(result);
                     if(result.status===201){
+                        $scope.sign_up_flag = true;
+                        $scope.$apply();
                         AuthService.Login(
                             result.data.username,
                             result.data.token,
                             function (callback) {
-                                console.log('done');
+                                if(callback){console.log('Auth service successful')}
                                 $location.path('/dashboard');
+                                $scope.sign_up_flag = false;
                                 $scope.$apply();
                             });
                     }else{
                         console.log('Unknown Error: ');
                         console.log(result);
                         $scope.login_error_flag = true;
+                        $scope.sign_up_flag = false;
                         $scope.login_error_messages = 'Error occurred while communicate with the server, Try again!';
                         $scope.$apply();
                     }
@@ -167,16 +180,19 @@ app.controller('UserAuthController',[
                     console.log(err);
                     if(err.status===409){
                         $scope.reg_error_flag = true;
+                        $scope.sign_up_flag = false;
                         $scope.reg_error_messages = 'User already exist on the server';
                         $scope.$apply();
                     }if(err.status===400){
                         $scope.login_error_flag = true;
+                        $scope.sign_up_flag = false;
                         $scope.reg_password_error = 'Invalid password';
                         $scope.$apply();
                     }else{
                         console.log('Unknown Error: ');
                         console.log(err);
                         $scope.login_error_flag = true;
+                        $scope.sign_up_flag = false;
                         $scope.login_error_messages = 'Server Error';
                         $scope.$apply();
                     }
