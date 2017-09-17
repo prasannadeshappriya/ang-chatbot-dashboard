@@ -73,7 +73,8 @@ app.controller('TrainController',[
             if(!$scope.user_input!=='' && typeof $scope.user_input!=='undefined'){
                 if($scope.user_input.length>0){
                     let start = 0;
-                    $scope.values = [{value: "Custom"}];
+                    if($scope.selectedEntity.includes('wit/')) {$scope.values = [];}
+                    else{$scope.values = [{value: "Custom"}];}
                     for(let i=0; i<$scope.user_input.length; i++){
                         if($scope.user_input[i]===" "){
                             let tmp_arr = {};
@@ -182,6 +183,21 @@ app.controller('TrainController',[
             if($scope.selectedEntityValue==="Custom")  {$scope.showCustomInputValueBox = true;}
         };
         $scope.entitySelect = function () {
+            if($scope.selectedEntity.includes('wit/')){
+                for(let i=0; i<$scope.values.length; i++){
+                    if($scope.values[i].value==='Custom'){
+                        $scope.values.splice(i,1); break;}
+                }
+            }else{
+                let con = true;
+                for(let i=0; i<$scope.values.length; i++){
+                    if($scope.values[i].value==='Custom'){
+                        con = false; break;}
+                }
+                if(con){$scope.values.push({value: 'Custom'});}
+                $scope.selectedEntityValue = 'Custom';
+                $scope.showCustomInputValueBox = true;
+            }
             $scope.showCustomInputBox = false;
             $scope.entity_name_empty = false;
             if($scope.selectedEntity==="Custom")  {$scope.showCustomInputBox = true;}
