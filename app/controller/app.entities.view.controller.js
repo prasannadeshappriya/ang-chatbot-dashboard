@@ -189,42 +189,55 @@ app.controller('AppEntitiesViewController',[
         $scope.onItemClick = async function (item) {
             $scope.isLoading = true;
             item = item.replace('/','$');
-            let result = await $http({
-                method: "GET",
-                url: host_url + "wit/getEntityById?entity_name=" + item
-            });
-            if(item.includes('wit$')){$scope.isWitEntity = true;}
-            else{$scope.isWitEntity = false;}
-            $scope.isLoading = false;
-            if(result.status===200) {
-                $scope.entityName = result.data.data.name;
-                try {
-                    let json_string = JSON.parse(result.data.data.doc);
-                    $scope.entityDescription = json_string.long_desc;
-                }catch (err){
-                    $scope.entityDescription = result.data.data.doc;
+            try {
+                let result = await $http({
+                    method: "GET",
+                    url: host_url + "wit/getEntityById?entity_name=" + item
+                });
+                if (item.includes('wit$')) {
+                    $scope.isWitEntity = true;
                 }
-                $scope.lookup = result.data.data.lookups;
-                let val = result.data.data.values;
-                let data = result.data.values;
-                if(typeof val !== 'undefined') {
-                    for (let i = 0; i < val.length; i++) {
-                        let item = val[i], con = true;
-                        if (data) {
-                            for (let j = 0; j < data.length; j++) {
-                                if (item.value === data[j].value) {
-                                    item.data = data[j].data;
-                                    con = false; break;
+                else {
+                    $scope.isWitEntity = false;
+                }
+                $scope.isLoading = false;
+                if (result.status === 200) {
+                    $scope.entityName = result.data.data.name;
+                    try {
+                        let json_string = JSON.parse(result.data.data.doc);
+                        $scope.entityDescription = json_string.long_desc;
+                    } catch (err) {
+                        $scope.entityDescription = result.data.data.doc;
+                    }
+                    $scope.lookup = result.data.data.lookups;
+                    let val = result.data.data.values;
+                    let data = result.data.values;
+                    if (typeof val !== 'undefined') {
+                        for (let i = 0; i < val.length; i++) {
+                            let item = val[i], con = true;
+                            if (data) {
+                                for (let j = 0; j < data.length; j++) {
+                                    if (item.value === data[j].value) {
+                                        item.data = data[j].data;
+                                        con = false;
+                                        break;
+                                    }
                                 }
                             }
+                            if (con) {
+                                item.data = ''
+                            }
                         }
-                        if (con) {item.data = ''}
                     }
+                    $scope.values = result.data.data.values;
+                    console.log($scope.values);
+                    $scope.$apply();
+                } else {
+                    $scope.message = 'Error occurred!';
+                    $scope.dangerAlert = true;
+                    $scope.$apply();
                 }
-                $scope.values = result.data.data.values;
-                console.log($scope.values);
-                $scope.$apply();
-            }else{
+            }catch (err){
                 $scope.message = 'Error occurred!';
                 $scope.dangerAlert = true;
                 $scope.$apply();

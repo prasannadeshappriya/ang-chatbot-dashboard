@@ -24,23 +24,27 @@ app.controller('TrainController',[
         $scope.onInit = async function () {
             console.log('Initializing training view');
             $scope.isLoading=true;
-            let result = await $http({
-                method: "GET",
-                url: host_url + "wit/getEntities"
-            });
-            if(result.status===200) {
-                for (let i = 0; i < result.data.data.length; i++) {
-                    result.data.data[i] = result.data.data[i].replace("$", "/");
+            try {
+                let result = await $http({
+                    method: "GET",
+                    url: host_url + "wit/getEntities"
+                });
+                if (result.status === 200) {
+                    for (let i = 0; i < result.data.data.length; i++) {
+                        result.data.data[i] = result.data.data[i].replace("$", "/");
+                    }
+                    AppEntitiesService.setAppEntities(result.data.data);
+                    $scope.entities = result.data.data;
+                    $scope.entities.push("Custom");
+                    $scope.values = [{value: "Custom"}];
+                    $scope.selectedEntity = "Custom";
+                    $scope.showCustomInputBox = true;
+                    $scope.showCustomInputValueBox = true;
+                    $scope.isLoading = false;
+                    // $scope.$apply();
                 }
-                AppEntitiesService.setAppEntities(result.data.data);
-                $scope.entities = result.data.data;
-                $scope.entities.push("Custom");
-                $scope.values = [{value: "Custom"}];
-                $scope.selectedEntity = "Custom";
-                $scope.showCustomInputBox = true;
-                $scope.showCustomInputValueBox = true;
-                $scope.isLoading = false;
-                // $scope.$apply();
+            }catch (err){
+                console.log(err);
             }
         };
 
