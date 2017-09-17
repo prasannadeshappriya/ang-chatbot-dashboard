@@ -5,12 +5,19 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Entity value: {{selectedappEntity.value}}</h4>
+                    <h4 class="modal-title" ng-show="!isCreateNewEntity">Entity value: {{selectedappEntity.value}}</h4>
+                    <div ng-show="isCreateNewEntity">
+                        <label for="new_entity_value" class="control-label">Entity value:</label>
+                        <input type="text" id="new_entity_value" class="form-control" ng-model="selectedappEntity.value"
+                               ng-change="reset_error_flag('value_error'); reset_error_flag('value_duplicate_error')">
+                        <p style="color: red; float: right" ng-show="isSubmit && value_error">*Entity value is required</p>
+                        <p style="color: red; float: right" ng-show="isSubmit && value_duplicate_error">*Entity value already exist</p>
+                    </div>
                 </div>
                 <div class="modal-body">
                     <p><b>Data:</b></p>
                     <textarea class="col-xs-12" style="resize: none; height: 100px; margin-bottom: 10px"
-                              ng-model="selectedappEntity.data"></textarea>
+                              ng-model="selectedappEntity.data" ng-change="reset_error_flag('data_error')"></textarea>
                     <p style="color: red; float: right" ng-show="isSubmit && data_error">*Entity data is required</p>
                     <p style="margin-top: 10px"><b>Expressions:</b></p>
                     <div class="list-group col-xs-12" style="margin-top: 10px">
@@ -27,7 +34,8 @@
                     <input type="button" style="float: right; width: 100px" value="Add" class="btn btn-success" ng-click="btn_update_add_expressions()">
                 </div>
                 <div class="modal-footer" style="margin-top: 5%">
-                    <button type="button" class="btn btn-danger" style="width: 100px" ng-click="appIntentsItemDelete()">Delete</button>
+                    <img src="assets/img/loading.svg" ng-show="isLoadingModel" style="height: 60px; float: left; margin-top:-15px">
+                    <button type="button" class="btn btn-danger" style="width: 100px" ng-click="appIntentsItemDelete()" ng-show="!isCreateNewEntity">Delete</button>
                     <button type="button" class="btn btn-success" style="width: 100px" ng-click="appEntityItemUpdate()">Update</button>
                     <button type="button" class="btn btn-success" data-dismiss="modal" style="width: 100px">Close</button>
                 </div>
@@ -57,15 +65,20 @@
                 <p class="text-info" ng-if="values.length===0">Currently there are not values and expressions for this entity</p>
                 <div class="list-group">
                     <a href="" class="list-group-item" ng-repeat="item in values"
-                       data-target="#updateEntityData" data-toggle="modal" ng-click="entityItemClick(item)">
+                       data-target="#updateEntityData" data-toggle="{{isWitEntity ? '' : 'modal'}}" ng-click="entityItemClick(item)">
                         <h4 class="list-group-item-heading">{{item.value}}</h4>
                         <p class="list-group-item-text" ng-if="item.data.length>0"><b>Data:</b></p>
                         <p class="list-group-item-text">{{item.data}}</p>
                         <p class="list-group-item-text" ng-if="item.expressions.length>0"><b>Expressions:</b></p>
-                        <p class="list-group-item-text" ng-repeat="exp in item.expressions">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- {{exp}}</p>
+                        <p class="list-group-item-text" ng-repeat="exp in item.expressions track by $index">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- {{item.expressions[$index]}}</p>
                     </a>
                 </div>
-                <input type="button" class="btn btn-danger" value="Delete" style="width: 150px; float: right" ng-click="delete()">
+                <img src="assets/img/loading.svg" ng-show="isLoadingDelete" style="height: 60px; float: left; margin-top:-15px">
+                <input type="button" class="btn btn-success" value="Add" data-target="#updateEntityData" data-toggle="modal"
+                       style="width: 150px; margin-left: 10px; float: right"
+                       ng-click="add()" ng-show="!isWitEntity">
+                <input type="button" class="btn btn-danger" value="Delete" style="width: 150px; float: right"
+                       ng-show="!isWitEntity" ng-click="delete()">
             </div>
         </div>
     </div>
