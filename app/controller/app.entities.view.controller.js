@@ -230,7 +230,6 @@ app.controller('AppEntitiesViewController',[
                         }
                     }
                     $scope.values = result.data.data.values;
-                    console.log($scope.values);
                     $scope.$apply();
                 } else {
                     $scope.message = 'Error occurred!';
