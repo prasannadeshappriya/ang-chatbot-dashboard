@@ -136,12 +136,35 @@ app.controller('TrainController',[
                             }
                         }
                     }
-                    tmp_obj["data"] = $scope.entityData;
+                    tmp_obj["data"] = $scope.entityData.replace('\n','<br>');
                     $scope.entityArr.push(tmp_obj);
                 }
             }
         };
-
+        $scope.isSyncData = false;
+        $scope.findValues = async function (isInputBox) {
+            $scope.isSyncData = true;
+            let timeout = 0;
+            let entity_value = $scope.selectedEntityValue;
+            if(isInputBox){
+                timeout=2000; entity_value = $scope.entityValue;
+            }
+            setTimeout(async function () {
+                if(typeof $scope.selectedEntity==='undefined'){$scope.selectedEntity = '';}
+                if(typeof entity_value==='undefined'){entity_value = '';}
+                try {
+                    let result = await $http({
+                        method: "GET",
+                        url: host_url + "entity/getEntityData?entity_name=" + $scope.selectedEntity +
+                        "&entity_value=" + entity_value,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    });
+                    $scope.entityData = result.data.entity_data;
+                    $scope.isSyncData = false;
+                    $scope.$apply();
+                }catch (err){console.log(err);}
+            },timeout);
+        };
         $scope.btnValidateEntity = async function () {
             let con = true;
             if($scope.user_input==='' || typeof $scope.user_input==='undefined') {
@@ -200,7 +223,7 @@ app.controller('TrainController',[
                         }
                         //Clear the array and reset values
                         $scope.selectedEntityValue = "Custom"; $scope.selectedEntity = $scope.entities[0];
-                        $scope.entityValue = "";
+                        $scope.entityValue = ""; $scope.entityData = ""; $scope.showCustomInputValueBox = true;
                         $scope.entityArr = []; $scope.isLoading = false; $scope.$apply();
                     }else{$scope.server_error = true;}
                 }catch (err){

@@ -64,7 +64,7 @@ app.controller('EntityController',[
                 let tmp_obj = {};
                 tmp_obj.value = $scope.entityAddValue;
                 tmp_obj.expressions = $scope.entityExpressions;
-                tmp_obj.data = $scope.entityData;
+                tmp_obj.data = $scope.entityData.replace('\n','<br>');
                 $scope.values.push(tmp_obj);
                 $scope.entityAddValue = '';
                 $scope.entityExpressions = [];
@@ -179,6 +179,10 @@ app.controller('EntityController',[
                     if(con){$scope.values.splice(i,1);}
                 }
             }
-        }
+        };
+        $scope.textSelected = function(text){
+            console.log(text);
+            //alert(text);
+        };
     }
 ]);
