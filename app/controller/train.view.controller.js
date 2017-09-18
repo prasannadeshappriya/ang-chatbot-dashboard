@@ -177,15 +177,26 @@ app.controller('TrainController',[
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                     });
                     if(result.status===200){
+                        //Database call
                         for(let i=0; i<entity_arr.length; i++){
                             let item = entity_arr[i];
-                            let result = await $http({
-                                method: "POST",
-                                url: host_url + "entity/createOrUpdateEntityValue",
-                                data: 'entity_name=' + item.entity + '&entity_value=' + item.value + '&entity_data=' + item.data,
-                                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                            });
-                            console.log(result);
+                            if(typeof item.entity !== 'undefined' &&
+                                item.entity.includes('wit$')) {
+                                let length = item.entity.length;
+                                for (let j = 0; j < (length-3); j++) {
+                                    if(item.entity.substr(j,j+4)==='wit$'){
+                                        item.entity = item.entity.substr(j+4,length);break;}
+                                }
+                            }
+                            try {
+                                let result = await $http({
+                                    method: "POST",
+                                    url: host_url + "entity/createOrUpdateEntityValue",
+                                    data: 'entity_name=' + item.entity + '&entity_value=' + item.value + '&entity_data=' + item.data,
+                                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                                });
+                                console.log(result);
+                            }catch (err){console.log(err);}
                         }
                         //Clear the array and reset values
                         $scope.selectedEntityValue = "Custom"; $scope.selectedEntity = $scope.entities[0];

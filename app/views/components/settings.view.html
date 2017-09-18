@@ -1,4 +1,4 @@
-<div ng-controller="mainController">
+<div ng-controller="SettingsViewController" ng-init="onInit()">
     <div class="alert alert-success" ng-show="successAlert">
         {{message}}
     </div>
@@ -18,11 +18,15 @@
                     </p>
                     <div class="form-group">
                         <label for="appID" class="control-label">App ID</label>
-                        <input type="text" id="appID" class="form-control">
+                        <input type="text" id="appID" class="form-control"
+                               ng-model="settings.app_id" ng-change="errorResetFlag('app_id_empty_error')">
+                        <p style="color: red; float: right" ng-show="isSubmit && app_id_empty_error">*App ID is required</p>
                     </div>
                     <div class="form-group">
                         <label for="serverAccessToken" class="control-label">Server access token</label>
-                        <input type="text" id="serverAccessToken" class="form-control">
+                        <input type="text" id="serverAccessToken" class="form-control"
+                               ng-model="settings.token" ng-change="errorResetFlag('token_empty_error')">
+                        <p style="color: red; float: right" ng-show="isSubmit && token_empty_error">*Server access token is required</p>
                     </div>
                     <h5 style="color: red; margin-left: 5%">Note:</h5>
                     <div style="margin-left: 10%">
@@ -30,7 +34,7 @@
                             <br>Refer <a href="https://wit.ai">https://wit.ai</a> </h5>
                     </div>
                 </div>
-                <input type="button" class="btn btn-success" value="Save" style="float: right; width: 150px; margin-top: 10px">
+                <input type="button" class="btn btn-success" value="Save" ng-click="updateSettings()" style="float: right; width: 150px; margin-top: 10px">
             </div>
         </div>
     </div>
