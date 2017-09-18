@@ -38,8 +38,6 @@
                                 <select class="form-control" name="size" id="entityName" ng-model="selectedEntity" ng-change="entitySelect()">
                                     <option ng-repeat="item in entities">{{item}}</option>
                                 </select>
-                                <input type="text" class="form-control" style="margin-top: 10px" ng-show="showCustomInputBox"
-                                       ng-model="entityName" ng-change="changeText('entity_name_empty')">
                                 <span class="col-xs-12" ng-show="entity_name_empty"><p style="color: red; float: right">*Entity name is required</p></span>
 
                                 <label for="entityValue" class="control-label" style="margin-top: 10px">Value:</label>
@@ -49,6 +47,14 @@
                                 <input type="text" class="form-control" style="margin-top: 10px" ng-show="showCustomInputValueBox"
                                        ng-model="entityValue" ng-change="changeText('entity_value_empty')">
                                 <span class="col-xs-12" ng-show="entity_value_empty"><p style="color: red; float: right">*Entity value is required</p></span>
+                                <span class="col-xs-12" ng-show="entity_value_exist"><p style="color: red; float: right">*Entity value already exist</p></span>
+
+                                <label for="entityData" class="control-label" style="margin-top: 10px">Data:</label>
+                                <textarea style="width: 100%; height: 200px; resize: none" id="entityData"
+                                          ng-model="entityData" ng-change="changeText('entity_data_empty')"></textarea>
+                                <div class="col-xs-12">
+                                    <span class="col-xs-12" ng-show="entity_data_empty"><p style="color: red; float: right">*Entity Data is required</p></span>
+                                </div>
 
                             </div>
                             <div class="col-xs-4">
@@ -59,8 +65,10 @@
                         </div>
                         <div class="list-group col-xs-9 col-xs-offset-2" style="margin-top: 10px">
                             <a class="list-group-item" ng-repeat="item in entityArr" ng-click="removeValue(item)">
-                                <h4 class="list-group-item-heading">Entity: {{item.entity}}</h4>
-                                <p class="list-group-item-text">Value: {{item.value}}</p>
+                                <h4 class="list-group-item-heading"><b>Entity:</b> {{item.entity}}</h4>
+                                <p class="list-group-item-text"><b>Value:</b> {{item.value}}</p>
+                                <p class="list-group-item-text"><b>Data:</b> {{item.data}}</p>
+
                             </a>
                         </div>
                         <div class="col-xs-12">

@@ -9,14 +9,6 @@ app.controller('TrainController',[
         $scope.isSubmit = false;
         $scope.isLoading = false;
         $scope.expression_empty = false;
-        $scope.changeText = function (field) {
-            switch (field){
-                case 'expression_empty':
-                    $scope.isSubmit = false;
-                    $scope.expression_empty = false;
-                    break;
-            }
-        };
         $scope.entities = [];
         //--------------------------------------------------------------------------------------------------------------
 
@@ -35,13 +27,11 @@ app.controller('TrainController',[
                     }
                     AppEntitiesService.setAppEntities(result.data.data);
                     $scope.entities = result.data.data;
-                    $scope.entities.push("Custom");
                     $scope.values = [{value: "Custom"}];
-                    $scope.selectedEntity = "Custom";
-                    $scope.showCustomInputBox = true;
+                    $scope.selectedEntity = $scope.entities[0];
                     $scope.showCustomInputValueBox = true;
                     $scope.isLoading = false;
-                    // $scope.$apply();
+                    $scope.$apply();
                 }
             }catch (err){
                 console.log(err);
@@ -54,16 +44,17 @@ app.controller('TrainController',[
         $scope.server_error = false;
         $scope.entity_name_empty = false;
         $scope.entity_value_empty = false;
+        $scope.entity_data_empty = false;
         $scope.changeText = function (field) {
             switch (field){
-                case 'entity_name_empty':
-                    $scope.entity_name_empty = false;
-                    break;
                 case 'entity_value_empty':
                     $scope.entity_value_empty = false;
                     break;
                 case 'expression_empty':
                     $scope.expression_empty = false;
+                    break;
+                case 'entity_data_empty':
+                    $scope.entity_data_empty = false;
                     break;
             }
         };
@@ -90,6 +81,11 @@ app.controller('TrainController',[
                     tmp_arr["end"] = $scope.user_input.length;
                     tmp_arr["value"] = $scope.user_input.substring(start,$scope.user_input.length);
                     $scope.values.push(tmp_arr);
+                    tmp_arr = {};
+                    tmp_arr["start"] = 0;
+                    tmp_arr["end"] = $scope.user_input.length;
+                    tmp_arr["value"] = $scope.user_input.substring(0,$scope.user_input.length);
+                    $scope.values.push(tmp_arr);
                 }
             }
         };
@@ -99,22 +95,36 @@ app.controller('TrainController',[
         $scope.entityArr = [];
         $scope.btnAddEntity = function () {
             let con = true;
-            if(($scope.selectedEntity==="Custom") &&
-                (typeof $scope.entityName==="undefined" || $scope.entityName==="")){
-                $scope.entity_name_empty = true; con = false;
-            }
             if(($scope.selectedEntityValue==="Custom") &&
                 (typeof $scope.entityValue==="undefined" || $scope.entityValue==="")){
                 $scope.entity_value_empty = true; con = false;
             }
+            if(typeof $scope.entityData==="undefined" || $scope.entityData===""){
+                $scope.entity_data_empty = true; con = false;
+            }
+            for(let i=0; i<$scope.entityArr.length; i++){
+                if($scope.selectedEntityValue==="Custom") {
+                    if ($scope.entityArr[i].value === $scope.entityValue) {
+                        $scope.entity_value_exist = true;
+                        con = false;
+                        break;
+                    }
+                }else{
+                    if($scope.entityArr[i].value===$scope.selectedEntityValue) {
+                        $scope.entity_value_exist = true;
+                        con = false;
+                        break;
+                    }
+                }
+            }
             if(con){
+                $scope.entity_value_exist = false;
                 if($scope.user_input==='' || typeof $scope.user_input==='undefined'){
                     $scope.expression_empty = true;
                 }else{
                     $scope.no_values_error = false;
                     let tmp_obj = {}; let entity;
-                    if($scope.selectedEntity==="Custom"){ entity = $scope.entityName;}
-                    else{entity = $scope.selectedEntity;}
+                    entity = $scope.selectedEntity;
                     tmp_obj["entity"] = entity;
                     if($scope.selectedEntityValue==="Custom"){tmp_obj["value"] = $scope.entityValue;}
                     else{
@@ -126,54 +136,69 @@ app.controller('TrainController',[
                             }
                         }
                     }
+                    tmp_obj["data"] = $scope.entityData;
                     $scope.entityArr.push(tmp_obj);
                 }
             }
         };
 
         $scope.btnValidateEntity = async function () {
-            console.log($scope.entityArr);
-            if($scope.entityArr.length>0){
-                if($scope.user_input==='' || typeof $scope.user_input==='undefined'){
-                    $scope.expression_empty = true;
-                }else{
-                    //Reset the error flags
-                    $scope.server_400_error=false;
-                    $scope.server_error = false;
-                    let data = JSON.stringify($scope.entityArr, function (key, value) {
-                        if (key === "$$hashKey") {
-                            return undefined;
-                        }
-                        return value;
-                    });
-                    try {
-                        $scope.isLoading = true;
-                        $scope.result = null;
-                        $scope.isSubmit = false;
-                        let result = await $http({
-                            method: "POST",
-                            url: host_url + "wit/postSample",
-                            data: 'text=' + $scope.user_input + '&entities=' + data,
-                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                        });
-                        if(result.status===200){
-                            //Clear the array and reset values
-                            $scope.selectedEntityValue = "Custom"; $scope.selectedEntity = "Custom";
-                            $scope.entityName = ""; $scope.entityValue = "";
-                            $scope.showCustomInputValueBox = true; $scope.showCustomInputBox = true;
-                            $scope.entityArr = []; $scope.isLoading = false; $scope.$apply();
-                        }else{$scope.server_error = true;}
-                    }catch (err){
-                        if(err.status===400){$scope.server_400_error=true;
-                        }else{$scope.server_error = true;}
-                        $scope.isLoading = false;
-                        $scope.$apply();
-                    }
-
-
-                }
-            }else{
+            let con = true;
+            if($scope.user_input==='' || typeof $scope.user_input==='undefined') {
+                $scope.expression_empty = true; con = false;
+            }
+            if($scope.entityArr.length===0) {
                 $scope.no_values_error = true;
+                con = false;
+            }
+            if(con){
+                //Reset the error flags
+                $scope.server_400_error=false;
+                $scope.server_error = false;
+                let entity_arr = $scope.entityArr;
+                console.log(entity_arr);
+                for(let i=0; i<entity_arr.length; i++){
+                    if(entity_arr[i].entity.includes('wit/')){
+                        entity_arr[i].entity = entity_arr[i].entity.replace("/","$");
+                    }
+                }
+                let data = JSON.stringify(entity_arr, function (key, value) {
+                    if (key === "$$hashKey" || key==="data") {return undefined;}
+                    return value;
+                });
+                try {
+                    $scope.isLoading = true;
+                    $scope.result = null;
+                    $scope.isSubmit = false;
+                    let result = await $http({
+                        method: "POST",
+                        url: host_url + "wit/postSample",
+                        data: 'text=' + $scope.user_input + '&entities=' + data,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    });
+                    if(result.status===200){
+                        for(let i=0; i<entity_arr.length; i++){
+                            let item = entity_arr[i];
+                            let result = await $http({
+                                method: "POST",
+                                url: host_url + "entity/createOrUpdateEntityValue",
+                                data: 'entity_name=' + item.entity + '&entity_value=' + item.value + '&entity_data=' + item.data,
+                                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                            });
+                            console.log(result);
+                        }
+                        //Clear the array and reset values
+                        $scope.selectedEntityValue = "Custom"; $scope.selectedEntity = $scope.entities[0];
+                        $scope.entityValue = "";
+                        $scope.entityArr = []; $scope.isLoading = false; $scope.$apply();
+                    }else{$scope.server_error = true;}
+                }catch (err){
+                    console.log(err);
+                    if(err.status===400){$scope.server_400_error=true;
+                    }else{$scope.server_error = true;}
+                    $scope.isLoading = false;
+                    $scope.$apply();
+                }
             }
         };
 
@@ -198,9 +223,7 @@ app.controller('TrainController',[
                 $scope.selectedEntityValue = 'Custom';
                 $scope.showCustomInputValueBox = true;
             }
-            $scope.showCustomInputBox = false;
             $scope.entity_name_empty = false;
-            if($scope.selectedEntity==="Custom")  {$scope.showCustomInputBox = true;}
         };
 
         $scope.btnCheck = async function () {
