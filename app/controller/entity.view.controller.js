@@ -64,7 +64,11 @@ app.controller('EntityController',[
                 let tmp_obj = {};
                 tmp_obj.value = $scope.entityAddValue;
                 tmp_obj.expressions = $scope.entityExpressions;
-                tmp_obj.data = $scope.entityData.replace('\n','<br>');
+                let tmp = $scope.entityData.split('\n'); let ret;
+                if(tmp.length>0){ret=tmp[0];}
+                if(tmp.length>1) {for (let i = 1; i < tmp.length; i++) {ret = ret + ' \\n\\n ' + tmp[i];}}
+                tmp_obj.data = ret;
+                console.log(tmp_obj);
                 $scope.values.push(tmp_obj);
                 $scope.entityAddValue = '';
                 $scope.entityExpressions = [];

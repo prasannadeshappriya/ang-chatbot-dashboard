@@ -136,7 +136,10 @@ app.controller('TrainController',[
                             }
                         }
                     }
-                    tmp_obj["data"] = $scope.entityData.replace('\n','<br>');
+                    let tmp = $scope.entityData.split('\n'); let ret;
+                    if(tmp.length>0){ret=tmp[0];}
+                    if(tmp.length>1) {for (let i = 1; i < tmp.length; i++) {ret = ret + ' \\n\\n ' + tmp[i];}}
+                    tmp_obj["data"] = ret;
                     $scope.entityArr.push(tmp_obj);
                 }
             }
@@ -218,7 +221,6 @@ app.controller('TrainController',[
                                     data: 'entity_name=' + item.entity + '&entity_value=' + item.value + '&entity_data=' + item.data,
                                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                                 });
-                                console.log(result);
                             }catch (err){console.log(err);}
                         }
                         //Clear the array and reset values
@@ -290,7 +292,7 @@ app.controller('TrainController',[
                     break;
                 }
             }
-        }
+        };
     }
 
 

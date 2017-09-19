@@ -64,7 +64,7 @@ app.controller('AppEntitiesViewController',[
         $scope.value_duplicate_error = false;
         $scope.data_error = false;
         //--------------------------------------------------------------------------------------------------------------
-        $scope.appIntentsItemDelete = async function () {
+        $scope.appEntityItemDelete = async function () {
             $scope.isSubmit = true;
             $scope.isLoadingModel = true;
             if(!$scope.isCreateNewEntity && selected_item){
@@ -139,11 +139,18 @@ app.controller('AppEntitiesViewController',[
                     return value;
                 });
                 if(typeof $scope.entityDescription==='undefined'){$scope.entityDescription='';}
+
+                //Add the new line character to the request url
+                let tmp = $scope.selectedappEntity.data.split('\n'); let ret;
+                if(tmp.length>0){ret=tmp[0];}
+                if(tmp.length>1) {for (let i = 1; i < tmp.length; i++) {ret = ret + ' \\n\\n ' + tmp[i];}}
+                let entity_data = ret;
+
                 let result = await $http({
                     method: "POST",
                     url: host_url + "entity/update",
                     data: 'entity_name='+  $scope.entityName + '&entity_value=' + $scope.selectedappEntity.value +
-                            '&entity_data=' + $scope.selectedappEntity.data,
+                            '&entity_data=' + ret,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 });
                 if(result.status===201){
@@ -224,9 +231,7 @@ app.controller('AppEntitiesViewController',[
                                     }
                                 }
                             }
-                            if (con) {
-                                item.data = ''
-                            }
+                            if (con) {item.data = ''}
                         }
                     }
                     $scope.values = result.data.data.values;
