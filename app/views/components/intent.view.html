@@ -10,11 +10,17 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title">Intent value: {{selectedappIntents.value}}</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="list-group">
+                    <div class="">
+                        <label for="intentModelData" class="control-label" style="margin-top: 10px">Intent Data</label>
+                        <textarea style="width: 100%; height: 200px; resize: none" id="intentModelData"
+                                  ng-model="intentModelData" ng-change="changeText('intent_model_data_empty')"></textarea>
+                        <span class="col-xs-12 text-info"><p style="float: right">*Put a word between &lt;b&gt;example&lt;/b&gt; to make it bold.</p></span>
+                        <span class="col-xs-12" ng-show="intent_model_data_empty"><p style="color: red; float: right">*Intent Data is required</p></span>
+                    </div>
+                    <div class="list-group" style="margin-top: 50px">
                         <a class="list-group-item" ng-repeat="item in selectedappIntents.expressions"
                            ng-click="appIntentsUpdateItemClick(item)">
                             <p class="list-group-item-text">{{item}}</p>
@@ -27,6 +33,7 @@
                     <input type="button" style="float: right; width: 100px" value="Add" class="btn btn-success" ng-click="btn_update_add_expressions()">
                 </div>
                 <div class="modal-footer" style="margin-top: 5%">
+                    <img src="assets/img/loading.svg" ng-show="isModelLoading" style="height: 60px; float: left; margin-top:-20px;" class="">
                     <button type="button" class="btn btn-danger" style="width: 100px" ng-click="appIntentsItemDelete()">Delete</button>
                     <button type="button" class="btn btn-success" style="width: 100px" ng-click="appIntentsItemUpdate()">Update</button>
                     <button type="button" class="btn btn-success" data-dismiss="modal" style="width: 100px">Close</button>
@@ -61,12 +68,14 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="text-info">Create new intent</h4>
+                    <img src="assets/img/loading.svg" ng-show="panel_loading" style="height: 60px; margin-top: -50px; float: right">
                 </div>
                 <div class="panel-body">
                     <div class="col-xs-8 col-xs-offset-2">
                         <div class="form-group">
                             <label for="intentName" class="control-label">Intent Name</label>
-                            <input type="text" id="intentName" class="form-control" ng-model="intentName" ng-change="changeText('intent_name_empty'); changeText('intent_name_dublicate')">
+                            <input type="text" id="intentName" class="form-control" ng-model="intentName"
+                                   ng-change="changeText('intent_name_empty'); changeText('intent_name_dublicate');">
                             <div class="col-xs-12">
                                 <span class="col-xs-12" ng-show="isSubmit && intent_name_empty"><p style="color: red; float: right">*Intent name is required</p></span>
                                 <span class="col-xs-12" ng-show="isSubmit && intent_name_dublicate"><p style="color: red; float: right">*Intent name is already taken</p></span>
@@ -95,6 +104,15 @@
                             <input type="text" id="intentDescription" class="form-control" ng-model="indentDes" ng-change="changeText('intent_description_empty')">
                             <div class="col-xs-12">
                                 <span class="col-xs-12" ng-show="isSubmit && intent_description_empty"><p style="color: red; float: right">*Intent description is required</p></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <label for="intentData" class="control-label" style="margin-top: 10px">Intent Data</label>
+                            <textarea style="width: 100%; height: 200px; resize: none" id="intentData"
+                                      ng-model="intentData" ng-change="changeText('intent_data_empty')"></textarea>
+                            <div class="col-xs-12">
+                                <span class="col-xs-12 text-info"><p style="float: right">*Put a word between &lt;b&gt;example&lt;/b&gt; to make it bold.</p></span>
+                                <span class="col-xs-12" ng-show="intent_data_empty"><p style="color: red; float: right">*Intent Data is required</p></span>
                             </div>
                         </div>
                         <div class="col-xs-12">
