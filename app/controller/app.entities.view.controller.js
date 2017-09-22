@@ -63,111 +63,150 @@ app.controller('AppEntitiesViewController',[
         $scope.isSubmit = false;
         $scope.value_duplicate_error = false;
         $scope.data_error = false;
+        $scope.wit_data_error = false;
         //--------------------------------------------------------------------------------------------------------------
-        $scope.appEntityItemDelete = async function () {
+        $scope.appEntityItemDelete = async function (isWitEntity) {
             $scope.isSubmit = true;
             $scope.isLoadingModel = true;
-            if(!$scope.isCreateNewEntity && selected_item){
-                for (let i = 0; i < $scope.values.length; i++) {
-                    if ($scope.values[i] === selected_item) {
-                        $scope.values.splice(i, 1);
-                        break;
-                    }
-                }
-                let data = JSON.stringify($scope.values, function (key, value) {
-                    if (key === "$$hashKey" || key === "data") {
-                        return undefined;
-                    }
-                    return value;
-                });
-                let result = await $http({
-                    method: "POST",
-                    url: host_url + "entity/delete",
-                    data: 'entity_name='+  $scope.entityName + '&entity_value=' + $scope.selectedappEntity.value,
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                });
-                if(result.status===200){
-                    result = await $http({
-                        method: "POST",
-                        url: host_url + "wit/putEntityById",
-                        data: 'entity_name='+  $scope.entityName + '&wit_values=' + data + '&wit_doc=' + $scope.entityDescription,
-                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                    });
-                }
-                $scope.message = 'Intent successfully deleted!';
-                $scope.successAlert = true;
-                $scope.$apply();
-                $('#updateEntityData').modal('hide');
-            }
-        };
-        $scope.appEntityItemUpdate = async function () {
-            $scope.isSubmit = true;
-            $scope.isLoadingModel = true;
-            let con = true;
-            if($scope.isCreateNewEntity){
-                if($scope.selectedappEntity.value.replace(" ","")==='' ||
-                    typeof $scope.selectedappEntity.value==='undefined'){
-                    $scope.value_error = true; con = false;
-                }
-                for(let i=0; i<$scope.values.length;i++){
-                    if($scope.values[i].value===$scope.selectedappEntity.value){
-                        $scope.value_duplicate_error = true;
-                        con = false; break;
-                    }
-                }
-            }
-            if($scope.selectedappEntity.data.replace(" ","")==='' ||
-                typeof $scope.selectedappEntity.data==='undefined'){
-                $scope.data_error = true; con = false;
-            }
-            if(con) {
-                if (selected_item) {
+            if(isWitEntity){
+                console.log('should delete wit data');
+            }else {
+                if (!$scope.isCreateNewEntity && selected_item) {
                     for (let i = 0; i < $scope.values.length; i++) {
                         if ($scope.values[i] === selected_item) {
                             $scope.values.splice(i, 1);
-                            $scope.values.splice(i, 0, $scope.selectedappEntity);
                             break;
                         }
                     }
-                } else {
-                        $scope.values.push($scope.selectedappEntity);
-                }
-                let data = JSON.stringify($scope.values, function (key, value) {
-                    if (key === "$$hashKey" || key === "data") {
-                        return undefined;
-                    }
-                    return value;
-                });
-                if(typeof $scope.entityDescription==='undefined'){$scope.entityDescription='';}
-
-                //Add the new line character to the request url
-                let tmp = $scope.selectedappEntity.data.split('\n'); let ret;
-                if(tmp.length>0){ret=tmp[0];}
-                if(tmp.length>1) {for (let i = 1; i < tmp.length; i++) {ret = ret + ' \\n\\n ' + tmp[i];}}
-                let entity_data = ret;
-
-                let result = await $http({
-                    method: "POST",
-                    url: host_url + "entity/update",
-                    data: 'entity_name='+  $scope.entityName + '&entity_value=' + $scope.selectedappEntity.value +
-                            '&entity_data=' + ret,
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                });
-                if(result.status===201){
-                    result = await $http({
+                    let data = JSON.stringify($scope.values, function (key, value) {
+                        if (key === "$$hashKey" || key === "data") {
+                            return undefined;
+                        }
+                        return value;
+                    });
+                    let result = await $http({
                         method: "POST",
-                        url: host_url + "wit/putEntityById",
-                        data: 'entity_name='+  $scope.entityName + '&wit_values=' + data + '&wit_doc=' + $scope.entityDescription,
+                        url: host_url + "entity/delete",
+                        data: 'entity_name=' + $scope.entityName + '&entity_value=' + $scope.selectedappEntity.value,
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                     });
+                    if (result.status === 200) {
+                        result = await $http({
+                            method: "POST",
+                            url: host_url + "wit/putEntityById",
+                            data: 'entity_name=' + $scope.entityName + '&wit_values=' + data + '&wit_doc=' + $scope.entityDescription,
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        });
+                    }
+                    $scope.message = 'Intent successfully deleted!';
+                    $scope.successAlert = true;
+                    $scope.$apply();
+                    $('#updateEntityData').modal('hide');
                 }
-
-                $scope.message = 'Intent successfully updated!';
-                $scope.successAlert = true;
-                $scope.$apply();
-                $('#updateEntityData').modal('hide');
             }
         };
+        $scope.appEntityItemUpdate = async function (isWitEntity) {
+            $scope.isSubmit = true;
+            $scope.isLoadingModel = true;
+            if(isWitEntity){
+                let con = true;
+                if(typeof $scope.selectedWitData.data==='undefined' ||
+                    $scope.selectedWitData.data === ''){
+                    $scope.wit_data_error = true;
+                }
+                if(con){
+                    console.log('should update or create');
+                }
+            }else {
+                let con = true;
+                if ($scope.isCreateNewEntity) {
+                    if ($scope.selectedappEntity.value.replace(" ", "") === '' ||
+                        typeof $scope.selectedappEntity.value === 'undefined') {
+                        $scope.value_error = true;
+                        con = false;
+                    }
+                    for (let i = 0; i < $scope.values.length; i++) {
+                        if ($scope.values[i].value === $scope.selectedappEntity.value) {
+                            $scope.value_duplicate_error = true;
+                            con = false;
+                            break;
+                        }
+                    }
+                }
+                if ($scope.selectedappEntity.data.replace(" ", "") === '' ||
+                    typeof $scope.selectedappEntity.data === 'undefined') {
+                    $scope.data_error = true;
+                    con = false;
+                }
+                if (con) {
+                    if (selected_item) {
+                        for (let i = 0; i < $scope.values.length; i++) {
+                            if ($scope.values[i] === selected_item) {
+                                $scope.values.splice(i, 1);
+                                $scope.values.splice(i, 0, $scope.selectedappEntity);
+                                break;
+                            }
+                        }
+                    } else {
+                        $scope.values.push($scope.selectedappEntity);
+                    }
+                    let data = JSON.stringify($scope.values, function (key, value) {
+                        if (key === "$$hashKey" || key === "data") {
+                            return undefined;
+                        }
+                        return value;
+                    });
+                    if (typeof $scope.entityDescription === 'undefined') {
+                        $scope.entityDescription = '';
+                    }
+
+                    //Add the new line character to the request url
+                    let tmp = $scope.selectedappEntity.data.split('\n');
+                    let ret;
+                    if (tmp.length > 0) {
+                        ret = tmp[0];
+                    }
+                    if (tmp.length > 1) {
+                        for (let i = 1; i < tmp.length; i++) {
+                            ret = ret + ' \\n\\n ' + tmp[i];
+                        }
+                    }
+                    let entity_data = ret;
+
+                    let result = await $http({
+                        method: "POST",
+                        url: host_url + "entity/update",
+                        data: 'entity_name=' + $scope.entityName + '&entity_value=' + $scope.selectedappEntity.value +
+                        '&entity_data=' + ret,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    });
+                    if (result.status === 201) {
+                        result = await $http({
+                            method: "POST",
+                            url: host_url + "wit/putEntityById",
+                            data: 'entity_name=' + $scope.entityName + '&wit_values=' + data + '&wit_doc=' + $scope.entityDescription,
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        });
+                    }
+
+                    $scope.message = 'Intent successfully updated!';
+                    $scope.successAlert = true;
+                    $scope.$apply();
+                    $('#updateEntityData').modal('hide');
+                }
+            }
+        };
+        $scope.onClickWitEntityData = function(isNewData,item){
+            if(isNewData){
+                $scope.isCreateNewWitEntity = true;
+                $scope.selectedWitData = {};
+            }else{
+                $scope.isCreateNewWitEntity = false;
+                $scope.selectedWitData = angular.copy(item);
+                console.log($scope.selectedWitData);
+            }
+        };
+        $scope.isCreateNewWitEntity = false;
         $scope.isCreateNewEntity = false;
         $scope.add = function () {
             $scope.isCreateNewEntity = true;
@@ -203,11 +242,11 @@ app.controller('AppEntitiesViewController',[
                 });
                 if (item.includes('wit$')) {
                     $scope.isWitEntity = true;
+                    $scope.wit_value_array = result.data.values;
                 }
-                else {
-                    $scope.isWitEntity = false;
-                }
+                else {$scope.isWitEntity = false;}
                 $scope.isLoading = false;
+                console.log(result);
                 if (result.status === 200) {
                     $scope.entityName = result.data.data.name;
                     try {
@@ -235,6 +274,7 @@ app.controller('AppEntitiesViewController',[
                         }
                     }
                     $scope.values = result.data.data.values;
+                    console.log($scope.values);
                     $scope.$apply();
                 } else {
                     $scope.message = 'Error occurred!';

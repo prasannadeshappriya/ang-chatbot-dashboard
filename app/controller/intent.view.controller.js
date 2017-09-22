@@ -2,10 +2,10 @@
  * Created by prasanna_d on 9/4/2017.
  */
 app.controller('IntentController',[
-    '$scope','$http','host_url','PageViewService','AuthService','$location',
-    function ($scope,$http,host_url,PageViewService,AuthService, $location) {
-        $scope.test = ['test1', 'test2', 'test3'];
-
+    '$scope','$http','host_url','PageViewService',
+    'AuthService','$location',
+    function ($scope,$http,host_url,PageViewService,
+              AuthService,$location) {
         //-----------------------Alert Show Section---------------------------------------------------------------------
         $scope.dangerAlert = false;
         $scope.successAlert = false;
@@ -35,7 +35,7 @@ app.controller('IntentController',[
                 if($scope.appIntents.length>0){$scope.selectedIntentName = $scope.appIntents[0].name;}
                 result = await $http({
                     method: "GET",
-                    url: host_url + "wit/getEntityById?entity_name=intent&token="+AuthService.getToken()
+                    url: host_url + "wit/getEntityById?entity_name=intent"
                 });
                 if(result.status===200) {
                     $scope.indentDes = result.data.data.doc;

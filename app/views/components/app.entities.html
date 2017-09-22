@@ -4,7 +4,6 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title" ng-show="!isCreateNewEntity">Entity value: {{selectedappEntity.value}}</h4>
                     <div ng-show="isCreateNewEntity">
                         <label for="new_entity_value" class="control-label">Entity value:</label>
@@ -35,8 +34,28 @@
                 </div>
                 <div class="modal-footer" style="margin-top: 5%">
                     <img src="assets/img/loading.svg" ng-show="isLoadingModel" style="height: 60px; float: left; margin-top:-15px">
-                    <button type="button" class="btn btn-danger" style="width: 100px" ng-click="appEntityItemDelete()" ng-show="!isCreateNewEntity">Delete</button>
-                    <button type="button" class="btn btn-success" style="width: 100px" ng-click="appEntityItemUpdate()">Update</button>
+                    <button type="button" class="btn btn-danger" style="width: 100px" ng-click="appEntityItemDelete(false)" ng-show="!isCreateNewEntity">Delete</button>
+                    <button type="button" class="btn btn-success" style="width: 100px" ng-click="appEntityItemUpdate(false)">Update</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" style="width: 100px">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="updateWitData">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Create/Update data for selected wit-entity</h4>
+                </div>
+                <div class="modal-body">
+                    <textarea class="col-xs-12" style="resize: none; height: 100px; margin-bottom: 10px"
+                              ng-model="selectedWitData.data" ng-change="reset_error_flag('data_error')"></textarea>
+                    <p style="color: red; float: right" ng-show="isSubmit && wit_data_error">*Entity data is required</p>
+                </div>
+                <div class="modal-footer" style="margin-top: 17%">
+                    <img src="assets/img/loading.svg" ng-show="isLoadingModel" style="height: 60px; float: left; margin-top:-15px">
+                    <button type="button" class="btn btn-danger" style="width: 100px" ng-click="appEntityItemDelete(true)" ng-show="!isCreateNewWitEntity">Delete</button>
+                    <button type="button" class="btn btn-success" style="width: 100px" ng-click="appEntityItemUpdate(true)">Update</button>
                     <button type="button" class="btn btn-success" data-dismiss="modal" style="width: 100px">Close</button>
                 </div>
             </div>
@@ -61,6 +80,21 @@
                 <h4>lookup strategy :</h4>
                 <p ng-repeat="item in lookup">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- {{item}}</p>
                 <hr>
+                <div ng-show="isWitEntity && wit_value_array.length>0">
+                    <h4 class="" ng-if="wit_value_array.length>0">Data:</h4>
+                    <h5 class="text-info"><b>Note: You can add more than one data for this entity. Then bot will randomly select data and
+                        make the conversation more interactive with the chat user</b></h5>
+                    <div class="list-group">
+                        <a href="" class="list-group-item" ng-repeat="item in wit_value_array"
+                           data-target="#updateWitData" data-toggle="{{isWitEntity ? 'modal' : ''}}" ng-click="onClickWitEntityData(false,item)">
+                            <p class="list-group-item-text">{{item.data}}</p>
+                        </a>
+                    </div>
+                    <input type="button" class="btn btn-default" value="add" style="width: 150px; float: right"
+                           ng-show="isWitEntity" data-target="#updateWitData" data-toggle="{{isWitEntity ? 'modal' : ''}}"
+                            ng-click="onClickWitEntityData(true,null)">
+                    <hr style="margin-top: 70px">
+                </div>
                 <h4>Values and expressions</h4>
                 <p class="text-info" ng-if="values.length===0">Currently there are not values and expressions for this entity</p>
                 <div class="list-group">
