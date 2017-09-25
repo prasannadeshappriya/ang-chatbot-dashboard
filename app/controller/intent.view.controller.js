@@ -6,6 +6,20 @@ app.controller('IntentController',[
     'AuthService','$location',
     function ($scope,$http,host_url,PageViewService,
               AuthService,$location) {
+        function prepareData(data) {
+            let skip_items=['&nbsp;','<span>','</span>'];
+            let output=data;
+            for(let j=0; j<skip_items.length; j++) {
+                let intent_Data = output.split(skip_items[j]);
+                let ret;
+                if (intent_Data.length > 0) {ret = intent_Data[0];}
+                let replace_chr = '';
+                if(skip_items[j]==='&nbsp;'){replace_chr = ' ';}
+                if (intent_Data.length > 1) {for (let i = 1; i < intent_Data.length; i++) {ret = ret + replace_chr + intent_Data[i];}}
+                output = ret;
+            }
+            return output;
+        }
         //-----------------------Alert Show Section---------------------------------------------------------------------
         $scope.dangerAlert = false;
         $scope.successAlert = false;
@@ -86,7 +100,7 @@ app.controller('IntentController',[
                     break;
                 case 'intent_model_data_empty':
                     $scope.intent_model_data_empty = false;
-                    break;
+                break;
             }
         };
         //------------------------Intent Update Model Section-----------------------------------------------------------
@@ -166,10 +180,9 @@ app.controller('IntentController',[
         $scope.appIntentsItemUpdate = async function () {
             let con = true;
             $scope.intent_model_data_empty = false;
-            if(typeof $scope.intentModelData==='undefined' ||
-                    $scope.intentModelData === ''){
-                $scope.intent_model_data_empty = true; con = false;
-            }
+            if($scope.intentModelData==='' ||
+                    typeof $scope.intentModelData==='undefined'){
+                $scope.intent_model_data_empty = true; con = false;}
             if(con) {
                 $scope.isModelLoading = true;
                 let tmp_arr = [];
@@ -194,7 +207,7 @@ app.controller('IntentController',[
                     let result = await $http({
                         method: "POST",
                         url: host_url + "intent/update",
-                        data: 'intent_name=' + $scope.selectedappIntents.value + '&intent_data=' + $scope.intentModelData,
+                        data: 'intent_name=' + $scope.selectedappIntents.value + '&intent_data=' + prepareData($scope.intentModelData),
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                     });
                     if(result.data.data) {
@@ -225,7 +238,6 @@ app.controller('IntentController',[
                     $scope.isModelLoading = false;
                     $scope.message = 'Internal server error';
                     $scope.dangerAlert = true;
-                    $scope.$apply();
                 }
                 $('#updateData').modal('hide');
             }
@@ -262,7 +274,7 @@ app.controller('IntentController',[
                         method: "POST",
                         url: host_url + "intent/create",
                         data: 'intent_name='+ $scope.intentName+ '&intent_description=' + $scope.indentDes +
-                                    '&intent_data=' + $scope.intentData,
+                                    '&intent_data=' + prepareData($scope.intentData),
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                     });
                     console.log(result);
@@ -287,7 +299,8 @@ app.controller('IntentController',[
                                 $scope.message = 'Intent successfully created!';
                                 $scope.successAlert = true;
                                 $scope.panel_loading = false;
-                                $scope.intentName = ''; $scope.intentData = '';
+                                $scope.intentName = '';
+                                $scope.intentData = '';
                                 $scope.add_expressions = [];
                                 $scope.$apply();
                             }else{
@@ -309,7 +322,7 @@ app.controller('IntentController',[
                         $scope.panel_loading = false; $scope.$apply();}
                     // console.log(err);
                 }
-            }
+            }else{$scope.panel_loading = false;}
         };
         //View Controller-----------------------------------------------------------------------------------------------
         $scope.showView = function (view_name) {
@@ -331,5 +344,11 @@ app.controller('IntentController',[
                 }
             }
         };
+        function synchronize() {
+            console.log('testing');
+        }
+        $scope.testtesttest = function () {
+            console.log('this is working');
+        }
     }
 ]);

@@ -15,8 +15,8 @@
                 </div>
                 <div class="modal-body">
                     <p><b>Data:</b></p>
-                    <textarea class="col-xs-12" style="resize: none; height: 100px; margin-bottom: 10px"
-                              ng-model="selectedappEntity.data" ng-change="reset_error_flag('data_error')"></textarea>
+                    <div data-wysiwyg='selectedappEntity.data' data-wysiwyg-toolbar='' ng-model="selectedappEntity.data" id="textarea_model_data"
+                         ng-change="reset_error_flag('data_error')" class="col-xs-12" style="resize: none; height: 100px; margin-bottom: 10px"></div>
                     <p style="color: red; float: right" ng-show="isSubmit && data_error">*Entity data is required</p>
                     <p style="margin-top: 10px"><b>Expressions:</b></p>
                     <div class="list-group col-xs-12" style="margin-top: 10px">
@@ -48,8 +48,8 @@
                     <h4 class="modal-title">Create/Update data for selected wit-entity</h4>
                 </div>
                 <div class="modal-body">
-                    <textarea class="col-xs-12" style="resize: none; height: 100px; margin-bottom: 10px"
-                              ng-model="selectedWitData.data" ng-change="reset_error_flag('data_error')"></textarea>
+                    <div data-wysiwyg='selectedWitData.data' data-wysiwyg-toolbar='' ng-model="selectedWitData.data" id="textarea_model_update_data"
+                         ng-change="reset_error_flag('data_error')" class="col-xs-12" style="resize: none; height: 100px; margin-bottom: 10px"></div>
                     <p style="color: red; float: right" ng-show="isSubmit && wit_data_error">*Entity data is required</p>
                 </div>
                 <div class="modal-footer" style="margin-top: 17%">

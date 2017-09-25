@@ -4,6 +4,20 @@
 app.controller('EntityController',[
     '$scope','PageViewService','$http','host_url','AppEntitiesService',
     function ($scope,PageViewService,$http,host_url,AppEntitiesService) {
+        function prepareData(data) {
+            let skip_items=['&nbsp;','<span>','</span>'];
+            let output=data;
+            for(let j=0; j<skip_items.length; j++) {
+                let intent_Data = output.split(skip_items[j]);
+                let ret;
+                if (intent_Data.length > 0) {ret = intent_Data[0];}
+                let replace_chr = '';
+                if(skip_items[j]==='&nbsp;'){replace_chr = ' ';}
+                if (intent_Data.length > 1) {for (let i = 1; i < intent_Data.length; i++) {ret = ret + replace_chr + intent_Data[i];}}
+                output = ret;
+            }
+            return output;
+        }
         //-----------------------Alert Show Section---------------------------------------------------------------------
         $scope.dangerAlert = false;
         $scope.successAlert = false;
@@ -64,11 +78,7 @@ app.controller('EntityController',[
                 let tmp_obj = {};
                 tmp_obj.value = $scope.entityAddValue;
                 tmp_obj.expressions = $scope.entityExpressions;
-                let tmp = $scope.entityData.split('\n'); let ret;
-                if(tmp.length>0){ret=tmp[0];}
-                if(tmp.length>1) {for (let i = 1; i < tmp.length; i++) {ret = ret + ' \\n\\n ' + tmp[i];}}
-                tmp_obj.data = ret;
-                console.log(tmp_obj);
+                tmp_obj.data = prepareData($scope.entityData);
                 $scope.values.push(tmp_obj);
                 $scope.entityAddValue = '';
                 $scope.entityExpressions = [];
@@ -139,6 +149,9 @@ app.controller('EntityController',[
         $scope.entity_des_empty = false;
         $scope.entity_data_empty = false;
         $scope.entity_value_empty = false;
+        $scope.test = function () {
+            console.log('testing');
+        };
         $scope.changeText = function (field) {
             switch (field){
                 case 'entity_name_empty':
@@ -150,11 +163,11 @@ app.controller('EntityController',[
                 case 'entity_des_empty':
                     $scope.entity_des_empty = false;
                     break;
-                case 'entity_data_empty':
-                    $scope.entity_data_empty = false;
-                    break;
                 case 'entity_value_empty':
                     $scope.entity_value_empty = false;
+                    break;
+                case 'entity_data_empty':
+                    $scope.entity_data_empty = false;
                     break;
             }
         };
@@ -183,10 +196,6 @@ app.controller('EntityController',[
                     if(con){$scope.values.splice(i,1);}
                 }
             }
-        };
-        $scope.textSelected = function(text){
-            console.log(text);
-            //alert(text);
         };
     }
 ]);

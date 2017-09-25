@@ -4,6 +4,21 @@
 app.controller('AppEntitiesViewController',[
     '$scope','$http','AppEntitiesService','host_url',
     function ($scope,$http, AppEntitiesService, host_url) {
+        function prepareData(data) {
+            let skip_items=['&nbsp;','<span>','</span>'];
+            let output=data;
+            for(let j=0; j<skip_items.length; j++) {
+                let intent_Data = output.split(skip_items[j]);
+                let ret;
+                if (intent_Data.length > 0) {ret = intent_Data[0];}
+                let replace_chr = '';
+                if(skip_items[j]==='&nbsp;'){replace_chr = ' ';}
+                if (intent_Data.length > 1) {for (let i = 1; i < intent_Data.length; i++) {ret = ret + replace_chr + intent_Data[i];}}
+                output = ret;
+            }
+            return output;
+        }
+        //--------------------------------------------------------------------------------------------------------------
         $scope.isWitEntity = false;
         //Watcher functions---------------------------------------------------------------------------------------------
         $scope.entities = [];
@@ -160,24 +175,11 @@ app.controller('AppEntitiesViewController',[
                         $scope.entityDescription = '';
                     }
 
-                    //Add the new line character to the request url
-                    let tmp = $scope.selectedappEntity.data.split('\n');
-                    let ret;
-                    if (tmp.length > 0) {
-                        ret = tmp[0];
-                    }
-                    if (tmp.length > 1) {
-                        for (let i = 1; i < tmp.length; i++) {
-                            ret = ret + ' \\n\\n ' + tmp[i];
-                        }
-                    }
-                    let entity_data = ret;
-
                     let result = await $http({
                         method: "POST",
                         url: host_url + "entity/update",
                         data: 'entity_name=' + $scope.entityName + '&entity_value=' + $scope.selectedappEntity.value +
-                        '&entity_data=' + ret,
+                        '&entity_data=' + prepareData($scope.selectedappEntity.data),
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                     });
                     if (result.status === 201) {

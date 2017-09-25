@@ -4,6 +4,20 @@
 app.controller('TrainController',[
     '$scope','$http','host_url','AppEntitiesService',
     function ($scope,$http,host_url,AppEntitiesService ) {
+        function prepareData(data) {
+            let skip_items=['&nbsp;','<span>','</span>'];
+            let output=data;
+            for(let j=0; j<skip_items.length; j++) {
+                let intent_Data = output.split(skip_items[j]);
+                let ret;
+                if (intent_Data.length > 0) {ret = intent_Data[0];}
+                let replace_chr = '';
+                if(skip_items[j]==='&nbsp;'){replace_chr = ' ';}
+                if (intent_Data.length > 1) {for (let i = 1; i < intent_Data.length; i++) {ret = ret + replace_chr + intent_Data[i];}}
+                output = ret;
+            }
+            return output;
+        }
         //Validation----------------------------------------------------------------------------------------------------
         $scope.result = null;
         $scope.isSubmit = false;
@@ -218,7 +232,7 @@ app.controller('TrainController',[
                                 let result = await $http({
                                     method: "POST",
                                     url: host_url + "entity/createOrUpdateEntityValue",
-                                    data: 'entity_name=' + item.entity + '&entity_value=' + item.value + '&entity_data=' + item.data,
+                                    data: 'entity_name=' + item.entity + '&entity_value=' + prepareData(item.value) + '&entity_data=' + item.data,
                                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                                 });
                             }catch (err){console.log(err);}

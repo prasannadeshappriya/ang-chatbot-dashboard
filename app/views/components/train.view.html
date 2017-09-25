@@ -58,8 +58,8 @@
                         </div>
                         <div class="">
                             <label for="entityData" class="control-label" style="margin-top: 10px">Data:</label>
-                            <textarea style="width: 100%; height: 200px; resize: none" id="entityData"
-                                      ng-model="entityData" ng-change="changeText('entity_data_empty')"></textarea>
+                            <div data-wysiwyg='entityData' data-wysiwyg-toolbar='' ng-model="entityData" id="entityData"
+                                 ng-change="changeText('entity_data_empty')" style="width: 100%; height: 200px; resize: none"></div>
                             <div class="col-xs-12">
                                 <span class="col-xs-12" ng-show="entity_data_empty"><p style="color: red; float: right">*Entity Data is required</p></span>
                             </div>
