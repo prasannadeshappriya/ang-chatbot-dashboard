@@ -84,7 +84,26 @@ app.controller('AppEntitiesViewController',[
             $scope.isSubmit = true;
             $scope.isLoadingModel = true;
             if(isWitEntity){
-                console.log('should delete wit data');
+                try{
+                    let result = await $http({
+                        method: "POST",
+                        url: host_url + "wit/deleteWitData",
+                        data: 'entity_data=' + JSON.stringify($scope.selectedWitData),
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    });
+                    if(result.status===200){
+                        for (let i = 0; i < $scope.wit_value_array.length; i++) {
+                            if ($scope.wit_value_array[i].id === $scope.selectedWitData.id &&
+                                $scope.wit_value_array[i].entity_id === $scope.selectedWitData.entity_id &&
+                                $scope.wit_value_array[i].value === $scope.selectedWitData.value) {
+                                $scope.wit_value_array.splice(i, 1); $scope.$apply(); break;
+                            }
+                        }
+                    }
+                }catch (err){console.log(err);}
+                $scope.selectedWitData = {id:'', entity_id: '', value: 'wit', data: ''};
+                $scope.isLoadingModel = false;
+                $('#updateWitData').modal('hide');
             }else {
                 if (!$scope.isCreateNewEntity && selected_item) {
                     for (let i = 0; i < $scope.values.length; i++) {
@@ -123,15 +142,46 @@ app.controller('AppEntitiesViewController',[
         $scope.appEntityItemUpdate = async function (isWitEntity) {
             $scope.isSubmit = true;
             $scope.isLoadingModel = true;
+            console.log($scope.wit_value_array);
             if(isWitEntity){
                 let con = true;
                 if(typeof $scope.selectedWitData.data==='undefined' ||
-                    $scope.selectedWitData.data === ''){
-                    $scope.wit_data_error = true;
+                    ($scope.selectedWitData.data).replace(' ','') === ''){
+                    $scope.wit_data_error = true; con = false;
                 }
-                if(con){
-                    console.log('should update or create');
+                if(con) {
+                    console.log($scope.selectedWitData);
+                    try {
+                        let result = await $http({
+                            method: "POST",
+                            url: host_url + "wit/updateWitData",
+                            data: 'entity_data=' + JSON.stringify($scope.selectedWitData),
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        });
+                        if(result.status===200){
+                            if($scope.selectedWitData.isNew){
+                                let new_item = result.data.message;
+                                $scope.wit_value_array.push(new_item);
+                                $scope.$apply();
+                            }else {
+                                for (let i = 0; i < $scope.wit_value_array.length; i++) {
+                                    if ($scope.wit_value_array[i].id === $scope.selectedWitData.id &&
+                                        $scope.wit_value_array[i].entity_id === $scope.selectedWitData.entity_id &&
+                                        $scope.wit_value_array[i].value === $scope.selectedWitData.value) {
+                                        $scope.wit_value_array.splice(i, 1);
+                                        $scope.wit_value_array.push($scope.selectedWitData);
+                                        $scope.$apply();
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }catch (err){console.log(err);}
+                    $scope.selectedWitData = {id:'', entity_id: '', value: 'wit', data: ''};
+                    $scope.isLoadingModel = false;
+                    $('#updateWitData').modal('hide');
                 }
+                $scope.isLoadingModel = false;
             }else {
                 let con = true;
                 if ($scope.isCreateNewEntity) {
@@ -201,10 +251,17 @@ app.controller('AppEntitiesViewController',[
         $scope.onClickWitEntityData = function(isNewData,item){
             if(isNewData){
                 $scope.isCreateNewWitEntity = true;
-                $scope.selectedWitData = {};
+                $scope.selectedWitData = {id:'', entity_id: '', value: 'wit', data: ''};
+                $scope.selectedWitData.data = ' ';
+                $scope.selectedWitData.entityName = $scope.entityName;
+                $scope.selectedWitData.isNew = true;
             }else{
                 $scope.isCreateNewWitEntity = false;
                 $scope.selectedWitData = angular.copy(item);
+                let oldItemWitData = angular.copy(item.data);
+                $scope.selectedWitData.isNew = false;
+                $scope.selectedWitData.entityName = $scope.entityName;
+                $scope.selectedWitData.oldItemWitData = oldItemWitData;
                 console.log($scope.selectedWitData);
             }
         };
