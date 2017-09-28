@@ -70,7 +70,7 @@ app.controller('EntityController',[
                 $scope.entity_value_empty = true;
                 con = false;
             }
-            if(typeof $scope.entityData==='undefined' || $scope.entityData ===''){
+            if(typeof $scope.entityData==='undefined' || $scope.entityData.replace(' ','') ===''){
                 $scope.entity_data_empty = true;
                 con = false;
             }
@@ -82,7 +82,7 @@ app.controller('EntityController',[
                 $scope.values.push(tmp_obj);
                 $scope.entityAddValue = '';
                 $scope.entityExpressions = [];
-                $scope.entityData ='';
+                $scope.entityData =' ';
             }
         };
         $scope.createEntity = async function () {
@@ -125,7 +125,7 @@ app.controller('EntityController',[
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                     });
                     if(result.status===200){
-                        $scope.entityDesc = ''; $scope.entityName = ''; $scope.entityData ='';
+                        $scope.entityDesc = ''; $scope.entityName = ''; $scope.entityData =' ';
                         $scope.values = []; $scope.entityExpressions = [];
                         $scope.message = 'Entity successfully created!';
                         $scope.successAlert = true;

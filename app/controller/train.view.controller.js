@@ -113,7 +113,7 @@ app.controller('TrainController',[
                 (typeof $scope.entityValue==="undefined" || $scope.entityValue==="")){
                 $scope.entity_value_empty = true; con = false;
             }
-            if(typeof $scope.entityData==="undefined" || $scope.entityData===""){
+            if(typeof $scope.entityData==="undefined" || $scope.entityData.replace(" ","")===""){
                 $scope.entity_data_empty = true; con = false;
             }
             for(let i=0; i<$scope.entityArr.length; i++){
@@ -239,7 +239,7 @@ app.controller('TrainController',[
                         }
                         //Clear the array and reset values
                         $scope.selectedEntityValue = "Custom"; $scope.selectedEntity = $scope.entities[0];
-                        $scope.entityValue = ""; $scope.entityData = ""; $scope.showCustomInputValueBox = true;
+                        $scope.entityValue = ""; $scope.entityData = " "; $scope.showCustomInputValueBox = true;
                         $scope.entityArr = []; $scope.isLoading = false; $scope.$apply();
                     }else{$scope.server_error = true;}
                 }catch (err){

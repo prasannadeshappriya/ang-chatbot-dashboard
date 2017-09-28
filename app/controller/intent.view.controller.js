@@ -180,7 +180,7 @@ app.controller('IntentController',[
         $scope.appIntentsItemUpdate = async function () {
             let con = true;
             $scope.intent_model_data_empty = false;
-            if($scope.intentModelData==='' ||
+            if($scope.intentModelData.replace(' ','')==='' ||
                     typeof $scope.intentModelData==='undefined'){
                 $scope.intent_model_data_empty = true; con = false;}
             if(con) {
@@ -267,7 +267,7 @@ app.controller('IntentController',[
             let con = true;
             if($scope.intentName==='' || typeof $scope.intentName==='undefined'){$scope.intent_name_empty = true; con = false;}
             if($scope.indentDes==='' || typeof $scope.indentDes==='undefined'){$scope.intent_description_empty = true; con = false;}
-            if($scope.intentData==='' || typeof $scope.intentData==='undefined'){$scope.intent_data_empty = true; con = false;}
+            if($scope.intentData.replace(' ','')==='' || typeof $scope.intentData==='undefined'){$scope.intent_data_empty = true; con = false;}
             if(con){
                 try {
                     let result = await $http({
@@ -300,7 +300,7 @@ app.controller('IntentController',[
                                 $scope.successAlert = true;
                                 $scope.panel_loading = false;
                                 $scope.intentName = '';
-                                $scope.intentData = '';
+                                $scope.intentData = ' ';
                                 $scope.add_expressions = [];
                                 $scope.$apply();
                             }else{
