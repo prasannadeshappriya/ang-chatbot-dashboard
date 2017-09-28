@@ -46,6 +46,12 @@ code {
 #navDrop2 a:hover{
     background-color: #e7e7e7;
 }
+#navChatWithBot a:hover{
+    background-color: #e7e7e7;
+}
+#addContact a:hover{
+    background-color: #e7e7e7;
+}
 .footer-company-about{
     line-height: 20px;
     color:  #92999f;

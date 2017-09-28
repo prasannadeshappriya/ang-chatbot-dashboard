@@ -7,7 +7,9 @@
             </div>
             <div class="modal-body">
                 <h5 class="text-info text-center"><b>Note: This message will send to all users.</b></h5>
-                <textarea style="resize: none; height: 200px" class="input-group col-xs-12" ng-model="message"></textarea>
+                <div data-wysiwyg='message' data-wysiwyg-toolbar='' ng-model="message" id="textarea_message_model_data"
+                     ng-change="onChangeMessage()" class="" style="resize: none; height: 200px"></div>
+                <h5 class="text-info text-right" ng-show="message_error" style="color: red">*Message is required</h5>
                 <h5 class="text-info text-center" ng-show="isSend">Message sent to {{count}} users</h5>
             </div>
             <div class="modal-footer">

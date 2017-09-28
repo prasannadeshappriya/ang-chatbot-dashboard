@@ -305,7 +305,6 @@ app.controller('AppEntitiesViewController',[
                 }
                 else {$scope.isWitEntity = false;}
                 $scope.isLoading = false;
-                console.log(result);
                 if (result.status === 200) {
                     $scope.entityName = result.data.data.name;
                     try {
@@ -333,7 +332,6 @@ app.controller('AppEntitiesViewController',[
                         }
                     }
                     $scope.values = result.data.data.values;
-                    console.log($scope.values);
                     $scope.$apply();
                 } else {
                     $scope.message = 'Error occurred!';
