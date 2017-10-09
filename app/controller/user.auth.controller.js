@@ -64,6 +64,8 @@ app.controller('UserAuthController',[
                             result.data.token,
                             function (callback) {
                                 if(callback){console.log('Auth service successful')}
+                                console.log('Login success');
+                                AuthService.setIsLogin(true);
                                 $location.path('/dashboard');
                                 $scope.sign_in_flag = false;
                                 $scope.$apply();
@@ -156,6 +158,7 @@ app.controller('UserAuthController',[
                         data: 'username=' + $scope.reg_username + '&password=' + $scope.reg_password,
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                     });
+                    console.log(result);
                     if(result.status===201){
                         $scope.sign_up_flag = true;
                         $scope.$apply();
@@ -164,6 +167,8 @@ app.controller('UserAuthController',[
                             result.data.token,
                             function (callback) {
                                 if(callback){console.log('Auth service successful')}
+                                console.log('Register success');
+                                AuthService.setIsLogin(true);
                                 $location.path('/dashboard');
                                 $scope.sign_up_flag = false;
                                 $scope.$apply();

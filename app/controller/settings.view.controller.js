@@ -24,15 +24,17 @@ app.controller('SettingsViewController',[
         $scope.settings={app_id: '', token: ''};
         $scope.onInit = async function () {
             console.log('Initializing settings view');
-            let result = await $http({
-                method: "GET",
-                url: host_url + "settings/get",
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            });
-            if(result) {
-                $scope.settings = result.data.settings;
-                $scope.$apply();
-            }
+            try {
+                let result = await $http({
+                    method: "GET",
+                    url: host_url + "settings/get",
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                });
+                if (result) {
+                    $scope.settings = result.data.settings;
+                    $scope.$apply();
+                }
+            }catch (err){}
         };
 
         //update settings
@@ -54,6 +56,7 @@ app.controller('SettingsViewController',[
                 if(result){
                     $scope.settings = result.data.settings;
                     $scope.$apply();
+                    location.reload();
                 }
             }
 

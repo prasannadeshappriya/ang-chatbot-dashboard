@@ -21,6 +21,7 @@ app.controller('mainController',[
         //--------------------------------------------------------------------------------------------------------------
         //User Authentication-------------------------------------------------------------------------------------------
         $scope.admin_user_name = '';
+        $scope.isAuthanticated = false;
         $scope.$watch(AuthService.isLoginStatus, function (newValue) {
             if(typeof newValue==='undefined'){
                 $scope.isAuthanticated = false;
@@ -31,13 +32,13 @@ app.controller('mainController',[
                     $scope.admin_user_name = user.username;
                 }
             }else{
-                $location.path('/');
                 $scope.isAuthanticated = false;
             }
         },true);
         $scope.userLogOut = function () {
             AuthService.Logout();
             $http.defaults.headers.common.authorization = '';
+            $location.path('/');
         }
     }
 ]);

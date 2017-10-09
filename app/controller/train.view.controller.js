@@ -45,6 +45,21 @@ app.controller('TrainController',[
                     $scope.selectedEntity = $scope.entities[0];
                     $scope.showCustomInputValueBox = true;
                     $scope.isLoading = false;
+
+                    if($scope.selectedEntity==='intent') {
+                        result = await $http({
+                            method: "GET",
+                            url: host_url + "intent/getNames"
+                        });
+                        if (result) {
+                            let intentArr = result.data.data;
+                            for (let item in intentArr) {
+                                $scope.values.push({value: intentArr[item]});
+                            }
+                            $scope.$apply();
+                        }
+                    }
+
                     $scope.$apply();
                 }
             }catch (err){
@@ -160,6 +175,7 @@ app.controller('TrainController',[
         };
         $scope.isSyncData = false;
         $scope.findValues = async function (isInputBox) {
+            $scope.entityData = ' ';
             $scope.isSyncData = true;
             let timeout = 0;
             let entity_value = $scope.selectedEntityValue;
@@ -196,7 +212,6 @@ app.controller('TrainController',[
                 $scope.server_400_error=false;
                 $scope.server_error = false;
                 let entity_arr = $scope.entityArr;
-                console.log(entity_arr);
                 for(let i=0; i<entity_arr.length; i++){
                     if(entity_arr[i].entity.includes('wit/')){
                         entity_arr[i].entity = entity_arr[i].entity.replace("/","$");
@@ -257,7 +272,9 @@ app.controller('TrainController',[
             $scope.entity_value_empty = false;
             if($scope.selectedEntityValue==="Custom")  {$scope.showCustomInputValueBox = true;}
         };
-        $scope.entitySelect = function () {
+        $scope.entitySelect = async function () {
+            $scope.values = [];
+            $scope.entityData = ' ';
             if($scope.selectedEntity.includes('wit/')){
                 for(let i=0; i<$scope.values.length; i++){
                     if($scope.values[i].value==='Custom'){
@@ -272,6 +289,19 @@ app.controller('TrainController',[
                 if(con){$scope.values.push({value: 'Custom'});}
                 $scope.selectedEntityValue = 'Custom';
                 $scope.showCustomInputValueBox = true;
+            }
+            if($scope.selectedEntity==='intent'){
+                let result = await $http({
+                    method: "GET",
+                    url: host_url + "intent/getNames"
+                });
+                if(result){
+                    let intentArr = result.data.data;
+                    for(let item in intentArr){
+                        $scope.values.push({value: intentArr[item]});
+                    }
+                    $scope.$apply();
+                }
             }
             $scope.entity_name_empty = false;
         };
