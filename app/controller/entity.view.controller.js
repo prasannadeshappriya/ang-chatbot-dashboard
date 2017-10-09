@@ -130,6 +130,7 @@ app.controller('EntityController',[
                         $scope.message = 'Entity successfully created!';
                         $scope.successAlert = true;
                         $scope.$apply();
+                        location.reload();
                     }else{
                         $scope.message = 'Error occurred!';
                         $scope.dangerAlert = true;
