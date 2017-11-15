@@ -7,7 +7,7 @@ app.controller('IntentController',[
     function ($scope,$http,host_url,PageViewService,
               AuthService,$location) {
         function prepareData(data) {
-            let skip_items=['&nbsp;','<span>','</span>'];
+            let skip_items=['&nbsp;','<span>','</span>','\''];
             let output=data;
             for(let j=0; j<skip_items.length; j++) {
                 let intent_Data = output.split(skip_items[j]);

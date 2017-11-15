@@ -175,6 +175,7 @@ app.controller('AppEntitiesViewController',[
                                     }
                                 }
                             }
+                            location.reload();
                         }
                     }catch (err){console.log(err);}
                     $scope.selectedWitData = {id:'', entity_id: '', value: 'wit', data: ''};

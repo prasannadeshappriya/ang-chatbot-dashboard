@@ -5,7 +5,7 @@ app.controller('EntityController',[
     '$scope','PageViewService','$http','host_url','AppEntitiesService',
     function ($scope,PageViewService,$http,host_url,AppEntitiesService) {
         function prepareData(data) {
-            let skip_items=['&nbsp;','<span>','</span>'];
+            let skip_items=['&nbsp;','<span>','</span>','\''];
             let output=data;
             for(let j=0; j<skip_items.length; j++) {
                 let intent_Data = output.split(skip_items[j]);
