@@ -57,7 +57,7 @@
                         <p class="list-group-item-text"  ng-repeat="item in appIntentsLookups" style="margin-left: 30px">- {{item}}</p>
                     </a>
                 </div>
-                <div class="list-group">
+                <div class="list-group" style="max-height: 100vh; overflow-y: scroll;">
                     <a class="list-group-item" ng-repeat="item in appIntents" ng-click="appIntentsItemClick(item)"
                        data-target="#updateData" data-toggle="modal">
                         <h4 class="list-group-item-heading">{{item.value}}</h4>
