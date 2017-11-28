@@ -2,13 +2,16 @@
  * Created by prasanna_d on 11/27/2017.
  */
 app.controller('AppAPIController',[
-    '$scope','$http',
-    function($scope, $http){
+    '$scope','$http', 'host_url',
+    function($scope, $http, host_url){
         //Error messages section----------------------------------------------------------------------------------------
         $scope.api_name_error = false;
         //Success and Fail Icons
         $scope.isSuccess = false;
         $scope.isError = false;
+
+        //page loading
+        $scope.pageLoading = false;
 
         $scope.isSaving = false;
         $scope.api_url_error = false;
@@ -29,10 +32,31 @@ app.controller('AppAPIController',[
             }
         };
         //--------------------------------------------------------------------------------------------------------------
-        let test = {"apiName":"dummy_api_checker","apiMethod":"GET","apiURL":"https://jsonplaceholder.typicode.com/posts/1","apiData":{"username":"#username"},"apiHeaders":{"content-type":"application/json"},"apiResponseKey":"title"}
-        $scope.stored_apis = [test];
+        $scope.stored_apis = [];
         $scope.onInit = async function(){
             console.log('App API View Initialized');
+            $scope.stored_apis = [];
+            $scope.pageLoading = true;
+            try {
+                let result = await $http({
+                    method: "GET",
+                    url: host_url + "api/getAllAPIs"
+                });
+                if (result.status === 200) {
+                    let data = result.data.data;
+                    for(let i=0; i<data.length; i++){
+                        try {
+                            let tmpData = JSON.parse(data[i].connection_data);
+                            $scope.stored_apis.push(tmpData);
+                        }
+                        catch (err){}
+                    }
+                    $scope.pageLoading = false;
+                    $scope.$apply();
+                }
+            }catch (err){
+                $scope.pageLoading = false;
+            }
             //clear loading flag
             $scope.isLoading = false;
             $scope.apiMethod = "GET";
