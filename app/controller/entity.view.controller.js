@@ -2,8 +2,8 @@
  * Created by prasanna_d on 9/4/2017.
  */
 app.controller('EntityController',[
-    '$scope','PageViewService','$http','host_url','AppEntitiesService',
-    function ($scope,PageViewService,$http,host_url,AppEntitiesService) {
+    '$scope','PageViewService','$http','host_url','AppEntitiesService','$anchorScroll',
+    function ($scope,PageViewService,$http,host_url,AppEntitiesService,$anchorScroll) {
         function prepareData(data) {
             let skip_items=['&nbsp;','<span>','</span>','\''];
             let output=data;
@@ -88,6 +88,7 @@ app.controller('EntityController',[
         $scope.createEntity = async function () {
             resetAlert();
             $scope.isSubmit = true;
+            $anchorScroll();
             //Data validation
             let con = true;
             if(typeof $scope.entityName==='undefined' || $scope.entityName===''){

@@ -1,0 +1,172 @@
+<div ng-controller="AppAPIController" ng-init="onInit()">
+    <div class="col-xs-12">
+        <div class="col-xs-12" ng-if="entities.length===0">
+            <!--<img src="assets/img/loading.svg" style="height: 60px;" class="center-block">-->
+        </div>
+        <div class="col-xs-3">
+            <p ng-if="stored_apis.length===0">You don't have any API's registered to the system at the moment</p>
+            <div class="list-group" style="max-height: 100vh; overflow-y: scroll;">
+                <a class="list-group-item" ng-repeat="item in stored_apis" ng-click="storedApiOnclick(item)">
+                    <h4 class="list-group-item-heading">{{item.apiName}}</h4>
+                    <p class="list-group-item-text" style="margin-left: 30px">- {{item.apiMethod}}</p>
+                    <p class="list-group-item-text" style="margin-left: 30px; word-wrap:break-word; word-break:break-all">- {{item.apiURL}}</p>
+                </a>
+            </div>
+        </div>
+        <div class="col-xs-9">
+            <img src="assets/img/loading.svg" ng-show="isLoading" style="height: 60px;" class="center-block">
+            <div ng-hide="isLoading">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="text-info"></h4> Create New API</h1>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-xs-12">
+                            <div class="col-xs-6">
+                                <!--API NAME-->
+                                <div class="form-group">
+                                    <label for="apiName" class="control-label">API Name:</label>
+                                    <input type="text" id="apiName" class="form-control"
+                                           ng-model="apiName"
+                                           ng-change="changeText('api_name_error'); resetValidation()">
+                                    <span class="col-xs-12" ng-show="api_name_error"><p style="color: red; float: right">*Api name is required</p></span>
+                                </div>
+                                <!--API URL-->
+                                <div class="form-group">
+                                    <label for="apiURL" class="control-label">API URL:</label>
+                                    <input type="text" id="apiURL" class="form-control"
+                                           ng-model="apiURL"
+                                           ng-change="changeText('api_url_error'); resetValidation()">
+                                    <span class="col-xs-12" ng-show="api_url_error"><p style="color: red; float: right">*Api url is required</p></span>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <!--Method-->
+                                <div class="form-group">
+                                    <label for="apiMethod" class="control-label">API Method:</label>
+                                    <select class="form-control" id="apiMethod"
+                                            ng-model="apiMethod"
+                                            ng-change="changeText('api_method_error'); resetValidation()">
+                                        <option value="POST">POST</option>
+                                        <option value="GET">GET</option>
+                                    </select>
+                                    <span class="col-xs-12" ng-show="api_method_error"><p style="color: red; float: right">*Api method is required</p></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="col-xs-6">
+                                <!--API DATA-->
+                                <div class="form-group">
+                                    <label for="apiData" class="control-label">API Data:</label>
+                                    <input type="text" id="apiData" class="form-control"
+                                            ng-model="apiData"
+                                            ng-change="resetValidation()">
+                                    <span class="col-xs-12"><p style="float: left" class="text-info">Eg: data_title=data_value</p></span>
+                                </div>
+                                <input type="button" class="btn btn-default" style="float: right; width: 100px" value="Add" ng-click="addData()">
+                            </div>
+                            <div class="col-xs-6">
+                                <!--API Header-->
+                                <div class="form-group">
+                                    <label for="apiHeaders" class="control-label">API Headers:</label>
+                                    <input type="text" id="apiHeaders" class="form-control" value="Content-Type=application/json"
+                                            ng-model="apiHeader"
+                                            ng-change="resetValidation()">
+                                    <span class="col-xs-12"><p style="float: left" class="text-info">Eg: header_name=header_value</p></span>
+                                </div>
+                                <input type="button" class="btn btn-default" style="float: right; width: 100px" value="Add" ng-click="addHeader()">
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="col-xs-6">
+                                <div class="list-group" style="margin-top: 20px; max-height: 15vh; overflow-y: scroll;">
+                                    <a class="list-group-item" ng-repeat="(key, value) in data" ng-click="ItemClick('data', key)"
+                                       style="height:40px">
+                                        <p class="list-group-item-text">{{key}}={{value}}</p>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="list-group" style="margin-top: 20px; max-height: 15vh; overflow-y: scroll;">
+                                    <a class="list-group-item" ng-repeat="(key, value) in headers" ng-click="ItemClick('header', key)"
+                                       style="height:40px">
+                                        <p class="list-group-item-text">{{key}}={{value}}</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12" style="margin-top: 30px;">
+                            <div class="col-xs-6">
+                                <div class="col-xs-12">
+                                    <div class="col-xs-4">
+                                        <img src="assets/img/loading.svg" ng-show="isValidating" style="height: 60px; margin-top: -20px" class="center-block">
+                                        <img src="assets/img/success.png" ng-show="!isValidating && isSuccess" style="height: 50px; margin-top: -20px" class="center-block">
+                                        <img src="assets/img/fail.png" ng-show="!isValidating && isError" style="height: 50px; margin-top: -20px" class="center-block">
+                                    </div>
+                                    <div class="col-xs-8">
+                                        {{validate_status_message}}
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Validate Button -->
+                            <div class="col-xs-6">
+                                <input type="button" class="btn btn-success" value="Validate"
+                                       ng-click="btnValidate()"
+                                       style="width: 150px; float: right">
+                            </div>
+                        </div>
+                        <div ng-if="api_response!==''">
+                            <hr class="col-xs-8 col-xs-offset-2">
+                            <div class="col-xs-12" style="margin-left: 2%">
+                                <label for="APIResponse" class="control-label" style="margin-top: 10px">API Response:</label>
+                                <p id="APIResponse">{{api_response}}</p>
+                            </div>
+                            <div ng-hide="request_error">
+                                <div class="col-xs-12">
+                                    <div class="col-xs-6">
+                                        <!--API Key-->
+                                        <div class="form-group" style="margin-top: 10px">
+                                            <label for="apiKey" class="control-label">Key:</label>
+                                            <input type="text" id="apiKey" class="form-control"
+                                                    ng-model="apiKeyField">
+                                            <span class="col-xs-12"><p style="float: left" class="text-info">Eg: data_title</p></span>
+                                        </div>
+                                        <input type="button" class="btn btn-default" style="float: right; width: 100px" value="Check" ng-click="btnAddKey(apiKeyField)">
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <!--Preview-->
+                                        <label for="apiOutput" class="control-label" style="margin-top: 10px">Output:</label>
+                                        <p id="apiOutput">{{api_output}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12" style="margin-top: 30px; margin-bottom: 20px">
+                                    <div class="col-xs-6">
+                                        <img src="assets/img/loading.svg" ng-show="isSaving" style="height: 60px; margin-top: -12px">
+                                        <p class="text-info" style="color: red" ng-show="!isSaving">{{save_message}}</p>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <!--Save/Create Button -->
+                                        <input type="button" class="btn btn-success" value="Create/Save"
+                                               ng-click="btnSaveAPI(apiKeyField)"
+                                               style="width: 100px; float: right">
+                                        <!--Delete API Button-->
+                                        <input type="button" class="btn btn-danger" value="Delete"
+                                               ng-click="deleteAPI()"
+                                               style="width: 100px; float: right; margin-right: 10px"
+                                               ng-show="isUpdate">
+                                        <!--Cancel Update Button-->
+                                        <input type="button" class="btn btn-default" value="Cancel"
+                                               ng-click="cancelUpdate()"
+                                               style="width: 100px; float: right; margin-right: 10px"
+                                               ng-show="isUpdate">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

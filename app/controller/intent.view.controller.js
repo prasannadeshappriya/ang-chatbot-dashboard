@@ -3,9 +3,9 @@
  */
 app.controller('IntentController',[
     '$scope','$http','host_url','PageViewService',
-    'AuthService','$location',
+    'AuthService','$location','$anchorScroll',
     function ($scope,$http,host_url,PageViewService,
-              AuthService,$location) {
+              AuthService,$location, $anchorScroll) {
         function prepareData(data) {
             let skip_items=['&nbsp;','<span>','</span>','\''];
             let output=data;
@@ -265,6 +265,7 @@ app.controller('IntentController',[
             $scope.isSubmit = true;
             $scope.panel_loading = true;
             let con = true;
+            $anchorScroll();
             if($scope.intentName==='' || typeof $scope.intentName==='undefined'){$scope.intent_name_empty = true; con = false;}
             if($scope.indentDes==='' || typeof $scope.indentDes==='undefined'){$scope.intent_description_empty = true; con = false;}
             if($scope.intentData.replace(' ','')==='' || typeof $scope.intentData==='undefined'){$scope.intent_data_empty = true; con = false;}

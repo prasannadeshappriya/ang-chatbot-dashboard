@@ -13,7 +13,7 @@
             </div>
             <div ng-show="appEntities.length!==0">
                 <div class="list-group" style="max-height: 100vh; overflow-y: scroll;">
-                    <div class="list-group-item" ng-repeat="item in appEntities">
+                    <div class="list-group-item" ng-repeat="item in appEntities | orderBy">
                         <p class="list-group-item-text">{{item}}</p>
                     </div>
                 </div>

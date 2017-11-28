@@ -2,8 +2,8 @@
  * Created by prasanna_d on 9/6/2017.
  */
 app.controller('TrainController',[
-    '$scope','$http','host_url','AppEntitiesService',
-    function ($scope,$http,host_url,AppEntitiesService ) {
+    '$scope','$http','host_url','AppEntitiesService','$anchorScroll',
+    function ($scope,$http,host_url,AppEntitiesService,$anchorScroll ) {
         function prepareData(data) {
             let skip_items=['&nbsp;','<span>','</span>','\''];
             let output=data;
@@ -81,6 +81,7 @@ app.controller('TrainController',[
                     break;
                 case 'expression_empty':
                     $scope.expression_empty = false;
+                    $scope.dangerAlert = false;
                     break;
                 case 'entity_data_empty':
                     $scope.entity_data_empty = false;
@@ -255,6 +256,7 @@ app.controller('TrainController',[
                         //Clear the array and reset values
                         $scope.selectedEntityValue = "Custom"; $scope.selectedEntity = $scope.entities[0];
                         $scope.entityValue = ""; $scope.entityData = " "; $scope.showCustomInputValueBox = true;
+                        $anchorScroll();
                         $scope.entityArr = []; $scope.isLoading = false; $scope.$apply();
                     }else{$scope.server_error = true;}
                 }catch (err){
@@ -321,9 +323,16 @@ app.controller('TrainController',[
                     url: host_url + "wit/getMessage?message=" + message,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 });
-                if(Object.keys(result.data.data.entities).length===0){$scope.result = null;}
-                else{$scope.result = result.data.data.entities;}
+                if(Object.keys(result.data.data.entities).length===0){
+                    $scope.result = null;
+                    $scope.dangerAlert = true;
+                    $scope.message = "No entities found!";
+                }
+                else{
+                    $scope.result = result.data.data.entities;
+                    $scope.dangerAlert = false;}
                 $scope.isLoading = false;
+                $anchorScroll();
                 $scope.$apply();
             }
         };
