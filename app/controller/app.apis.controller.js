@@ -206,9 +206,13 @@ app.controller('AppAPIController',[
                     //Shoe the image [success]
                     $scope.isSuccess = false;
                     $scope.isError = true;
-
                     $scope.request_error = true;
                     $scope.validate_status_message = "Error on validation";
+
+                    if($scope.isUpdate){
+                        $scope.cancelUpdate();
+                        $scope.validate_status_message = "Cannot connect to the API. [connection_error]";
+                    }
                     $scope.$apply();
                 }
             }
