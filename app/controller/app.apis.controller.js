@@ -87,7 +87,6 @@ app.controller('AppAPIController',[
 
         function removeSpacesInArray(arrInput, isData){
             let tmpArr = [];
-            console.log(arrInput);
             for(let i=0; i<arrInput.length; i++){
                 let value = arrInput[i]; let newValue = '';
                 let valueArr = value.split(" ");
@@ -100,7 +99,6 @@ app.controller('AppAPIController',[
             return tmpArr;
         }
         $scope.addHeader = function () {
-            console.log('test');
             if($scope.apiHeader !== '' &&
                 typeof $scope.apiHeader !== 'undefined'){
                 let input = $scope.apiHeader.split("=");
@@ -231,7 +229,6 @@ app.controller('AppAPIController',[
             $scope.key_error = '';
             try{
                 let document = JSON.parse($scope.api_response);
-                console.log(document[key]);
                 $scope.api_output = document[key];
             }catch (err){
                 $scope.key_error = true;
@@ -248,7 +245,7 @@ app.controller('AppAPIController',[
 
         $scope.btnSaveAPI = async function(key){
             //clear the save error flag
-            $scope.save_message = '';
+            $scope.save_message = 'Saving API ...';
             $scope.isSaving = true;
 
             //Validation
@@ -286,16 +283,19 @@ app.controller('AppAPIController',[
                 apiHeaders: $scope.headers,
                 apiResponseKey: key
             };
-            console.log(JSON.stringify(dataString));
 
             try{
                 //send the values to the server to store api information in the database
                 //database call
                 if($scope.isUpdate){
                     //Update process
+                    let isChanged = false;
+                    let apiName;
                     if(typeof $scope.oldItem==='undefined'){return;}
                     for(let i=0; i<$scope.stored_apis.length; i++){
                         if($scope.oldItem===$scope.stored_apis[i]){
+                            isChanged = true;
+                            apiName = $scope.oldItem.apiName;
                             $scope.stored_apis.splice(i,1);
                             $scope.stored_apis.push(dataString);
                             break;
@@ -303,6 +303,31 @@ app.controller('AppAPIController',[
                     }
                     //send stored_apis to the server
                     //server call
+                    if(isChanged){
+                        //server call
+                        try {
+                            let result = await $http({
+                                method: "POST",
+                                url: host_url + "api/updateAPI",
+                                data: 'connection_data=' + JSON.stringify(dataString) + '&apiName=' + apiName,
+                                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                            });
+                            if(result.status===200) {
+                                $scope.save_message = '';
+                                $scope.isSaving = false;
+
+                                //Reset the text fields and other variables to default
+                                clear();
+                                $scope.$apply();
+                            }else{
+                                console.log('API update failed, Error!');
+                                $scope.$apply();
+                            }
+                        }catch (err){
+                            console.log('API update failed, Error!');
+                            $scope.$apply();
+                        }
+                    }
                 }else{
                     //create new API process
                     //validation for similar name
@@ -313,15 +338,33 @@ app.controller('AppAPIController',[
                             return;
                         }
                     }
-                    //Add new API to the array
-                    $scope.stored_apis.push(dataString);
-                    console.log($scope.stored_apis);
-                    //send stored_apis to the server
                     //server call
-                }
+                    try {
+                        let result = await $http({
+                            method: "POST",
+                            url: host_url + "api/createApi",
+                            data: 'connection_data=' + JSON.stringify(dataString),
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        });
+                        if(result.status===201) {
+                            //Add new API to the array
+                            $scope.stored_apis.push(dataString);
 
-                //Reset the text fields and other variables to default
-                clear();
+                            $scope.save_message = '';
+                            $scope.isSaving = false;
+
+                            //Reset the text fields and other variables to default
+                            clear();
+                            $scope.$apply();
+                        }else{
+                            console.log('API create failed, Error!');
+                            $scope.$apply();
+                        }
+                    }catch (err){
+                        console.log('API create failed, Error!');
+                        $scope.$apply();
+                    }
+                }
             }catch (err){
                 console.log(err);
                 $scope.isSaving = false;
@@ -382,20 +425,51 @@ app.controller('AppAPIController',[
         };
 
         $scope.deleteAPI = async function () {
+            $scope.isSaving = true;
+            $scope.save_message = 'Deleting API ...';
+
+            let isDeleted = false;
+            let apiName;
+
             if(typeof $scope.oldItem==='undefined'){return;}
             for(let i=0; i<$scope.stored_apis.length; i++){
                 if($scope.oldItem===$scope.stored_apis[i]){
                     $scope.stored_apis.splice(i,1);
+                    isDeleted = true;
+                    apiName = $scope.oldItem.apiName;
                     break;
                 }
             }
-            //database call [Server]
 
-            //clear
-            clear();
-            //set the old item to null
-            $scope.isUpdate = false;
-            $scope.oldItem = null;
+            if(isDeleted) {
+                //database call [Server]
+                try {
+                    let result = await $http({
+                        method: "POST",
+                        url: host_url + "api/deleteAPI",
+                        data: 'apiName=' + apiName,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    });
+                    $scope.isSaving = false;
+                    $scope.save_message = '';
+                    //clear
+                    clear();
+                    //set the old item to null
+                    $scope.isUpdate = false;
+                    $scope.oldItem = null;
+                    $scope.$apply();
+                }catch (err){
+                    console.log('Error removing api from the database');
+                    $scope.isSaving = false;
+                    $scope.save_message = '';
+                    //clear
+                    clear();
+                    //set the old item to null
+                    $scope.isUpdate = false;
+                    $scope.oldItem = null;
+                    $scope.$apply();
+                }
+            }
         }
     }
 ]);
