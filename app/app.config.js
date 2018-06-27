@@ -5,7 +5,7 @@ app.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
         .when("/dashboard",{
             //Dashboard home page
-            templateUrl: "views/home.view.html",
+            templateUrl: "app/views/home.view.html",
             controller: 'mainController',
             resolve:{
                 init: function (AuthService,$location) {
@@ -20,7 +20,7 @@ app.config(['$routeProvider', function ($routeProvider) {
         })
         .when("/login",{
             //Login page
-            templateUrl: "views/user.auth.html",
+            templateUrl: "app/views/user.auth.html",
             controller: 'UserAuthController',
             resolve:{
                 init: function (AuthService,$location) {
@@ -33,7 +33,7 @@ app.config(['$routeProvider', function ($routeProvider) {
         })
         .when("/",{
             //Login page
-            templateUrl: "views/user.auth.html",
+            templateUrl: "app/views/user.auth.html",
             controller: 'UserAuthController',
             resolve:{
                 init: function (AuthService,$location) {
