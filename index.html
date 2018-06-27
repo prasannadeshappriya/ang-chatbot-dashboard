@@ -4,44 +4,44 @@
     <meta charset="UTF-8">
     <title>Dashboard</title>
     <!--Base URL-->
-    <base href="/ang-chatbot-dashboard/app/">
+    <base href="/ang-chatbot-dashboard/">
     <!--Icon-->
-    <link rel="icon" href="assets/img/bot_icon.png">
+    <link rel="icon" href="app/assets/img/bot_icon.png">
     <!--Import css files-->
-    <link rel="stylesheet" href="../vendors/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="assets/css/reg.login.form.css">
+    <link rel="stylesheet" href="vendors/css/bootstrap.min.css">
+    <link rel="stylesheet" href="app/assets/css/main.css">
+    <link rel="stylesheet" href="app/assets/css/reg.login.form.css">
     <!--Import js files-->
-    <script src="../vendors/js/jquery-3.2.1.min.js"></script>
-    <script src="../vendors/js/bootstrap.min.js"></script>
-    <script src="../vendors/js/wysihtml5-0.3.0.js"></script>
-    <script src="../vendors/js/angular.min.js"></script>
-    <script src="../vendors/js/angular-route.js"></script>
-    <script src="../vendors/js/ngStorage.min.js"></script>
-    <script src="../vendors/js/angular-ui-router.min.js"></script>
+    <script src="vendors/js/jquery-3.2.1.min.js"></script>
+    <script src="vendors/js/bootstrap.min.js"></script>
+    <script src="vendors/js/wysihtml5-0.3.0.js"></script>
+    <script src="vendors/js/angular.min.js"></script>
+    <script src="vendors/js/angular-route.js"></script>
+    <script src="vendors/js/ngStorage.min.js"></script>
+    <script src="vendors/js/angular-ui-router.min.js"></script>
     <!--Imported custom js files-->
-    <script src="assets/js/main.js"></script>
+    <script src="app/assets/js/main.js"></script>
     <!--Angular main config-->
-    <script src="app.modules.js"></script>
-    <script src="app.config.js"></script>
-    <script src="app.run.js"></script>
+    <script src="app/app.modules.js"></script>
+    <script src="app/app.config.js"></script>
+    <script src="app/app.run.js"></script>
     <!--Angular controllers-->
-    <script src="controller/main.controller.js"></script>
-    <script src="controller/intent.view.controller.js"></script>
-    <script src="controller/entity.view.controller.js"></script>
-    <script src="controller/train.view.controller.js"></script>
-    <script src="controller/app.entities.view.controller.js"></script>
-    <script src="controller/user.auth.controller.js"></script>
-    <script src="controller/broadcast.message.controller.js"></script>
-    <script src="controller/settings.view.controller.js"></script>
-    <script src="controller/app.apis.controller.js"></script>
+    <script src="app/controller/main.controller.js"></script>
+    <script src="app/controller/intent.view.controller.js"></script>
+    <script src="app/controller/entity.view.controller.js"></script>
+    <script src="app/controller/train.view.controller.js"></script>
+    <script src="app/controller/app.entities.view.controller.js"></script>
+    <script src="app/controller/user.auth.controller.js"></script>
+    <script src="app/controller/broadcast.message.controller.js"></script>
+    <script src="app/controller/settings.view.controller.js"></script>
+    <script src="app/controller/app.apis.controller.js"></script>
     <!--Angular Services-->
-    <script src="service/page.refresh.service.js"></script>
-    <script src="service/page.view.service.js"></script>
-    <script src="service/app.entities.service.js"></script>
-    <script src="service/auth.service.js"></script>
+    <script src="app/service/page.refresh.service.js"></script>
+    <script src="app/service/page.view.service.js"></script>
+    <script src="app/service/app.entities.service.js"></script>
+    <script src="app/service/auth.service.js"></script>
     <!--Angular Directives-->
-    <script src="directive/texteditor.directive.js"></script>
+    <script src="app/directive/texteditor.directive.js"></script>
 </head>
 <nav class="navbar navbar-default" ng-controller="mainController" ng-show="isAuthanticated">
     <div class="container-fluid">
@@ -53,7 +53,7 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="#">
-                <img src="../app/assets/img/chat-bot-logo.png" style="width: 220px; margin-top: -12px"></a>
+                <img src="app/assets/img/chat-bot-logo.png" style="width: 220px; margin-top: -12px"></a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav" style="margin-left: 50px">
@@ -78,12 +78,12 @@
             <ul class="nav navbar-nav navbar-right">
                 <li id="navChatWithBot">
                     <a href="" data-toggle="modal" data-target="#modalChatWithBot" >
-                        <img src="../app/assets/img/bot_icon.png" style="width: 40px; margin: -10px 10px -10px 10px;">
+                        <img src="app/assets/img/bot_icon.png" style="width: 40px; margin: -10px 10px -10px 10px;">
                     </a>
                 </li>
                 <li class="dropdown" id="navDrop2">
                     <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        <img src="../app/assets/img/default_profile_pic.png" style="width: 30px; margin: -10px 10px -10px 21px; right: 0">
+                        <img src="app/assets/img/default_profile_pic.png" style="width: 30px; margin: -10px 10px -10px 21px; right: 0">
                         {{admin_user_name}} <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="">Profile</a></li>
