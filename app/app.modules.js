@@ -4,6 +4,5 @@
 let app = angular.module('chat-bot-app',[
     'ngRoute','ui.router','ngStorage'
     ]).constant(
-        'host_url', 'http://localhost:3000/'
-        // 'host_url', 'https://chatbot-186613.appspot.com/'
+         'host_url', 'https://prasannadeshappriya.alwaysdata.net/'
 );
