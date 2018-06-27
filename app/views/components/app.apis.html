@@ -1,7 +1,7 @@
 <div ng-controller="AppAPIController" ng-init="onInit()">
     <div class="col-xs-12">
         <div class="col-xs-12" ng-show="pageLoading">
-            <img src="assets/img/loading.svg" style="height: 60px;" class="center-block">
+            <img src="app/assets/img/loading.svg" style="height: 60px;" class="center-block">
         </div>
         <div ng-show="!pageLoading">
             <div class="col-xs-3">
@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="col-xs-9">
-                <img src="assets/img/loading.svg" ng-show="isLoading" style="height: 60px;" class="center-block">
+                <img src="app/assets/img/loading.svg" ng-show="isLoading" style="height: 60px;" class="center-block">
                 <div ng-hide="isLoading">
                     <div class="panel panel-default">
                         <div class="panel-heading">
@@ -101,9 +101,9 @@
                                 <div class="col-xs-6">
                                     <div class="col-xs-12">
                                         <div class="col-xs-4">
-                                            <img src="assets/img/loading.svg" ng-show="isValidating" style="height: 60px; margin-top: -20px" class="center-block">
-                                            <img src="assets/img/success.png" ng-show="!isValidating && isSuccess" style="height: 50px; margin-top: -20px" class="center-block">
-                                            <img src="assets/img/fail.png" ng-show="!isValidating && isError" style="height: 50px; margin-top: -20px" class="center-block">
+                                            <img src="app/assets/img/loading.svg" ng-show="isValidating" style="height: 60px; margin-top: -20px" class="center-block">
+                                            <img src="app/assets/img/success.png" ng-show="!isValidating && isSuccess" style="height: 50px; margin-top: -20px" class="center-block">
+                                            <img src="app/assets/img/fail.png" ng-show="!isValidating && isError" style="height: 50px; margin-top: -20px" class="center-block">
                                         </div>
                                         <div class="col-xs-8">
                                             {{validate_status_message}}
@@ -143,7 +143,7 @@
                                     </div>
                                     <div class="col-xs-12" style="margin-top: 30px; margin-bottom: 20px">
                                         <div class="col-xs-6">
-                                            <img src="assets/img/loading.svg" ng-show="isSaving" style="height: 60px; margin-top: -12px">
+                                            <img src="app/assets/img/loading.svg" ng-show="isSaving" style="height: 60px; margin-top: -12px">
                                             <p class="text-info" style="color: red" ng-show="!isSaving">{{save_message}}</p>
                                         </div>
                                         <div class="col-xs-6">
