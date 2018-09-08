@@ -151,6 +151,9 @@ app.controller('UserAuthController',[
             //--------------------------------
             if($scope.reg_password!==$scope.reg_re_password){con = false;}
             if(con){
+                $scope.reg_error_messages = 'Registration process is disabled by the admin, ' +
+                    'Login with admin credentials and enable user registration.';
+                /*
                 try {
                     let result = await $http({
                         method: "POST",
@@ -202,6 +205,7 @@ app.controller('UserAuthController',[
                         $scope.$apply();
                     }
                 }
+                */
             }
         };
     }
